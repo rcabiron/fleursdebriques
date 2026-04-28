@@ -88,6 +88,11 @@ const getResourceId = (event) =>
   event?.resource?.supplementary_data?.related_ids?.order_id ||
   "Non communiqué";
 
+const getOrderId = (event) =>
+  event?.resource?.supplementary_data?.related_ids?.order_id ||
+  event?.resource?.purchase_units?.[0]?.payments?.captures?.[0]?.supplementary_data?.related_ids?.order_id ||
+  (event?.event_type === "CHECKOUT.ORDER.APPROVED" ? event?.resource?.id : "");
+
 const getAmount = (event) => {
   const amount =
     event?.resource?.amount ||
@@ -98,13 +103,108 @@ const getAmount = (event) => {
   return `${amount.value} ${amount.currency_code || "EUR"}`;
 };
 
-const sendWebhookEmail = async ({ env, event }) => {
+const getOrderDetails = async ({ env, event }) => {
+  const orderId = getOrderId(event);
+  if (!orderId) return null;
+
+  try {
+    const accessToken = await getAccessToken(env);
+    const response = await fetch(`${getPayPalBase(env)}/v2/checkout/orders/${orderId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) return null;
+    return response.json();
+  } catch {
+    return null;
+  }
+};
+
+const joinAddress = (address) => {
+  if (!address) return "";
+
+  return [
+    address.address_line_1,
+    address.address_line_2,
+    [address.postal_code, address.admin_area_2].filter(Boolean).join(" "),
+    address.admin_area_1,
+    address.country_code,
+  ]
+    .filter(Boolean)
+    .join("\n");
+};
+
+const getOrderSummary = ({ event, orderDetails }) => {
+  const resource = event.resource || {};
+  const purchaseUnit = orderDetails?.purchase_units?.[0] || {};
+  const payer = orderDetails?.payer || resource.payer || {};
+  const shipping = purchaseUnit.shipping || {};
+  const amount =
+    resource.amount ||
+    resource.seller_receivable_breakdown?.gross_amount ||
+    purchaseUnit.amount ||
+    resource.billing_info?.last_payment?.amount;
+
+  const items = purchaseUnit.items?.map((item) => `${item.quantity || 1} × ${item.name}`).join(", ");
+  const description = purchaseUnit.description || resource.description || items || "Non communiqué";
+  const orderReference = resource.custom_id || purchaseUnit.custom_id || resource.invoice_id || "Non communiqué";
+  const paypalReference = getResourceId(event);
+  const orderId = orderDetails?.id || getOrderId(event) || "Non communiqué";
+  const buyerName = [payer.name?.given_name, payer.name?.surname].filter(Boolean).join(" ") || payer.name?.full_name || "Non communiqué";
+  const buyerEmail = payer.email_address || resource.subscriber?.email_address || "Non communiqué";
+  const shippingName = shipping.name?.full_name || buyerName;
+  const shippingAddress = joinAddress(shipping.address);
+
+  return {
+    eventType: event.event_type || "Événement PayPal",
+    status: resource.status || orderDetails?.status || "Non communiqué",
+    orderReference,
+    paypalReference,
+    orderId,
+    amount: amount?.value ? `${amount.value} ${amount.currency_code || "EUR"}` : getAmount(event),
+    description,
+    buyerName,
+    buyerEmail,
+    shippingName,
+    shippingAddress,
+    date: event.create_time || new Date().toISOString(),
+  };
+};
+
+const getReadableEventTitle = (eventType) => {
+  const titles = {
+    "BILLING.SUBSCRIPTION.ACTIVATED": "Abonnement activé",
+    "BILLING.SUBSCRIPTION.CANCELLED": "Abonnement annulé",
+    "BILLING.SUBSCRIPTION.EXPIRED": "Abonnement expiré",
+    "BILLING.SUBSCRIPTION.PAYMENT.FAILED": "Paiement d'abonnement échoué",
+    "BILLING.SUBSCRIPTION.SUSPENDED": "Abonnement suspendu",
+    "BILLING.SUBSCRIPTION.UPDATED": "Abonnement modifié",
+    "CHECKOUT.ORDER.APPROVED": "Commande approuvée",
+    "PAYMENT.CAPTURE.COMPLETED": "Commande payée",
+    "PAYMENT.CAPTURE.DENIED": "Paiement refusé",
+    "PAYMENT.CAPTURE.REFUNDED": "Paiement remboursé",
+    "PAYMENT.SALE.COMPLETED": "Paiement d'abonnement reçu",
+  };
+
+  return titles[eventType] || eventType || "Événement PayPal";
+};
+
+const renderInfoRow = (label, value) => `
+  <tr>
+    <td style="padding:10px 12px;color:#6f625b;font-weight:700;border-bottom:1px solid #eadfd3;">${escapeHtml(label)}</td>
+    <td style="padding:10px 12px;color:#1f160e;border-bottom:1px solid #eadfd3;">${escapeHtml(value || "Non communiqué").replaceAll("\n", "<br>")}</td>
+  </tr>
+`;
+
+const sendWebhookEmail = async ({ env, event, orderDetails }) => {
   if (!env.RESEND_API_KEY || !env.CONTACT_TO || !env.CONTACT_FROM) return false;
 
-  const resourceId = getResourceId(event);
-  const amount = getAmount(event);
-  const eventType = event.event_type || "Événement PayPal";
-  const eventTime = event.create_time || new Date().toISOString();
+  const summary = getOrderSummary({ event, orderDetails });
+  const readableTitle = getReadableEventTitle(summary.eventType);
+  const subjectReference = summary.orderReference !== "Non communiqué" ? summary.orderReference : summary.paypalReference;
 
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
@@ -115,25 +215,50 @@ const sendWebhookEmail = async ({ env, event }) => {
     body: JSON.stringify({
       from: env.CONTACT_FROM,
       to: [env.CONTACT_TO.toLowerCase()],
-      subject: `PayPal - ${eventType}`,
+      subject: `${readableTitle} - ${summary.amount} - ${subjectReference}`,
       html: `
-        <h1>Notification PayPal</h1>
-        <p>Un événement PayPal important vient d'être reçu par le site Fleurs de Briques.</p>
-        <ul>
-          <li><strong>Type :</strong> ${escapeHtml(eventType)}</li>
-          <li><strong>Référence :</strong> ${escapeHtml(resourceId)}</li>
-          <li><strong>Montant :</strong> ${escapeHtml(amount)}</li>
-          <li><strong>Date :</strong> ${escapeHtml(eventTime)}</li>
-        </ul>
-        <p>Consultez PayPal pour le détail complet de la transaction ou de l'abonnement.</p>
+        <div style="font-family:Arial,sans-serif;background:#fffaf2;color:#1f160e;padding:24px;">
+          <div style="max-width:680px;margin:0 auto;background:#ffffff;border:1px solid #eadfd3;border-radius:14px;overflow:hidden;">
+            <div style="padding:22px 24px;background:#123b66;color:#ffffff;">
+              <p style="margin:0 0 8px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#ffed4a;font-weight:800;">Fleurs de Briques</p>
+              <h1 style="margin:0;font-size:28px;line-height:1.15;">${escapeHtml(readableTitle)}</h1>
+              <p style="margin:10px 0 0;font-size:17px;">${escapeHtml(summary.description)}</p>
+            </div>
+
+            <div style="padding:22px 24px;">
+              <p style="margin:0 0 16px;font-size:18px;">
+                <strong>${escapeHtml(summary.amount)}</strong> confirmé via PayPal.
+              </p>
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;border:1px solid #eadfd3;border-radius:10px;overflow:hidden;">
+                ${renderInfoRow("Référence FDB", summary.orderReference)}
+                ${renderInfoRow("Référence PayPal", summary.paypalReference)}
+                ${renderInfoRow("Commande PayPal", summary.orderId)}
+                ${renderInfoRow("Statut", summary.status)}
+                ${renderInfoRow("Client", `${summary.buyerName}\n${summary.buyerEmail}`)}
+                ${renderInfoRow("Livraison", `${summary.shippingName}${summary.shippingAddress ? `\n${summary.shippingAddress}` : ""}`)}
+                ${renderInfoRow("Date PayPal", summary.date)}
+                ${renderInfoRow("Événement technique", summary.eventType)}
+              </table>
+              <p style="margin:18px 0 0;color:#6f625b;font-size:14px;">
+                Consultez PayPal pour le reçu officiel, le moyen de paiement et les détails complets.
+              </p>
+            </div>
+          </div>
+        </div>
       `,
       text: [
-        "Notification PayPal",
-        `Type: ${eventType}`,
-        `Référence: ${resourceId}`,
-        `Montant: ${amount}`,
-        `Date: ${eventTime}`,
-        "Consultez PayPal pour le détail complet de la transaction ou de l'abonnement.",
+        `Fleurs de Briques - ${readableTitle}`,
+        `Produit: ${summary.description}`,
+        `Montant: ${summary.amount}`,
+        `Référence FDB: ${summary.orderReference}`,
+        `Référence PayPal: ${summary.paypalReference}`,
+        `Commande PayPal: ${summary.orderId}`,
+        `Statut: ${summary.status}`,
+        `Client: ${summary.buyerName} - ${summary.buyerEmail}`,
+        `Livraison: ${summary.shippingName}${summary.shippingAddress ? ` - ${summary.shippingAddress.replaceAll("\n", ", ")}` : ""}`,
+        `Date PayPal: ${summary.date}`,
+        `Événement technique: ${summary.eventType}`,
+        "Consultez PayPal pour le reçu officiel, le moyen de paiement et les détails complets.",
       ].join("\n"),
     }),
   });
@@ -165,7 +290,8 @@ export async function onRequestPost({ request, env }) {
   }
 
   const shouldNotify = IMPORTANT_EVENTS.has(event.event_type);
-  const emailSent = shouldNotify ? await sendWebhookEmail({ env, event }) : false;
+  const orderDetails = shouldNotify ? await getOrderDetails({ env, event }) : null;
+  const emailSent = shouldNotify ? await sendWebhookEmail({ env, event, orderDetails }) : false;
 
   return json({
     ok: true,
