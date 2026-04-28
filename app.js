@@ -276,6 +276,29 @@ const showToast = (message) => {
 
 const getCartItemType = (item) => (item.type === "subscription" || item.id?.startsWith("sub-") ? "Abonnement" : "Sans abonnement");
 
+const isSubscriptionItem = (item) => item.type === "subscription" || item.id?.startsWith("sub-");
+
+const normalizeQuantity = (quantity) => {
+  const parsed = Number.parseInt(quantity, 10);
+  if (!Number.isFinite(parsed)) return 1;
+  return Math.min(Math.max(parsed, 1), 99);
+};
+
+const getLineQuantity = (item) => (isSubscriptionItem(item) ? 1 : normalizeQuantity(item.quantity));
+
+const getLineTotal = (item) => item.price * getLineQuantity(item);
+
+const hasSubscriptionInCart = () => [...cart.values()].some((item) => isSubscriptionItem(item));
+
+const getReplacementLabel = () => {
+  const items = [...cart.values()];
+  if (items.length === 0) return "";
+  if (items.length === 1) return items[0].name;
+  const oneTimeCount = items.filter((item) => !isSubscriptionItem(item)).length;
+  if (oneTimeCount === items.length) return `${oneTimeCount} box à l'unité`;
+  return `${items.length} offres`;
+};
+
 const saveCartState = () => {
   try {
     if (cart.size === 0) {
@@ -304,10 +327,11 @@ const restoreCartState = () => {
     cart.clear();
     saved.items.forEach((item) => {
       if (!item?.id || typeof item.price !== "number") return;
+      const type = item.type || (item.id.startsWith("sub-") ? "subscription" : "one-time");
       cart.set(item.id, {
         ...item,
-        type: item.type || (item.id.startsWith("sub-") ? "subscription" : "one-time"),
-        quantity: 1,
+        type,
+        quantity: type === "subscription" ? 1 : normalizeQuantity(item.quantity),
       });
     });
 
@@ -363,45 +387,65 @@ const celebrateCartAdd = () => {
 
 const getTotals = () => {
   let total = 0;
+  let quantity = 0;
 
   cart.forEach((item) => {
-    total += item.price;
+    const lineQuantity = getLineQuantity(item);
+    quantity += lineQuantity;
+    total += item.price * lineQuantity;
   });
 
-  return { quantity: cart.size, total };
+  return { quantity, total };
 };
 
 const renderCart = () => {
   cartItems.innerHTML = "";
 
   cart.forEach((item, id) => {
+    const quantity = getLineQuantity(item);
+    const lineTotal = getLineTotal(item);
+    const canChangeQuantity = !isSubscriptionItem(item);
     const line = document.createElement("article");
     line.className = "cart-line";
     line.innerHTML = `
       <div class="cart-line-main">
         <div class="cart-line-top">
           <h3>${item.name}</h3>
-          <strong>${formatPrice(item.price)}</strong>
+          <strong>${formatPrice(lineTotal)}</strong>
         </div>
         <p>${item.detail}</p>
+        ${canChangeQuantity && quantity > 1 ? `<small class="cart-meta">${quantity} × ${formatPrice(item.price)} l'unité</small>` : ""}
         ${item.cadence ? `<small class="cart-meta">${item.cadence}</small>` : ""}
       </div>
-      <button class="remove-item" type="button" data-remove="${id}" aria-label="Supprimer ${item.name} du panier">Supprimer</button>
+      <div class="cart-line-actions">
+        ${
+          canChangeQuantity
+            ? `<div class="quantity-control" aria-label="Quantité ${item.name}">
+                <button type="button" data-qty-decrease="${id}" aria-label="Réduire la quantité de ${item.name}">−</button>
+                <span>${quantity}</span>
+                <button type="button" data-qty-increase="${id}" aria-label="Augmenter la quantité de ${item.name}">+</button>
+              </div>`
+            : ""
+        }
+        <button class="remove-item" type="button" data-remove="${id}" aria-label="Supprimer ${item.name} du panier">Supprimer</button>
+      </div>
     `;
     cartItems.append(line);
   });
 
   const { quantity, total } = getTotals();
-  const hasSubscription = [...cart.keys()].some((id) => id.startsWith("sub-"));
+  const hasSubscription = hasSubscriptionInCart();
   const isGift = giftToggle?.checked;
   cartCount.textContent = quantity;
   cartTotal.textContent = formatPrice(total);
   if (isGift) {
-    cartNote.textContent = "Cadeau: indiquez l'adresse du destinataire lors du paiement PayPal. Une commande contient une seule offre.";
+    cartNote.textContent = hasSubscription
+      ? "Cadeau: indiquez l'adresse du destinataire lors du paiement."
+      : "Cadeau: indiquez l'adresse du destinataire lors du paiement. Vous pouvez offrir plusieurs box à l'unité.";
   } else {
     cartNote.textContent = hasSubscription
-      ? "Les box restent envoyées chaque mois selon le rythme indiqué. Une box à l'unité se commande séparément."
-      : "Les frais de port sont inclus dans le total affiché. Un abonnement se commande séparément.";
+      ? "Les box restent envoyées chaque mois selon le rythme indiqué. Les achats ponctuels se commandent séparément."
+      : "Vous pouvez ajouter plusieurs box à l'unité. Les frais de port sont inclus dans le total affiché.";
   }
   cartEmpty.classList.toggle("is-visible", quantity === 0);
   saveCartState();
@@ -462,7 +506,7 @@ const saveOrderSnapshot = ({ paymentType, reference, orderReference }) => {
     detail: item.detail,
     cadence: item.cadence,
     meta: item.meta,
-    quantity: 1,
+    quantity: getLineQuantity(item),
     price: item.price,
   }));
 
@@ -567,12 +611,22 @@ const renderPayPalArea = () => {
     return;
   }
 
-  const oneTimeSummary = [...cart.values()]
-    .map((item) => item.name)
-    .join(", ");
+  const oneTimeItems = [...cart.values()].map((item) => ({
+    name: item.name,
+    quantity: String(getLineQuantity(item)),
+    unit_amount: {
+      currency_code: PAYPAL_CONFIG.currency,
+      value: item.price.toFixed(2),
+    },
+  }));
+  const itemTotal = oneTimeItems.reduce(
+    (sum, item) => sum + Number(item.unit_amount.value) * Number(item.quantity),
+    0,
+  );
+  const oneTimeSummary = oneTimeItems.map((item) => `${item.quantity} × ${item.name}`).join(", ");
   const orderReference = getCheckoutReference();
 
-  paypalStatus.textContent = "Payez votre box à l'unité avec PayPal ou carte bancaire.";
+  paypalStatus.textContent = "Payez vos box à l'unité avec PayPal ou carte bancaire.";
   loadPayPalSdk("capture")
     .then((paypal) => {
       paypalButtons.classList.remove("is-loading");
@@ -585,9 +639,16 @@ const renderPayPalArea = () => {
                 {
                   description: oneTimeSummary || "Fleurs de Briques - Box à l'unité",
                   custom_id: orderReference,
+                  items: oneTimeItems,
                   amount: {
                     currency_code: PAYPAL_CONFIG.currency,
                     value: total.toFixed(2),
+                    breakdown: {
+                      item_total: {
+                        currency_code: PAYPAL_CONFIG.currency,
+                        value: itemTotal.toFixed(2),
+                      },
+                    },
                   },
                 },
               ],
@@ -620,15 +681,20 @@ const renderCheckoutSummary = () => {
 
   const lines = [...cart.values()]
     .map(
-      (item) => `
+      (item) => {
+        const quantity = getLineQuantity(item);
+        const lineTotal = getLineTotal(item);
+        return `
         <li>
-          <span>${item.name}</span>
-          <strong>${formatPrice(item.price)}</strong>
+          <span>${quantity > 1 ? `${quantity} × ` : ""}${item.name}</span>
+          <strong>${formatPrice(lineTotal)}</strong>
           <small>${item.detail}</small>
+          ${quantity > 1 ? `<small>${formatPrice(item.price)} l'unité</small>` : ""}
           ${item.cadence ? `<small>${item.cadence}</small>` : ""}
           ${item.meta ? `<small>${item.meta}</small>` : ""}
         </li>
-      `,
+      `;
+      },
     )
     .join("");
   const paymentMode = getCartPaymentMode();
@@ -658,7 +724,10 @@ const renderCheckoutSummary = () => {
 
 const commitCartItem = (item, message) => {
   cart.clear();
-  cart.set(item.id, item);
+  cart.set(item.id, {
+    ...item,
+    quantity: isSubscriptionItem(item) ? 1 : normalizeQuantity(item.quantity),
+  });
   checkoutReference = "";
 
   renderCart();
@@ -687,7 +756,7 @@ const requestCartReplacement = (item) => {
   }
 
   pendingCartReplacement = { item };
-  if (replaceCurrent) replaceCurrent.textContent = current.name;
+  if (replaceCurrent) replaceCurrent.textContent = getReplacementLabel();
   if (replaceNext) replaceNext.textContent = item.name;
   if (replaceCurrentType) replaceCurrentType.textContent = getCartItemType(current);
   if (replaceNextType) replaceNextType.textContent = getCartItemType(item);
@@ -701,12 +770,40 @@ const addToCart = (id) => {
   const product = products[id];
   if (!product) return;
 
-  requestCartReplacement({
+  const item = {
     id,
     ...product,
     type: "one-time",
     quantity: 1,
-  });
+  };
+
+  if (hasSubscriptionInCart()) {
+    requestCartReplacement(item);
+    return;
+  }
+
+  const existing = cart.get(id);
+  checkoutReference = "";
+
+  if (existing) {
+    cart.set(id, {
+      ...existing,
+      quantity: normalizeQuantity(normalizeQuantity(existing.quantity) + 1),
+    });
+    renderCart();
+    drawer.classList.add("is-open");
+    drawer.setAttribute("aria-hidden", "false");
+    celebrateCartAdd();
+    showToast(`${product.name} ajouté en quantité ${cart.get(id).quantity}`);
+    return;
+  }
+
+  cart.set(id, item);
+  renderCart();
+  drawer.classList.add("is-open");
+  drawer.setAttribute("aria-hidden", "false");
+  celebrateCartAdd();
+  showToast(`${product.name} ajouté au panier`);
 };
 
 const addPlanToCart = (type) => {
@@ -852,6 +949,8 @@ document.addEventListener("click", (event) => {
   const timelineItem = event.target.closest("[data-timeline-item]");
   const collectionButton = event.target.closest("[data-collection-month]");
   const removeButton = event.target.closest("[data-remove]");
+  const quantityDecreaseButton = event.target.closest("[data-qty-decrease]");
+  const quantityIncreaseButton = event.target.closest("[data-qty-increase]");
   const replaceCancelButton = event.target.closest("[data-replace-cancel]");
   const replaceConfirmButton = event.target.closest("[data-replace-confirm]");
 
@@ -935,6 +1034,26 @@ document.addEventListener("click", (event) => {
 
   if (removeButton) {
     cart.delete(removeButton.dataset.remove);
+    checkoutReference = "";
+  }
+
+  if (quantityDecreaseButton) {
+    const item = cart.get(quantityDecreaseButton.dataset.qtyDecrease);
+    if (item && !isSubscriptionItem(item)) {
+      item.quantity = normalizeQuantity(item.quantity) > 1 ? normalizeQuantity(item.quantity) - 1 : 1;
+      checkoutReference = "";
+    }
+  }
+
+  if (quantityIncreaseButton) {
+    const item = cart.get(quantityIncreaseButton.dataset.qtyIncrease);
+    if (item && !isSubscriptionItem(item)) {
+      item.quantity = normalizeQuantity(normalizeQuantity(item.quantity) + 1);
+      checkoutReference = "";
+    }
+  }
+
+  if (removeButton || quantityDecreaseButton || quantityIncreaseButton) {
     renderCart();
   }
 
