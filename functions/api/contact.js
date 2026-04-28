@@ -74,7 +74,7 @@ export async function onRequestPost({ request, env }) {
     },
     body: JSON.stringify({
       from: env.CONTACT_FROM,
-      to: [env.CONTACT_TO],
+      to: [env.CONTACT_TO.toLowerCase()],
       reply_to: email,
       subject,
       text,
