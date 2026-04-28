@@ -157,27 +157,6 @@ const planHelp = {
   12: "Meilleur prix: un prélèvement annuel, une box chaque mois.",
 };
 
-const collectionItems = [
-  {
-    image: "assets/bouquet-pink-vase.png",
-    alt: "Premier bouquet en briques",
-    title: "La première pièce",
-    text: "Un premier bouquet à construire tranquillement, puis à poser dans une entrée, un bureau ou une bibliothèque.",
-  },
-  {
-    image: "assets/set-orchid-purple.png",
-    alt: "Orchidée violette en briques",
-    title: "Une plante qui complète",
-    text: "Le mois suivant ajoute une nouvelle hauteur et une autre couleur, sans avoir à choisir vous-même l'association.",
-  },
-  {
-    image: "assets/bouquet-sunflowers.png",
-    alt: "Bouquet de tournesols en briques",
-    title: "Un coin déco qui s'installe",
-    text: "Après trois mois, la collection commence à raconter quelque chose: des formes, des couleurs, un vrai petit jardin.",
-  },
-];
-
 const selectedPlans = {
   classic: 1,
   signature: 1,
@@ -212,9 +191,6 @@ const planNote = document.querySelector("[data-plan-note-modal]");
 const planShippingNote = document.querySelector("[data-plan-shipping-note]");
 const planMonthlyShipping = document.querySelector("[data-plan-monthly-shipping]");
 const toast = document.querySelector("[data-toast]");
-const collectionImage = document.querySelector("[data-collection-image]");
-const collectionTitle = document.querySelector("[data-collection-title]");
-const collectionText = document.querySelector("[data-collection-text]");
 const siteHeader = document.querySelector(".site-header");
 
 let activePlanType = "classic";
@@ -920,21 +896,6 @@ const setTimelineStep = (step) => {
   });
 };
 
-const setCollectionMonth = (index) => {
-  const item = collectionItems[index];
-  if (!item || !collectionImage) return;
-  collectionImage.src = item.image;
-  collectionImage.alt = item.alt;
-  collectionTitle.textContent = item.title;
-  collectionText.textContent = item.text;
-  document.querySelectorAll("[data-collection-month]").forEach((button) => {
-    button.classList.toggle("is-selected", Number(button.dataset.collectionMonth) === index);
-  });
-  document.querySelectorAll(".collection-dots span").forEach((dot, dotIndex) => {
-    dot.classList.toggle("is-active", dotIndex <= index);
-  });
-};
-
 document.addEventListener("click", (event) => {
   const anchorLink = event.target.closest('a[href^="#"]');
   const addButton = event.target.closest("[data-add]");
@@ -947,7 +908,6 @@ document.addEventListener("click", (event) => {
   const planButton = event.target.closest("[data-plan]");
   const timelineButton = event.target.closest("[data-timeline-step]");
   const timelineItem = event.target.closest("[data-timeline-item]");
-  const collectionButton = event.target.closest("[data-collection-month]");
   const removeButton = event.target.closest("[data-remove]");
   const quantityDecreaseButton = event.target.closest("[data-qty-decrease]");
   const quantityIncreaseButton = event.target.closest("[data-qty-increase]");
@@ -991,10 +951,6 @@ document.addEventListener("click", (event) => {
 
   if (timelineItem) {
     setTimelineStep(Number(timelineItem.dataset.timelineItem));
-  }
-
-  if (collectionButton) {
-    setCollectionMonth(Number(collectionButton.dataset.collectionMonth));
   }
 
   if (planButton) {
@@ -1143,7 +1099,6 @@ document.addEventListener("keydown", (event) => {
 restoreCartState();
 renderCart();
 setTimelineStep(0);
-setCollectionMonth(0);
 
 window.addEventListener("load", () => {
   if (window.location.hash) {

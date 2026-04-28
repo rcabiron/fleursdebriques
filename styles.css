@@ -601,26 +601,6 @@ h3 {
   color: var(--muted);
 }
 
-.collection-card {
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--paper);
-  box-shadow: 0 14px 42px rgba(31, 22, 14, 0.07);
-}
-
-.collection-tabs button {
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: var(--cream);
-  color: var(--ink);
-  cursor: pointer;
-  font-weight: 900;
-}
-
-.collection-tabs button:hover {
-  border-color: rgba(18, 59, 102, 0.34);
-}
-
 .section {
   padding: clamp(3.5rem, 8vw, 7rem) clamp(1rem, 4vw, 4rem);
 }
@@ -857,17 +837,6 @@ details {
 .offer-reassurance span {
   color: var(--muted);
   font-size: 0.9rem;
-}
-
-.collection-tabs button {
-  min-height: 42px;
-  padding: 0.6rem 0.8rem;
-}
-
-.collection-tabs button.is-selected {
-  border-color: var(--navy);
-  background: var(--navy);
-  color: var(--paper);
 }
 
 .subscription-grid {
@@ -1485,74 +1454,6 @@ details {
 .premium-copy .button {
   align-self: flex-start;
   margin-top: 0.35rem;
-}
-
-.collection-builder {
-  background: var(--cream);
-}
-
-.collection-card {
-  display: grid;
-  grid-template-columns: minmax(300px, 0.72fr) minmax(0, 1fr);
-  overflow: hidden;
-}
-
-.collection-visual {
-  display: grid;
-  place-items: end center;
-  min-height: 430px;
-  padding: 2rem 1.2rem 0;
-  background:
-    radial-gradient(circle at 50% 28%, rgba(255, 237, 74, 0.22), transparent 36%),
-    linear-gradient(180deg, var(--blue-soft), var(--paper));
-}
-
-.collection-visual img {
-  max-height: 390px;
-  object-fit: contain;
-  filter: drop-shadow(0 28px 24px rgba(12, 40, 71, 0.2));
-  transition: opacity 180ms ease, transform 180ms ease;
-}
-
-.collection-copy {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 1rem;
-  padding: clamp(1.4rem, 4vw, 3rem);
-}
-
-.collection-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-}
-
-.collection-copy h3 {
-  margin: 0;
-  font-size: clamp(1.7rem, 3vw, 2.6rem);
-}
-
-.collection-copy p {
-  max-width: 640px;
-  color: var(--muted);
-  font-size: 1.08rem;
-}
-
-.collection-dots {
-  display: flex;
-  gap: 0.4rem;
-}
-
-.collection-dots span {
-  width: 36px;
-  height: 8px;
-  border-radius: 999px;
-  background: var(--line);
-}
-
-.collection-dots span.is-active {
-  background: var(--navy);
 }
 
 .how {
@@ -3100,7 +3001,6 @@ details p {
   .bouquet-showcase,
   .box-section,
   .section-heading-wide,
-  .collection-card,
   .product-card,
   .subscription-grid,
   .single-offers,
@@ -3128,10 +3028,6 @@ details p {
   .single-offers-section .single-offers,
   .compact-single-offers .single-offers {
     grid-template-columns: 1fr;
-  }
-
-  .collection-visual {
-    min-height: 360px;
   }
 
   .comparison-mobile {
@@ -3218,10 +3114,6 @@ details p {
     white-space: nowrap;
   }
 
-  .main-nav a[href="#concept"] {
-    display: none;
-  }
-
   h1 {
     font-size: clamp(2.2rem, 9.6vw, 3.25rem);
   }
@@ -3262,28 +3154,6 @@ details p {
 
   .form-grid {
     grid-template-columns: 1fr;
-  }
-
-  .collection-card {
-    gap: 0.75rem;
-  }
-
-  .collection-visual {
-    min-height: 310px;
-    padding-top: 1.2rem;
-  }
-
-  .collection-visual img {
-    max-height: 285px;
-  }
-
-  .collection-copy {
-    padding: 1.1rem;
-  }
-
-  .collection-tabs {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .delivery-timeline {
