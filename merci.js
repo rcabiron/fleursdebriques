@@ -10,12 +10,14 @@ const params = new URLSearchParams(window.location.search);
 const storedOrder = localStorage.getItem(THANK_YOU_STORAGE_KEY);
 const order = storedOrder ? JSON.parse(storedOrder) : null;
 const reference = order?.reference || params.get("ref") || "Confirmation PayPal";
+const orderReference = order?.orderReference || params.get("order") || "Non communiqué";
 const paymentType = order?.paymentType || params.get("type") || "one-time";
 const isSubscription = paymentType === "subscription" || order?.mode === "subscription";
 
 const title = document.querySelector("[data-thank-title]");
 const intro = document.querySelector("[data-thank-intro]");
 const referenceTarget = document.querySelector("[data-thank-reference]");
+const orderReferenceTarget = document.querySelector("[data-thank-order-reference]");
 const summary = document.querySelector("[data-thank-summary]");
 const nextSteps = document.querySelector("[data-next-steps]");
 const giftConfirmation = document.querySelector("[data-gift-confirmation]");
@@ -25,6 +27,7 @@ intro.textContent = isSubscription
   ? "Merci. PayPal a bien créé votre abonnement Fleurs de Briques."
   : "Merci. PayPal a bien validé votre paiement Fleurs de Briques.";
 referenceTarget.textContent = reference;
+orderReferenceTarget.textContent = orderReference;
 if (order?.isGift && giftConfirmation) {
   giftConfirmation.hidden = false;
 }

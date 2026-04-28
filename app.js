@@ -222,6 +222,7 @@ let paypalSdkIntent = "";
 let planModalGiftMode = false;
 let activeBoxGiftId = "box-m";
 let pendingCartReplacement = null;
+let checkoutReference = "";
 
 const getHeaderOffset = () => (siteHeader?.offsetHeight || 0) + 22;
 
@@ -244,6 +245,25 @@ const formatPrice = (value) =>
     style: "currency",
     currency: "EUR",
   }).format(value);
+
+const createOrderReference = () => {
+  const now = new Date();
+  const date = [
+    now.getFullYear(),
+    String(now.getMonth() + 1).padStart(2, "0"),
+    String(now.getDate()).padStart(2, "0"),
+  ].join("");
+  const randomPart = crypto.randomUUID().slice(0, 8).toUpperCase();
+  return `FDB-${date}-${randomPart}`;
+};
+
+const getCheckoutReference = () => {
+  if (!checkoutReference) {
+    checkoutReference = createOrderReference();
+  }
+
+  return checkoutReference;
+};
 
 const showToast = (message) => {
   toast.textContent = message;
@@ -434,7 +454,7 @@ const loadPayPalSdk = (intent) =>
     document.head.append(script);
   });
 
-const saveOrderSnapshot = ({ paymentType, reference }) => {
+const saveOrderSnapshot = ({ paymentType, reference, orderReference }) => {
   const { total } = getTotals();
   const mode = getCartPaymentMode();
   const items = [...cart.values()].map((item) => ({
@@ -452,6 +472,7 @@ const saveOrderSnapshot = ({ paymentType, reference }) => {
       paymentType,
       mode,
       reference,
+      orderReference,
       total,
       items,
       isGift: giftToggle?.checked || false,
@@ -460,16 +481,17 @@ const saveOrderSnapshot = ({ paymentType, reference }) => {
   );
 };
 
-const completePaidOrder = ({ paymentType, reference }) => {
-  saveOrderSnapshot({ paymentType, reference });
+const completePaidOrder = ({ paymentType, reference, orderReference }) => {
+  saveOrderSnapshot({ paymentType, reference, orderReference });
   cart.clear();
+  checkoutReference = "";
   localStorage.removeItem(CART_STORAGE_KEY);
   renderCart();
   modal.classList.remove("is-open");
   modal.setAttribute("aria-hidden", "true");
   drawer.classList.remove("is-open");
   drawer.setAttribute("aria-hidden", "true");
-  window.location.href = `merci.html?type=${encodeURIComponent(paymentType)}&ref=${encodeURIComponent(reference)}`;
+  window.location.href = `merci.html?type=${encodeURIComponent(paymentType)}&ref=${encodeURIComponent(reference)}&order=${encodeURIComponent(orderReference)}`;
 };
 
 const renderPayPalArea = () => {
@@ -508,6 +530,7 @@ const renderPayPalArea = () => {
   if (mode === "subscription") {
     const [cartId, item] = [...cart.entries()][0];
     const planId = PAYPAL_CONFIG.subscriptionPlanIds[cartId];
+    const orderReference = getCheckoutReference();
 
     if (!planId) {
       paypalButtons.classList.remove("is-loading");
@@ -525,11 +548,13 @@ const renderPayPalArea = () => {
             createSubscription: (data, actions) =>
               actions.subscription.create({
                 plan_id: planId,
+                custom_id: orderReference,
               }),
             onApprove: (data) =>
               completePaidOrder({
                 paymentType: "subscription",
                 reference: data.subscriptionID,
+                orderReference,
               }),
             onError: () => showToast("Le paiement PayPal n'a pas pu être lancé"),
           })
@@ -545,6 +570,7 @@ const renderPayPalArea = () => {
   const oneTimeSummary = [...cart.values()]
     .map((item) => item.name)
     .join(", ");
+  const orderReference = getCheckoutReference();
 
   paypalStatus.textContent = "Payez votre box à l'unité avec PayPal ou carte bancaire.";
   loadPayPalSdk("capture")
@@ -558,7 +584,7 @@ const renderPayPalArea = () => {
               purchase_units: [
                 {
                   description: oneTimeSummary || "Fleurs de Briques - Box à l'unité",
-                  custom_id: "fleurs-de-briques-box-unite",
+                  custom_id: orderReference,
                   amount: {
                     currency_code: PAYPAL_CONFIG.currency,
                     value: total.toFixed(2),
@@ -571,6 +597,7 @@ const renderPayPalArea = () => {
               completePaidOrder({
                 paymentType: "one-time",
                 reference: details.id || data.orderID,
+                orderReference,
               }),
             ),
           onError: () => showToast("Le paiement PayPal n'a pas pu être lancé"),
@@ -606,6 +633,7 @@ const renderCheckoutSummary = () => {
     .join("");
   const paymentMode = getCartPaymentMode();
   const isGift = giftToggle?.checked;
+  const orderReference = getCheckoutReference();
   const checkoutNote =
     isGift
       ? "Cadeau: l'adresse du destinataire sera confirmée dans PayPal."
@@ -617,6 +645,10 @@ const renderCheckoutSummary = () => {
     <strong>Récapitulatif</strong>
     <ul>${lines}</ul>
     <p>
+      <span>Référence commande</span>
+      <strong>${orderReference}</strong>
+    </p>
+    <p>
       <span>Total à régler maintenant</span>
       <strong>${formatPrice(total)}</strong>
     </p>
@@ -627,6 +659,7 @@ const renderCheckoutSummary = () => {
 const commitCartItem = (item, message) => {
   cart.clear();
   cart.set(item.id, item);
+  checkoutReference = "";
 
   renderCart();
   drawer.classList.add("is-open");

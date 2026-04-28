@@ -6,6 +6,7 @@ Le site utilise les boutons PayPal côté navigateur pour lancer le paiement, pu
 
 - Les abonnements utilisent les `plan_id` PayPal configurés dans `app.js`.
 - Les box à l'unité créent une commande PayPal au montant du panier.
+- Une référence interne `FDB-...` est créée au moment du paiement et envoyée à PayPal en `custom_id`.
 - Après validation PayPal, le client arrive sur `merci.html` avec le récapitulatif enregistré dans son navigateur.
 
 ## Pourquoi ajouter le webhook
@@ -60,6 +61,7 @@ Pour démarrer, cocher au minimum :
 Quand le volume de commandes augmentera, ajouter une base Cloudflare D1 pour conserver :
 
 - la référence PayPal,
+- la référence interne `FDB-...`,
 - le type d'offre,
 - le statut,
 - la date,
