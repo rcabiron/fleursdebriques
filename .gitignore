@@ -1,0 +1,18 @@
+.DS_Store
+*.log
+node_modules/
+
+# Anciennes captures/export Canva conservées localement.
+/4.png
+/5.png
+/6.png
+/7.png
+/Accueil.png
+/Découvrez.png
+/Découvrez.png
+/FAQ.png
+/La Box.png
+/Nos abonnés en parle.png
+/Nos abonnés en parle.png
+/S'abonner.png
+/Surprise.png
