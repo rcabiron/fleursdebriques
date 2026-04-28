@@ -83,7 +83,9 @@ export async function onRequestPost({ request, env }) {
   });
 
   if (!response.ok) {
-    return json({ message: "L'email n'a pas pu être envoyé pour le moment." }, 502);
+    const resendError = await response.json().catch(() => null);
+    const detail = resendError?.message || resendError?.error || `Erreur Resend ${response.status}`;
+    return json({ message: `L'email n'a pas pu être envoyé: ${detail}` }, 502);
   }
 
   return json({ ok: true });
