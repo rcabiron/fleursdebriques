@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Contact - Fleurs de Briques</title>
+    <meta name="description" content="Contactez le service client Fleurs de Briques pour une commande, un abonnement, un retour ou une question.">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <meta property="og:site_name" content="Fleurs de Briques">
+    <meta property="og:locale" content="fr_FR">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Contact - Fleurs de Briques">
+    <meta property="og:description" content="Contactez le service client Fleurs de Briques pour une commande, un abonnement, un retour ou une question.">
+    <meta property="og:image" content="assets/social-share.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,650;9..144,800&family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    >
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="index.html#top" aria-label="Fleurs de Briques">
+        <span class="brand-mark" aria-hidden="true">
+          <img src="assets/favicon.svg" alt="">
+        </span>
+        <span class="brand-text">
+          <strong>Fleurs</strong>
+          <small>de Briques</small>
+        </span>
+      </a>
+      <nav class="main-nav" aria-label="Navigation principale">
+        <a href="index.html#offres">Offres</a>
+        <a href="offrir.html">Cadeau</a>
+        <a href="index.html#box">La box</a>
+        <a href="index.html#concept">Concept</a>
+        <a href="index.html#faq">FAQ</a>
+      </nav>
+      <div class="header-actions">
+        <a class="header-cta" href="index.html#offres">Retour au site</a>
+      </div>
+    </header>
+
+    <main class="contact-main">
+      <section class="legal-hero contact-hero">
+        <p class="eyebrow">Service client</p>
+        <h1>Nous contacter</h1>
+        <p>
+          Une question sur une commande, un abonnement ou une box reçue ?
+          Envoyez-nous les informations utiles pour que l'on puisse vous répondre simplement.
+        </p>
+      </section>
+
+      <section class="contact-layout" aria-label="Formulaire de contact">
+        <form class="contact-form" data-contact-form>
+          <div class="form-grid">
+            <label>
+              <span>Votre nom</span>
+              <input type="text" name="name" autocomplete="name" required>
+            </label>
+            <label>
+              <span>Votre email</span>
+              <input type="email" name="email" autocomplete="email" required>
+            </label>
+          </div>
+
+          <label>
+            <span>Motif</span>
+            <select name="topic" required>
+              <option value="">Choisir un motif</option>
+              <option value="Question avant commande">Question avant commande</option>
+              <option value="Commande ou livraison">Commande ou livraison</option>
+              <option value="Abonnement">Abonnement</option>
+              <option value="Retour ou rétractation">Retour ou rétractation</option>
+              <option value="Produit abîmé ou incomplet">Produit abîmé ou incomplet</option>
+              <option value="Autre demande">Autre demande</option>
+            </select>
+          </label>
+
+          <label>
+            <span>Référence PayPal ou commande <em>facultatif</em></span>
+            <input type="text" name="reference" autocomplete="off" placeholder="Ex: I-XXXXXXXX ou 123456789">
+          </label>
+
+          <label>
+            <span>Votre message</span>
+            <textarea name="message" rows="7" required placeholder="Décrivez votre demande en quelques lignes."></textarea>
+          </label>
+
+          <label class="contact-hp" aria-hidden="true">
+            <span>Site web</span>
+            <input type="text" name="website" tabindex="-1" autocomplete="off">
+          </label>
+
+          <label class="contact-consent">
+            <input type="checkbox" name="consent" required>
+            <span>J'accepte que ces informations soient utilisées pour répondre à ma demande.</span>
+          </label>
+
+          <button class="button button-primary" type="submit">Envoyer la demande</button>
+          <p class="form-note">Le formulaire prépare un email avec votre demande. Vous pourrez le relire avant envoi.</p>
+          <p class="contact-status" data-contact-status role="status" aria-live="polite"></p>
+        </form>
+
+        <aside class="contact-side">
+          <article>
+            <h2>Pour une commande</h2>
+            <p>Ajoutez si possible la référence PayPal, le nom de l'offre et l'adresse email utilisée au paiement.</p>
+          </article>
+          <article>
+            <h2>Pour un retour</h2>
+            <p>Décrivez la box concernée et la raison de la demande. L'adresse de retour sera confirmée par le service client.</p>
+          </article>
+          <article>
+            <h2>Produit abîmé ou incomplet</h2>
+            <p>Indiquez les pièces manquantes ou abîmées. Des photos pourront être demandées pour traiter le dossier.</p>
+          </article>
+        </aside>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <strong>Fleurs de Briques</strong>
+        <span>Box florale à construire</span>
+      </div>
+      <nav aria-label="Liens légaux">
+        <a href="contact.html">Contact</a>
+        <a href="mentions-legales.html">Mentions légales</a>
+        <a href="conditions-generales.html">CGV</a>
+        <a href="confidentialite.html">Confidentialité</a>
+        <a href="retractation-livraison.html">Rétractation & livraison</a>
+      </nav>
+    </footer>
+
+    <script src="contact.js"></script>
+  </body>
+</html>

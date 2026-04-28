@@ -1,0 +1,873 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fleurs de Briques - Box de fleurs en briques à construire</title>
+    <meta
+      name="description"
+      content="Recevez chaque mois une fleur ou un bouquet en briques à assembler, avec notice illustrée et bonus surprise."
+    >
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <meta property="og:site_name" content="Fleurs de Briques">
+    <meta property="og:locale" content="fr_FR">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Fleurs de Briques - Box de fleurs en briques à construire">
+    <meta property="og:description" content="Recevez chaque mois une fleur ou un bouquet en briques à assembler, avec notice illustrée et bonus surprise.">
+    <meta property="og:image" content="assets/social-share.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Fleurs de Briques - Box de fleurs en briques à construire">
+    <meta name="twitter:description" content="Recevez chaque mois une fleur ou un bouquet en briques à assembler, avec notice illustrée et bonus surprise.">
+    <meta name="twitter:image" content="assets/social-share.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,650;9..144,800&family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    >
+    <link rel="stylesheet" href="styles.css">
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Fleurs de Briques",
+        "url": "https://fleursdebriques.fr",
+        "logo": "https://fleursdebriques.fr/assets/favicon.svg"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": "Fleurs de Briques",
+        "description": "Box mensuelle de fleurs, plantes et bouquets en briques à construire, avec notice papier et bonus selon l'offre.",
+        "brand": {
+          "@type": "Brand",
+          "name": "Fleurs de Briques"
+        },
+        "image": "https://fleursdebriques.fr/assets/social-share.png",
+        "offers": [
+          {
+            "@type": "Offer",
+            "name": "Jardin Classique",
+            "price": "29.90",
+            "priceCurrency": "EUR",
+            "availability": "https://schema.org/InStock",
+            "url": "https://fleursdebriques.fr/#offres"
+          },
+          {
+            "@type": "Offer",
+            "name": "Jardin Signature",
+            "price": "46.90",
+            "priceCurrency": "EUR",
+            "availability": "https://schema.org/InStock",
+            "url": "https://fleursdebriques.fr/#offres"
+          },
+          {
+            "@type": "Offer",
+            "name": "Box à l'unité",
+            "price": "19.90",
+            "priceCurrency": "EUR",
+            "availability": "https://schema.org/InStock",
+            "url": "https://fleursdebriques.fr/#box-unitaires"
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main">Aller au contenu</a>
+
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="Fleurs de Briques">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 64 64" role="img" focusable="false">
+            <rect class="logo-bg" x="5" y="5" width="54" height="54" rx="16"></rect>
+            <path class="logo-stem" d="M32 35 L32 47"></path>
+            <path class="logo-leaf logo-leaf-left" d="M31 40 C22 35 19 39 16 44 C23 46 28 45 31 40Z"></path>
+            <path class="logo-leaf logo-leaf-right" d="M33 38 C42 33 46 37 49 42 C41 45 36 44 33 38Z"></path>
+            <rect class="logo-petal logo-petal-top" x="26" y="9" width="12" height="12" rx="3"></rect>
+            <rect class="logo-petal logo-petal-left" x="14" y="22" width="12" height="12" rx="3"></rect>
+            <rect class="logo-petal logo-petal-right" x="38" y="22" width="12" height="12" rx="3"></rect>
+            <rect class="logo-center" x="26" y="22" width="12" height="12" rx="3"></rect>
+            <rect class="logo-brick" x="20" y="47" width="24" height="9" rx="2"></rect>
+            <path class="logo-brick-lines" d="M28 47 V56 M36 47 V56"></path>
+          </svg>
+        </span>
+        <span class="brand-text">
+          <strong>Fleurs</strong>
+          <small>de Briques</small>
+        </span>
+      </a>
+
+      <nav class="main-nav" aria-label="Navigation principale">
+        <a href="#offres">Offres</a>
+        <a href="offrir.html">Cadeau</a>
+        <a href="#box">La box</a>
+        <a href="#concept">Concept</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+
+      <div class="header-actions">
+        <a class="header-cta" href="#offres">Choisir une box</a>
+        <button class="cart-button" type="button" data-cart-open aria-label="Ouvrir le panier">
+          <span>Panier</span>
+          <strong data-cart-count>0</strong>
+        </button>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Box florale à construire</p>
+          <h1>Recevez, construisez, exposez.</h1>
+          <p class="hero-text">
+            Chaque mois, une fleur ou un bouquet en briques arrive chez vous:
+            un moment de montage, puis une vraie pièce déco qui reste.
+          </p>
+          <div class="hero-proof" aria-label="Réassurance abonnement">
+            <span>Sans engagement</span>
+            <span>Livraison incluse en abonnement</span>
+            <span>Cadeau dans la première box</span>
+            <span>À s'offrir ou à offrir</span>
+          </div>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#offres">Choisir ma box</a>
+            <a class="button button-secondary" href="offrir.html">Offrir une box</a>
+          </div>
+        </div>
+
+        <aside class="hero-card hero-lifestyle" aria-label="Bouquet en briques exposé dans un intérieur">
+          <img src="assets/set-lifestyle-window.jpg" alt="Bouquet en briques colorées exposé près d'une fenêtre">
+          <div class="price-box">
+            <span>Abonnement</span>
+            <strong>Dès 29,90€ <small>/ mois</small></strong>
+            <p>1re box avec cadeau bonus</p>
+            <small>Livraison incluse</small>
+          </div>
+        </aside>
+      </section>
+
+      <section class="trust-strip" aria-label="Avantages principaux">
+        <div>
+          <strong>Sans engagement</strong>
+          <span>Résiliable à tout moment</span>
+        </div>
+        <div>
+          <strong>Expédition mensuelle</strong>
+          <span>Autour du 10 de chaque mois</span>
+        </div>
+        <div>
+          <strong>Notice papier</strong>
+          <span>Illustrée, étape par étape</span>
+        </div>
+        <div>
+          <strong>Cadeau de bienvenue</strong>
+          <span>Inclus dans la première box</span>
+        </div>
+      </section>
+
+      <section class="section why-bricks" aria-label="Pourquoi choisir des fleurs en briques">
+        <div class="section-heading section-heading-wide">
+          <div>
+            <p class="eyebrow">Pourquoi pas des fleurs classiques ?</p>
+            <h2>Un bouquet qui ne fane pas.</h2>
+          </div>
+          <p>Le plaisir d'un bouquet, avec le moment créatif en plus: on construit, on expose, on garde.</p>
+        </div>
+        <div class="why-grid">
+          <article>
+            <span aria-hidden="true">01</span>
+            <h3>Pas d'entretien</h3>
+            <p>Pas d'eau, pas de lumière idéale, pas de fleurs à remplacer au bout de quelques jours.</p>
+          </article>
+          <article>
+            <span aria-hidden="true">02</span>
+            <h3>Un moment à soi</h3>
+            <p>La box devient une pause manuelle et calme, loin des écrans, avant de devenir déco.</p>
+          </article>
+          <article>
+            <span aria-hidden="true">03</span>
+            <h3>Une déco durable</h3>
+            <p>Chaque set reste exposé et complète peu à peu un jardin personnel en briques.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section offers" id="offres">
+        <div class="section-heading section-heading-wide">
+          <div>
+            <p class="eyebrow">Offres</p>
+            <h2>Choisissez votre façon de recevoir des fleurs.</h2>
+          </div>
+          <p>Deux abonnements mensuels pour construire une collection qui prend place dans votre intérieur.</p>
+        </div>
+
+        <div class="offer-reassurance" aria-label="Réassurance commande">
+          <div>
+            <strong>Paiement sécurisé</strong>
+            <span>Carte bancaire, PayPal ou carte cadeau</span>
+          </div>
+          <div>
+            <strong>Sans engagement</strong>
+            <span>Gestion et résiliation depuis PayPal</span>
+          </div>
+          <div>
+            <strong>Envoi mensuel</strong>
+            <span>Préparation autour du 10, réception vers le 15</span>
+          </div>
+          <div>
+            <strong>Prix transparent</strong>
+            <span>Le rythme de prélèvement est confirmé avant validation</span>
+          </div>
+        </div>
+
+        <div class="offers-layout" data-products>
+          <div class="subscription-grid" aria-label="Abonnements">
+            <article class="product-card featured recommended-card">
+              <img class="product-bouquet" src="assets/box-classique.png" alt="Box Jardin Classique">
+              <div class="product-badge">Choix recommandé</div>
+              <h3>Jardin Classique</h3>
+              <p>Une box créative chaque mois avec un modèle surprise, une notice papier et un cadeau bonus dans la première box.</p>
+              <ul>
+                <li>Sans engagement</li>
+                <li>Livraison incluse</li>
+                <li>Cadeau bonus de bienvenue</li>
+                <li>Bonus ponctuels dans l'année</li>
+              </ul>
+              <div class="billing-options" data-billing="classic" aria-label="Choisir le rythme de prélèvement Jardin Classique">
+                <button type="button" class="is-selected" data-plan="classic-1">Mensuel <span>Flex</span><small>34,90€ / mois</small></button>
+                <button type="button" data-plan="classic-3">3 mois <span>-6%</span><small>32,90€ / mois</small></button>
+                <button type="button" data-plan="classic-6">6 mois <span>-9%</span><small>31,90€ / mois</small></button>
+                <button type="button" data-plan="classic-12">1 an <span>-14%</span><small>29,90€ / mois</small></button>
+              </div>
+              <p class="billing-note" data-plan-note="classic">Prélevé 34,90€ chaque mois. Box envoyée chaque mois.</p>
+              <div class="product-footer">
+                <strong data-plan-price="classic">34,90€ <small>/ mois</small></strong>
+                <button class="button button-primary" type="button" data-add-plan="classic">Ajouter au panier</button>
+              </div>
+            </article>
+
+            <article class="product-card featured premium-card">
+              <img class="product-bouquet" src="assets/box-signature.png" alt="Box Jardin Signature">
+              <div class="product-badge">Upgrade premium</div>
+              <h3>Jardin Signature</h3>
+              <p>Une sélection plus généreuse ou plus travaillée, pensée pour celles et ceux qui veulent une vraie pièce forte.</p>
+              <ul>
+                <li>Format premium mensuel</li>
+                <li>Plantes plus travaillées et imposantes</li>
+                <li>Parfois plusieurs sets dans la box</li>
+                <li>Bonus environ deux fois plus fréquents</li>
+                <li>Livraison incluse</li>
+                <li>Cadeau bonus de bienvenue</li>
+              </ul>
+              <div class="billing-options" data-billing="signature" aria-label="Choisir le rythme de prélèvement Jardin Signature">
+                <button type="button" class="is-selected" data-plan="signature-1">Mensuel <span>Flex</span><small>54,90€ / mois</small></button>
+                <button type="button" data-plan="signature-3">3 mois <span>-5%</span><small>51,90€ / mois</small></button>
+                <button type="button" data-plan="signature-6">6 mois <span>-9%</span><small>49,90€ / mois</small></button>
+                <button type="button" data-plan="signature-12">1 an <span>-15%</span><small>46,90€ / mois</small></button>
+              </div>
+              <p class="billing-note" data-plan-note="signature">Prélevé 54,90€ chaque mois. Box envoyée chaque mois.</p>
+              <div class="product-footer">
+                <strong data-plan-price="signature">54,90€ <small>/ mois</small></strong>
+                <button class="button button-primary" type="button" data-add-plan="signature">Ajouter au panier</button>
+              </div>
+            </article>
+          </div>
+
+          <div class="comparison-table comparison-panel" aria-label="Comparatif des offres">
+            <div class="comparison-head">
+              <p class="eyebrow">Comparatif</p>
+              <h3>Classique, Premium ou box à l'unité ?</h3>
+            </div>
+            <div class="comparison-cards">
+              <article class="compare-card">
+                <div class="compare-card-head">
+                  <span>Essentiel</span>
+                  <h4>Jardin Classique</h4>
+                  <strong>Dès 29,90€ <small>/ mois</small></strong>
+                </div>
+                <dl>
+                  <div>
+                    <dt>Pour</dt>
+                    <dd>Construire une collection régulière</dd>
+                  </div>
+                  <div>
+                    <dt>Chaque mois</dt>
+                    <dd>1 fleur, plante ou bouquet surprise</dd>
+                  </div>
+                  <div>
+                    <dt>Bonus</dt>
+                    <dd>Bienvenue + surprises ponctuelles</dd>
+                  </div>
+                  <div>
+                    <dt>Livraison</dt>
+                    <dd>Incluse</dd>
+                  </div>
+                  <div>
+                    <dt>Paiement</dt>
+                    <dd>Mensuel, 3 mois, 6 mois ou annuel</dd>
+                  </div>
+                </dl>
+              </article>
+
+              <article class="compare-card compare-card-featured">
+                <div class="compare-card-head">
+                  <span>Premium</span>
+                  <h4>Jardin Signature</h4>
+                  <strong>Dès 46,90€ <small>/ mois</small></strong>
+                </div>
+                <dl>
+                  <div>
+                    <dt>Pour</dt>
+                    <dd>Recevoir les pièces les plus fortes</dd>
+                  </div>
+                  <div>
+                    <dt>Chaque mois</dt>
+                    <dd>Set plus imposant, parfois plusieurs sets</dd>
+                  </div>
+                  <div>
+                    <dt>Bonus</dt>
+                    <dd>Environ deux fois plus fréquents</dd>
+                  </div>
+                  <div>
+                    <dt>Livraison</dt>
+                    <dd>Incluse</dd>
+                  </div>
+                  <div>
+                    <dt>Paiement</dt>
+                    <dd>Mensuel, 3 mois, 6 mois ou annuel</dd>
+                  </div>
+                </dl>
+              </article>
+
+              <article class="compare-card">
+                <div class="compare-card-head">
+                  <span>Sans abonnement</span>
+                  <h4>Box à l'unité</h4>
+                  <strong>Dès 19,90€</strong>
+                </div>
+                <dl>
+                  <div>
+                    <dt>Pour</dt>
+                    <dd>Tester, offrir ou compléter</dd>
+                  </div>
+                  <div>
+                    <dt>Contenu</dt>
+                    <dd>Petit Bouquet, Découverte ou Grande Composition</dd>
+                  </div>
+                  <div>
+                    <dt>Bonus</dt>
+                    <dd>Pas de bonus surprise</dd>
+                  </div>
+                  <div>
+                    <dt>Livraison</dt>
+                    <dd>2,90€</dd>
+                  </div>
+                  <div>
+                    <dt>Paiement</dt>
+                    <dd>Achat ponctuel</dd>
+                  </div>
+                </dl>
+              </article>
+            </div>
+
+            <div class="comparison-mobile" aria-label="Comparatif mobile des offres">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Offre</th>
+                    <th>Classique</th>
+                    <th>Signature</th>
+                    <th>Unité</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>Prix</th>
+                    <td>Dès 29,90€ / mois</td>
+                    <td>Dès 46,90€ / mois</td>
+                    <td>Dès 19,90€</td>
+                  </tr>
+                  <tr>
+                    <th>Pour</th>
+                    <td>Collection régulière</td>
+                    <td>Pièces fortes</td>
+                    <td>Tester ou offrir</td>
+                  </tr>
+                  <tr>
+                    <th>Chaque mois</th>
+                    <td>1 set surprise</td>
+                    <td>Set plus imposant, parfois plusieurs</td>
+                    <td>Non</td>
+                  </tr>
+                  <tr>
+                    <th>Bonus</th>
+                    <td>Bienvenue + ponctuels</td>
+                    <td>Environ 2x plus fréquents</td>
+                    <td>Non</td>
+                  </tr>
+                  <tr>
+                    <th>Livraison</th>
+                    <td>Incluse</td>
+                    <td>Incluse</td>
+                    <td>2,90€</td>
+                  </tr>
+                  <tr>
+                    <th>Paiement</th>
+                    <td>Mensuel, 3, 6 ou 12 mois</td>
+                    <td>Mensuel, 3, 6 ou 12 mois</td>
+                    <td>Ponctuel</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="premium-band" aria-label="Édition premium">
+        <img src="assets/signature-lifestyle.png" alt="Box Jardin Signature avec une fleur premium en briques">
+        <div class="premium-copy">
+          <p class="eyebrow">Jardin Signature</p>
+          <h2>La version premium pour les plus belles pièces de la collection.</h2>
+          <p>
+            Une box pensée pour recevoir des compositions plus imposantes,
+            plus travaillées, et parfois plusieurs sets dans le même envoi.
+          </p>
+          <div class="premium-price">
+            <span>Dès</span>
+            <strong>46,90€ <small>/ mois</small></strong>
+          </div>
+          <ul class="premium-points">
+            <li>
+              <strong>Plus de présence</strong>
+              <span>Bouquets larges, vases travaillés et modèles plus décoratifs.</span>
+            </li>
+            <li>
+              <strong>Plus de contenu</strong>
+              <span>Certains mois, plusieurs sets ou une composition plus complète.</span>
+            </li>
+            <li>
+              <strong>Plus de surprises</strong>
+              <span>Des bonus environ deux fois plus fréquents que dans le Classique.</span>
+            </li>
+          </ul>
+          <a class="button button-primary" href="#offres">Choisir Jardin Signature</a>
+        </div>
+      </section>
+
+      <section class="section box-section" id="box">
+        <div class="box-copy">
+          <p class="eyebrow">Dans chaque box</p>
+          <h2>Un rituel simple, prêt à monter.</h2>
+          <p>Chaque box va droit à l'essentiel: un set surprise, une notice claire et parfois un bonus.</p>
+        </div>
+
+        <div class="box-list">
+          <article>
+            <span>01</span>
+            <h3>Set de briques</h3>
+            <p>Une fleur, une plante ou un bouquet sélectionné pour le mois.</p>
+          </article>
+          <article>
+            <span>02</span>
+            <h3>Notice illustrée</h3>
+            <p>Des instructions claires, pensées pour un montage agréable.</p>
+          </article>
+          <article>
+            <span>03</span>
+            <h3>Bonus ponctuel</h3>
+            <p>Régulièrement, un petit accessoire utile ou décoratif complète l'expérience.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="bouquet-showcase" aria-label="Aperçu des fleurs en briques">
+        <div class="showcase-lifestyle">
+          <img src="assets/set-lifestyle-window.jpg" alt="Bouquet en briques colorées exposé près d'une fenêtre">
+        </div>
+        <div class="photo-story-copy">
+          <p class="eyebrow">Aperçu des sets</p>
+          <h2>Des bouquets à exposer.</h2>
+          <p>
+            Les fleurs reçues chaque mois deviennent de vraies pièces déco:
+            un bouquet sur une étagère, un tournesol sur le bureau, ou une
+            nouvelle plante pour compléter la collection.
+          </p>
+        </div>
+      </section>
+
+      <section class="section collection-builder" aria-label="Aperçu de collection">
+        <div class="section-heading section-heading-wide">
+          <div>
+            <p class="eyebrow">Collection</p>
+            <h2>Voyez votre jardin prendre forme.</h2>
+          </div>
+          <p>Chaque clic ajoute un mois au rituel et montre comment la collection peut s'installer chez vous.</p>
+        </div>
+        <div class="collection-card">
+          <div class="collection-visual">
+            <img src="assets/bouquet-pink-vase.png" alt="Premier bouquet en briques" data-collection-image>
+          </div>
+          <div class="collection-copy">
+            <div class="collection-tabs" aria-label="Mois de collection">
+              <button type="button" class="is-selected" data-collection-month="0">Mois 1</button>
+              <button type="button" data-collection-month="1">Mois 2</button>
+              <button type="button" data-collection-month="2">Mois 3</button>
+            </div>
+            <h3 data-collection-title>La première pièce</h3>
+            <p data-collection-text>Un premier bouquet à construire tranquillement, puis à poser dans une entrée, un bureau ou une bibliothèque.</p>
+            <div class="collection-dots" aria-hidden="true">
+              <span class="is-active"></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section concept" id="concept">
+        <div class="section-heading">
+          <p class="eyebrow">Le concept</p>
+          <h2>Un moment de détente, une déco qui reste.</h2>
+          <p>
+            Fleurs de Briques transforme le montage en rendez-vous créatif:
+            vous construisez une pièce décorative, puis vous composez votre
+            jardin en briques au fil des mois.
+          </p>
+        </div>
+        <div class="feature-grid">
+          <article>
+            <div class="feature-title">
+              <span class="feature-icon petals" aria-hidden="true"></span>
+              <h3>Jolie déco à faire soi-même</h3>
+            </div>
+            <p>Un objet fini qui trouve naturellement sa place sur une étagère, un bureau ou une table.</p>
+          </article>
+          <article>
+            <div class="feature-title">
+              <span class="feature-icon heart" aria-hidden="true"></span>
+              <h3>La surprise du colis</h3>
+            </div>
+            <p>Chaque box garde l'effet découverte: un modèle du mois et une petite routine créative.</p>
+          </article>
+          <article>
+            <div class="feature-title">
+              <span class="feature-icon brick" aria-hidden="true"></span>
+              <h3>Collection à construire</h3>
+            </div>
+            <p>Rose, tournesol, lavande ou bouquet: les modèles sont pensés pour être harmonieux ensemble.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section how" id="fonctionnement">
+        <div class="section-heading section-heading-wide">
+          <div>
+          <p class="eyebrow">Comment ça marche</p>
+            <h2>Vous choisissez, puis le rituel se lance.</h2>
+          </div>
+          <p>Choisissez votre offre une fois. Ensuite, la box arrive chaque mois, quel que soit le rythme de prélèvement choisi.</p>
+        </div>
+        <div class="delivery-timeline" aria-label="Timeline de livraison mensuelle">
+          <p class="timeline-hint">Cliquez sur une étape pour voir le détail.</p>
+          <div class="timeline-track" aria-hidden="true">
+            <span class="timeline-progress"></span>
+            <button class="timeline-marker marker-start is-active" type="button" data-timeline-step="0" aria-label="Jour 1"></button>
+            <button class="timeline-marker marker-pack" type="button" data-timeline-step="1" aria-label="Autour du 10"></button>
+            <button class="timeline-marker marker-home" type="button" data-timeline-step="2" aria-label="Vers le 15"></button>
+          </div>
+          <ol>
+            <li class="is-active" data-timeline-item="0">
+              <strong>Jour 1</strong>
+              <span>Vous choisissez l'offre</span>
+              <p>Abonnement ou box à l'unité: vous validez la formule, puis PayPal sécurise le paiement.</p>
+            </li>
+            <li data-timeline-item="1">
+              <strong>Autour du 10</strong>
+              <span>La box du mois est préparée</span>
+              <p>Le set surprise du mois est sélectionné, emballé avec sa notice, puis confié au transporteur.</p>
+            </li>
+            <li data-timeline-item="2">
+              <strong>Vers le 15</strong>
+              <span>Vous recevez votre set à construire</span>
+              <p>La box arrive chez vous: vous montez votre fleur, puis elle rejoint votre déco.</p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="section reviews" id="avis">
+        <div class="section-heading section-heading-wide">
+          <div>
+            <p class="eyebrow">Avis clients</p>
+            <h2>Une routine créative qui plaît.</h2>
+          </div>
+          <p>Des retours volontairement simples: ce que les clients aiment, et ce qu'ils remarquent vraiment après quelques box.</p>
+        </div>
+        <div class="review-grid">
+          <figure>
+            <div class="review-rating" aria-label="Note 5 sur 5">★★★★★</div>
+            <blockquote>Je pensais surtout aimer le montage, mais au final c'est la déco qui m'a surprise. Les deux premiers sets vont très bien ensemble.</blockquote>
+            <figcaption>
+              <strong>Camille</strong>
+              <span>Jardin Classique · 4 mois</span>
+            </figcaption>
+          </figure>
+          <figure>
+            <div class="review-rating" aria-label="Note 5 sur 5">★★★★★</div>
+            <blockquote>La Signature est plus chère, mais le rendu fait vraiment plus objet à exposer. Le dernier bouquet a fini sur mon bureau.</blockquote>
+            <figcaption>
+              <strong>Nadia</strong>
+              <span>Jardin Signature · 3 mois</span>
+            </figcaption>
+          </figure>
+          <figure>
+            <div class="review-rating" aria-label="Note 4 sur 5">★★★★☆</div>
+            <blockquote>J'ai pris un Bouquet Découverte pour tester avant l'abonnement. Le montage était accessible, même si certaines petites pièces demandent un peu de patience.</blockquote>
+            <figcaption>
+              <strong>Julien</strong>
+              <span>Bouquet Découverte à l'unité</span>
+            </figcaption>
+          </figure>
+          <figure>
+            <div class="review-rating" aria-label="Note 5 sur 5">★★★★★</div>
+            <blockquote>On la monte souvent à deux le dimanche. Ce n'est pas trop long, et ça change des écrans sans faire activité enfantine.</blockquote>
+            <figcaption>
+              <strong>Sarah</strong>
+              <span>Jardin Classique · 6 mois</span>
+            </figcaption>
+          </figure>
+          <figure>
+            <div class="review-rating" aria-label="Note 4 sur 5">★★★★☆</div>
+            <blockquote>Le cadeau de la première box est un vrai plus. J'aimerais parfois choisir la couleur, mais l'effet surprise marche bien.</blockquote>
+            <figcaption>
+              <strong>Élodie</strong>
+              <span>Jardin Classique · 2 mois</span>
+            </figcaption>
+          </figure>
+          <figure>
+            <div class="review-rating" aria-label="Note 5 sur 5">★★★★★</div>
+            <blockquote>J'ai offert la Signature à ma mère. Elle garde les notices et expose les modèles dans l'entrée, donc mission réussie.</blockquote>
+            <figcaption>
+              <strong>Marc</strong>
+              <span>Jardin Signature · offert 3 mois</span>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="section faq" id="faq">
+        <div class="section-heading">
+          <p class="eyebrow">FAQ</p>
+          <h2>Les réponses utiles avant de commander.</h2>
+        </div>
+        <div class="faq-list">
+          <details>
+            <summary>Que contient chaque box ?</summary>
+            <p>Un bouquet ou une fleur en briques à construire, une notice papier illustrée et parfois un bonus surprise.</p>
+          </details>
+          <details>
+            <summary>Quand vais-je recevoir ma box ?</summary>
+            <p>Les envois sont prévus autour du 10 de chaque mois, pour une réception généralement vers le 15.</p>
+          </details>
+          <details>
+            <summary>Quand suis-je débité(e) ?</summary>
+            <p>Selon la durée choisie: chaque mois, tous les 3 mois, deux fois par an ou une fois par an. Plus le rythme est long, plus le prix ramené au mois baisse.</p>
+          </details>
+          <details>
+            <summary>Puis-je offrir une box ?</summary>
+            <p>Oui. Une page dédiée vous aide à choisir entre une box à l'unité, 3 mois d'abonnement ou Jardin Signature. Au panier, cochez l'option cadeau puis indiquez l'adresse du destinataire dans PayPal.</p>
+          </details>
+          <details>
+            <summary>Peut-on choisir la fleur ?</summary>
+            <p>Non: le modèle change chaque mois pour garder l'effet surprise et créer une collection harmonieuse.</p>
+          </details>
+          <details>
+            <summary>Les sets sont-ils compatibles avec les grandes marques de briques ?</summary>
+            <p>Oui, les pièces sont compatibles avec les formats standards de briques de construction. Les sets ne sont pas des produits officiels de marques tierces, sauf mention explicite.</p>
+          </details>
+          <details>
+            <summary>Comment arrêter mon abonnement ?</summary>
+            <p>L'abonnement est sans engagement et peut être géré depuis le compte PayPal de l'acheteur, résiliation incluse. Pour éviter l'envoi suivant, résiliez avant la préparation de la prochaine box.</p>
+          </details>
+        </div>
+      </section>
+
+      <section class="section single-offers-section" id="box-unitaires" aria-label="Box à l'unité">
+        <div class="section-heading section-heading-wide">
+          <div>
+            <p class="eyebrow">Sans abonnement</p>
+            <h2>Envie de tester ou d'offrir une box ?</h2>
+          </div>
+          <p>Achat ponctuel, sans cadeau bonus. Frais de port: 2,90€.</p>
+        </div>
+
+        <div class="single-offers">
+          <article class="single-card">
+            <div>
+              <span class="single-size">S</span>
+              <h4>Petit Bouquet</h4>
+              <p>Petit set surprise, notice incluse, sans bonus.</p>
+            </div>
+            <strong>19,90€ <small>+ 2,90€ livraison</small></strong>
+            <button class="button button-primary" type="button" data-add="box-s">Ajouter</button>
+          </article>
+
+          <article class="single-card emphasized">
+            <div>
+              <span class="single-size">M</span>
+              <h4>Bouquet Découverte</h4>
+              <p>L'équivalent d'une box classique d'abonnement, sans bonus.</p>
+            </div>
+            <strong>39,90€ <small>+ 2,90€ livraison</small></strong>
+            <button class="button button-primary" type="button" data-add="box-m">Ajouter</button>
+          </article>
+
+          <article class="single-card">
+            <div>
+              <span class="single-size">XL</span>
+              <h4>Grande Composition</h4>
+              <p>Grand set généreux, idéal pour un cadeau plus spectaculaire.</p>
+            </div>
+            <strong>59,90€ <small>+ 2,90€ livraison</small></strong>
+            <button class="button button-primary" type="button" data-add="box-xl">Ajouter</button>
+          </article>
+        </div>
+      </section>
+
+      <section class="final-cta">
+        <div>
+          <p class="eyebrow">Prêt(e) à faire fleurir votre intérieur ?</p>
+          <h2>Commencez par une box ou lancez votre abonnement.</h2>
+        </div>
+        <a class="button button-primary" href="#offres">Choisir une offre</a>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <strong>Fleurs de Briques</strong>
+        <span>Box florale à construire</span>
+      </div>
+      <nav aria-label="Liens légaux">
+        <a href="contact.html">Contact</a>
+        <a href="mentions-legales.html">Mentions légales</a>
+        <a href="conditions-generales.html">CGV</a>
+        <a href="confidentialite.html">Confidentialité</a>
+        <a href="retractation-livraison.html">Rétractation & livraison</a>
+      </nav>
+    </footer>
+
+    <aside class="cart-drawer" data-cart-drawer aria-hidden="true" aria-label="Panier">
+      <div class="cart-panel">
+        <div class="cart-head">
+          <div>
+            <p class="eyebrow">Récapitulatif</p>
+            <h2>Votre panier</h2>
+          </div>
+          <button class="icon-button" type="button" data-cart-close aria-label="Fermer le panier">×</button>
+        </div>
+        <div class="cart-items" data-cart-items></div>
+        <div class="cart-empty" data-cart-empty>Votre panier est vide.</div>
+        <div class="gift-option">
+          <label>
+            <input type="checkbox" data-gift-toggle>
+            <span>C'est un cadeau à offrir</span>
+          </label>
+          <div class="gift-details" data-gift-details>
+            <strong>Comment ça se passe ?</strong>
+            <p>
+              Réglez la commande avec votre compte PayPal, puis indiquez l'adresse du destinataire dans PayPal.
+              Pour un abonnement, la première box partira chez lui, puis les suivantes suivront le même rythme mensuel.
+            </p>
+          </div>
+        </div>
+        <div class="cart-summary">
+          <div class="cart-total">
+            <span>Total à régler maintenant</span>
+            <strong data-cart-total>0,00€</strong>
+          </div>
+          <p data-cart-note></p>
+        </div>
+        <button class="button button-primary button-full" type="button" data-checkout>Commander</button>
+      </div>
+    </aside>
+
+    <div class="replace-modal" data-replace-modal aria-hidden="true">
+      <div class="replace-card" role="dialog" aria-modal="true" aria-labelledby="replace-title">
+        <div class="cart-head">
+          <div>
+            <p class="eyebrow">Panier déjà rempli</p>
+            <h2 id="replace-title">Remplacer votre choix ?</h2>
+          </div>
+          <button class="icon-button" type="button" data-replace-cancel aria-label="Fermer">×</button>
+        </div>
+        <p>Votre panier contient déjà une offre. Pour éviter une commande confuse, une commande ne peut contenir qu'une seule formule.</p>
+        <div class="replace-choices" aria-label="Comparaison du remplacement">
+          <div>
+            <span>Actuellement <em data-replace-current-type>Offre</em></span>
+            <strong data-replace-current>Votre offre</strong>
+          </div>
+          <div>
+            <span>Nouveau choix <em data-replace-next-type>Offre</em></span>
+            <strong data-replace-next>Nouvelle offre</strong>
+          </div>
+        </div>
+        <p class="replace-note">Pour commander les deux, validez d'abord votre panier actuel puis passez une seconde commande.</p>
+        <div class="replace-actions">
+          <button class="button button-secondary" type="button" data-replace-cancel>Annuler</button>
+          <button class="button button-primary" type="button" data-replace-confirm>Remplacer le panier</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="plan-modal" data-plan-modal aria-hidden="true">
+      <div class="plan-card" role="dialog" aria-modal="true" aria-labelledby="plan-title">
+        <div class="cart-head">
+          <div>
+            <p class="eyebrow">Abonnement</p>
+            <h2 id="plan-title" data-plan-title>Jardin Classique</h2>
+          </div>
+          <button class="icon-button" type="button" data-plan-close aria-label="Fermer">×</button>
+        </div>
+        <p class="plan-intro" data-plan-intro>Choisissez votre rythme de prélèvement.</p>
+        <p class="plan-shipping-note" data-plan-shipping-note>Vous recevez toujours une box chaque mois. Seul le rythme de paiement change.</p>
+        <div class="billing-options plan-choice-grid" data-billing="modal" data-plan-options aria-label="Choix du rythme de prélèvement"></div>
+        <div class="plan-summary">
+          <span data-plan-note-modal>Prélevé 358,80€ une fois par an</span>
+          <em data-plan-monthly-shipping>Envoi mensuel inclus</em>
+          <strong data-plan-price-modal>29,90€ <small>/ mois</small></strong>
+        </div>
+        <button class="button button-primary button-full" type="button" data-confirm-plan>Ajouter au panier</button>
+      </div>
+    </div>
+
+    <div class="modal" data-modal aria-hidden="true">
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="checkout-title">
+        <div class="cart-head">
+          <h2 id="checkout-title">Finaliser la commande</h2>
+          <button class="icon-button" type="button" data-modal-close aria-label="Fermer">×</button>
+        </div>
+        <form class="checkout-form">
+          <div class="checkout-summary" data-checkout-summary></div>
+          <div class="payment-box" data-payment-box>
+            <div>
+              <p class="eyebrow">Paiement</p>
+              <h3>PayPal ou carte bancaire</h3>
+            </div>
+            <p data-paypal-status>Les boutons PayPal apparaîtront ici après configuration.</p>
+            <div class="paypal-buttons" data-paypal-buttons></div>
+          </div>
+          <p class="form-note">Vous serez redirigé vers PayPal pour confirmer le paiement et les informations nécessaires à la commande.</p>
+        </form>
+      </div>
+    </div>
+
+    <div class="toast" data-toast role="status" aria-live="polite"></div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
