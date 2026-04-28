@@ -2391,6 +2391,12 @@ details p {
   line-height: 1.22;
 }
 
+.replace-choices small {
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 750;
+}
+
 .replace-note {
   padding: 0.8rem;
   border: 1px solid rgba(18, 59, 102, 0.16);

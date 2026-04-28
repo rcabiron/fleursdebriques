@@ -182,6 +182,8 @@ const replaceCurrent = document.querySelector("[data-replace-current]");
 const replaceNext = document.querySelector("[data-replace-next]");
 const replaceCurrentType = document.querySelector("[data-replace-current-type]");
 const replaceNextType = document.querySelector("[data-replace-next-type]");
+const replaceCurrentDetail = document.querySelector("[data-replace-current-detail]");
+const replaceNextDetail = document.querySelector("[data-replace-next-detail]");
 const planEyebrow = document.querySelector("[data-plan-eyebrow]");
 const planTitle = document.querySelector("[data-plan-title]");
 const planIntro = document.querySelector("[data-plan-intro]");
@@ -273,6 +275,15 @@ const getReplacementLabel = () => {
   const oneTimeCount = items.filter((item) => !isSubscriptionItem(item)).length;
   if (oneTimeCount === items.length) return `${oneTimeCount} box à l'unité`;
   return `${items.length} offres`;
+};
+
+const getReplacementDetail = (item) => {
+  if (!item) return "";
+  if (isSubscriptionItem(item)) return item.detail || item.meta || item.cadence || "";
+
+  const quantity = getLineQuantity(item);
+  const quantityLabel = quantity > 1 ? `${quantity} exemplaires · ` : "";
+  return `${quantityLabel}${item.detail || item.meta || item.cadence || ""}`;
 };
 
 const saveCartState = () => {
@@ -736,6 +747,8 @@ const requestCartReplacement = (item) => {
   if (replaceNext) replaceNext.textContent = item.name;
   if (replaceCurrentType) replaceCurrentType.textContent = getCartItemType(current);
   if (replaceNextType) replaceNextType.textContent = getCartItemType(item);
+  if (replaceCurrentDetail) replaceCurrentDetail.textContent = getReplacementDetail(current);
+  if (replaceNextDetail) replaceNextDetail.textContent = getReplacementDetail(item);
   drawer.classList.remove("is-open");
   drawer.setAttribute("aria-hidden", "true");
   replaceModal?.classList.add("is-open");
