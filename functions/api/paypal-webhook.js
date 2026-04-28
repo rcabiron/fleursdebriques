@@ -57,23 +57,25 @@ const getAccessToken = async (env) => {
   return payload.access_token;
 };
 
-const verifyWebhookSignature = async ({ env, request, webhookEvent }) => {
+const verifyWebhookSignature = async ({ env, request, rawBody }) => {
   const accessToken = await getAccessToken(env);
+  const verificationPayload = `{
+    "auth_algo": ${JSON.stringify(request.headers.get("PAYPAL-AUTH-ALGO"))},
+    "cert_url": ${JSON.stringify(request.headers.get("PAYPAL-CERT-URL"))},
+    "transmission_id": ${JSON.stringify(request.headers.get("PAYPAL-TRANSMISSION-ID"))},
+    "transmission_sig": ${JSON.stringify(request.headers.get("PAYPAL-TRANSMISSION-SIG"))},
+    "transmission_time": ${JSON.stringify(request.headers.get("PAYPAL-TRANSMISSION-TIME"))},
+    "webhook_id": ${JSON.stringify(env.PAYPAL_WEBHOOK_ID)},
+    "webhook_event": ${rawBody}
+  }`;
+
   const response = await fetch(`${getPayPalBase(env)}/v1/notifications/verify-webhook-signature`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      auth_algo: request.headers.get("PAYPAL-AUTH-ALGO"),
-      cert_url: request.headers.get("PAYPAL-CERT-URL"),
-      transmission_id: request.headers.get("PAYPAL-TRANSMISSION-ID"),
-      transmission_sig: request.headers.get("PAYPAL-TRANSMISSION-SIG"),
-      transmission_time: request.headers.get("PAYPAL-TRANSMISSION-TIME"),
-      webhook_id: env.PAYPAL_WEBHOOK_ID,
-      webhook_event: webhookEvent,
-    }),
+    body: verificationPayload,
   });
 
   const payload = await response.json().catch(() => ({}));
@@ -154,7 +156,7 @@ export async function onRequestPost({ request, env }) {
   }
 
   try {
-    const isVerified = await verifyWebhookSignature({ env, request, webhookEvent: event });
+    const isVerified = await verifyWebhookSignature({ env, request, rawBody });
     if (!isVerified) {
       return json({ message: "Signature PayPal invalide." }, 401);
     }
