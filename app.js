@@ -843,7 +843,7 @@ const openPlanModal = (type, options = {}) => {
         <button type="button" data-plan="${type}-${duration}">
           ${plan.durationLabel}
           <span>${planModalGiftMode && duration === 3 ? `Recommandé · ${plan.badge}` : plan.badge}</span>
-          <small>${duration === 1 ? "Plus flexible" : "Box chaque mois"}</small>
+          <small>${plan.label.replace("<small>", "").replace("</small>", "")}</small>
         </button>
       `;
     })
@@ -899,7 +899,6 @@ const setTimelineStep = (step) => {
 document.addEventListener("click", (event) => {
   const anchorLink = event.target.closest('a[href^="#"]');
   const addButton = event.target.closest("[data-add]");
-  const addPlanButton = event.target.closest("[data-add-plan]");
   const openPlanButton = event.target.closest("[data-open-plan]");
   const giftPlanButton = event.target.closest("[data-gift-plan]");
   const giftBoxButton = event.target.closest("[data-gift-box]");
@@ -962,16 +961,7 @@ document.addEventListener("click", (event) => {
       button.classList.toggle("is-selected", button === planButton);
     });
 
-    const priceTarget = document.querySelector(`[data-plan-price="${type}"]`);
-    const noteTarget = document.querySelector(`[data-plan-note="${type}"]`);
-    const plan = subscriptionPlans[type][duration];
-    if (priceTarget) priceTarget.innerHTML = plan.label;
-    if (noteTarget) noteTarget.textContent = `${plan.note}. Box envoyée chaque mois.`;
     if (type === activePlanType) syncPlanModal();
-  }
-
-  if (addPlanButton) {
-    addPlanToCart(addPlanButton.dataset.addPlan);
   }
 
   if (event.target.closest("[data-confirm-plan]")) {

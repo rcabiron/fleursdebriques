@@ -942,7 +942,6 @@ details {
 .product-card p,
 .product-card ul,
 .billing-options,
-.billing-note,
 .product-footer {
   position: relative;
   z-index: 2;
@@ -1075,13 +1074,6 @@ details {
   align-self: start;
   max-width: 100%;
   font-size: 0.68rem;
-}
-
-.billing-note {
-  margin: -0.6rem 0 1rem;
-  color: rgba(255, 255, 255, 0.78);
-  font-size: 0.9rem;
-  font-weight: 800;
 }
 
 .product-footer {
