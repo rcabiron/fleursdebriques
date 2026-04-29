@@ -18,7 +18,7 @@ Il permet de recevoir une notification quand PayPal confirme, modifie, suspend o
 Endpoint à utiliser dans PayPal :
 
 ```text
-https://fleursdebriques.pages.dev/api/paypal-webhook
+https://www.fleursdebriques.fr/api/paypal-webhook
 ```
 
 ## Variables Cloudflare nécessaires

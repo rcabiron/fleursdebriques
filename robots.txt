@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /merci.html
+
+Sitemap: https://www.fleursdebriques.fr/sitemap.xml
