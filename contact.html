@@ -57,54 +57,67 @@
       </section>
 
       <section class="contact-layout" aria-label="Formulaire de contact">
-        <form class="contact-form" data-contact-form>
-          <div class="form-grid">
+        <div class="contact-card-shell" data-contact-card>
+          <form class="contact-form contact-card-face contact-card-front" data-contact-form>
+            <div class="form-grid">
+              <label>
+                <span>Votre nom</span>
+                <input type="text" name="name" autocomplete="name" required>
+              </label>
+              <label>
+                <span>Votre email</span>
+                <input type="email" name="email" autocomplete="email" required>
+              </label>
+            </div>
+
             <label>
-              <span>Votre nom</span>
-              <input type="text" name="name" autocomplete="name" required>
+              <span>Motif</span>
+              <select name="topic" required>
+                <option value="">Choisir un motif</option>
+                <option value="Question avant commande">Question avant commande</option>
+                <option value="Commande ou livraison">Commande ou livraison</option>
+                <option value="Abonnement">Abonnement</option>
+                <option value="Retour ou rétractation">Retour ou rétractation</option>
+                <option value="Produit abîmé ou incomplet">Produit abîmé ou incomplet</option>
+                <option value="Autre demande">Autre demande</option>
+              </select>
             </label>
+
             <label>
-              <span>Votre email</span>
-              <input type="email" name="email" autocomplete="email" required>
+              <span>Référence PayPal ou commande <em>facultatif</em></span>
+              <input type="text" name="reference" autocomplete="off" placeholder="Ex: I-XXXXXXXX ou 123456789">
             </label>
+
+            <label>
+              <span>Votre message</span>
+              <textarea name="message" rows="7" required placeholder="Décrivez votre demande en quelques lignes."></textarea>
+            </label>
+
+            <label class="contact-hp" aria-hidden="true">
+              <span>Site web</span>
+              <input type="text" name="website" tabindex="-1" autocomplete="off">
+            </label>
+
+            <label class="contact-consent">
+              <input type="checkbox" name="consent" required>
+              <span>J'accepte que ces informations soient utilisées pour répondre à ma demande.</span>
+            </label>
+
+            <button class="button button-primary" type="submit">Envoyer la demande</button>
+            <p class="contact-status" data-contact-status role="status" aria-live="polite"></p>
+          </form>
+
+          <div class="contact-success contact-card-face contact-card-back" aria-hidden="true" data-contact-success>
+            <span class="success-mark" aria-hidden="true">✓</span>
+            <p class="eyebrow">Message envoyé</p>
+            <h2>Merci, on s'en occupe.</h2>
+            <p>
+              Votre demande est arrivée au service client. Nous vous répondrons par email
+              dès que possible, généralement sous 24 à 48h ouvrées.
+            </p>
+            <a class="button button-primary" href="index.html#offres">Retour aux offres</a>
           </div>
-
-          <label>
-            <span>Motif</span>
-            <select name="topic" required>
-              <option value="">Choisir un motif</option>
-              <option value="Question avant commande">Question avant commande</option>
-              <option value="Commande ou livraison">Commande ou livraison</option>
-              <option value="Abonnement">Abonnement</option>
-              <option value="Retour ou rétractation">Retour ou rétractation</option>
-              <option value="Produit abîmé ou incomplet">Produit abîmé ou incomplet</option>
-              <option value="Autre demande">Autre demande</option>
-            </select>
-          </label>
-
-          <label>
-            <span>Référence PayPal ou commande <em>facultatif</em></span>
-            <input type="text" name="reference" autocomplete="off" placeholder="Ex: I-XXXXXXXX ou 123456789">
-          </label>
-
-          <label>
-            <span>Votre message</span>
-            <textarea name="message" rows="7" required placeholder="Décrivez votre demande en quelques lignes."></textarea>
-          </label>
-
-          <label class="contact-hp" aria-hidden="true">
-            <span>Site web</span>
-            <input type="text" name="website" tabindex="-1" autocomplete="off">
-          </label>
-
-          <label class="contact-consent">
-            <input type="checkbox" name="consent" required>
-            <span>J'accepte que ces informations soient utilisées pour répondre à ma demande.</span>
-          </label>
-
-          <button class="button button-primary" type="submit">Envoyer la demande</button>
-          <p class="contact-status" data-contact-status role="status" aria-live="polite"></p>
-        </form>
+        </div>
 
         <aside class="contact-side">
           <article>

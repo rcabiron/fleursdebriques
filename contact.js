@@ -1,5 +1,7 @@
 const form = document.querySelector("[data-contact-form]");
 const statusTarget = document.querySelector("[data-contact-status]");
+const contactCard = document.querySelector("[data-contact-card]");
+const successPanel = document.querySelector("[data-contact-success]");
 const trackEvent = (eventName, payload = {}) => {
   window.fdbTrack?.(eventName, payload);
 };
@@ -55,7 +57,9 @@ form?.addEventListener("submit", async (event) => {
     }
 
     form.reset();
-    setStatus("Votre demande a bien été envoyée. Nous vous répondrons par email.", "success");
+    setStatus("Votre demande a bien été envoyée.", "success");
+    contactCard?.classList.add("is-sent");
+    successPanel?.setAttribute("aria-hidden", "false");
     trackEvent("contact_success");
   } catch (error) {
     setStatus(error.message || "Une erreur est survenue pendant l'envoi.", "error");
