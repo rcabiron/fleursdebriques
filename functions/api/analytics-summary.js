@@ -66,7 +66,7 @@ export async function onRequestGet({ request, env }) {
   const range = getRange(request);
   const since = getDateBoundary(range);
 
-  const [events, products, pages, daily, recent] = await Promise.all([
+  const [events, products, offerTypes, giftEvents, pages, daily, recent] = await Promise.all([
     env.ANALYTICS_DB.prepare(
       `SELECT event, COUNT(*) AS total
        FROM analytics_events
@@ -86,6 +86,28 @@ export async function onRequestGet({ request, env }) {
        GROUP BY product, type
        ORDER BY total DESC
        LIMIT 8`,
+    )
+      .bind(since)
+      .all(),
+    env.ANALYTICS_DB.prepare(
+      `SELECT
+         COALESCE(json_extract(data, '$.productType'), 'Non renseigné') AS type,
+         COUNT(*) AS total
+       FROM analytics_events
+       WHERE event = 'add_to_cart' AND created_at >= ?
+       GROUP BY type
+       ORDER BY total DESC`,
+    )
+      .bind(since)
+      .all(),
+    env.ANALYTICS_DB.prepare(
+      `SELECT
+         COALESCE(json_extract(data, '$.isGift'), 0) AS is_gift,
+         COUNT(*) AS total
+       FROM analytics_events
+       WHERE event = 'add_to_cart' AND created_at >= ?
+       GROUP BY is_gift
+       ORDER BY is_gift DESC`,
     )
       .bind(since)
       .all(),
@@ -125,12 +147,20 @@ export async function onRequestGet({ request, env }) {
   return json({
     range,
     totals,
+    funnel: [
+      { key: "page_view", label: "Visites", total: pageViews },
+      { key: "add_to_cart", label: "Paniers", total: totals.add_to_cart || 0 },
+      { key: "checkout_start", label: "Checkouts", total: checkouts },
+      { key: "thank_you_view", label: "Confirmations", total: confirmations },
+    ],
     conversion: {
       pageToCart: pageViews ? Math.round(((totals.add_to_cart || 0) / pageViews) * 1000) / 10 : 0,
       cartToCheckout: totals.add_to_cart ? Math.round((checkouts / totals.add_to_cart) * 1000) / 10 : 0,
       checkoutToConfirmation: checkouts ? Math.round((confirmations / checkouts) * 1000) / 10 : 0,
     },
     products: products.results || [],
+    offerTypes: offerTypes.results || [],
+    gifts: giftEvents.results || [],
     pages: pages.results || [],
     daily: daily.results || [],
     recent: (recent.results || []).map((row) => ({

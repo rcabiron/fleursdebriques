@@ -65,25 +65,52 @@
 
         <div class="admin-card-grid" data-admin-cards></div>
 
-        <section class="legal-card">
-          <h2>Conversion</h2>
-          <div class="admin-card-grid is-compact" data-admin-funnel></div>
+        <section class="legal-card admin-funnel-card">
+          <div class="admin-section-head">
+            <div>
+              <h2>Entonnoir d'achat</h2>
+              <p>Le chemin principal, de la visite jusqu'à la confirmation.</p>
+            </div>
+          </div>
+          <div class="admin-funnel" data-admin-funnel></div>
+          <div class="admin-card-grid is-compact" data-admin-conversion></div>
         </section>
 
-        <section class="legal-card">
-          <h2>Offres ajoutées au panier</h2>
-          <ul class="admin-list" data-admin-products></ul>
-        </section>
+        <div class="admin-split">
+          <section class="legal-card">
+            <div class="admin-section-head">
+              <div>
+                <h2>Offres ajoutées</h2>
+                <p>Ce qui déclenche le plus d'intention d'achat.</p>
+              </div>
+            </div>
+            <ul class="admin-list" data-admin-products></ul>
+          </section>
 
-        <section class="legal-card">
-          <h2>Pages les plus vues</h2>
-          <ul class="admin-list" data-admin-pages></ul>
-        </section>
+          <section class="legal-card">
+            <div class="admin-section-head">
+              <div>
+                <h2>Répartition</h2>
+                <p>Abonnement, achat ponctuel et cadeaux.</p>
+              </div>
+            </div>
+            <div class="admin-breakdown" data-admin-breakdown></div>
+          </section>
+        </div>
 
-        <section class="legal-card">
-          <h2>Événements récents</h2>
-          <ul class="admin-list" data-admin-recent></ul>
-        </section>
+        <div class="admin-split">
+          <section class="legal-card">
+            <h2>Pages les plus vues</h2>
+            <ul class="admin-list" data-admin-pages></ul>
+          </section>
+
+          <details class="legal-card admin-details">
+            <summary>Événements récents</summary>
+            <ul class="admin-list" data-admin-recent></ul>
+          </details>
+        </div>
+
+        <p class="admin-note" data-admin-insight></p>
       </section>
     </main>
 
