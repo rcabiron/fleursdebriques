@@ -202,6 +202,10 @@ let activeBoxGiftId = "box-m";
 let pendingCartReplacement = null;
 let checkoutReference = "";
 
+const trackEvent = (eventName, payload = {}) => {
+  window.fdbTrack?.(eventName, payload);
+};
+
 const getHeaderOffset = () => (siteHeader?.offsetHeight || 0) + 22;
 
 const scrollToHash = (hash, { updateHistory = true, behavior = "smooth" } = {}) => {
@@ -513,6 +517,12 @@ const saveOrderSnapshot = ({ paymentType, reference, orderReference }) => {
 };
 
 const completePaidOrder = ({ paymentType, reference, orderReference }) => {
+  trackEvent("paypal_approved", {
+    paymentType,
+    cartMode: getCartPaymentMode(),
+    total: getTotals().total,
+    isGift: giftToggle?.checked || false,
+  });
   saveOrderSnapshot({ paymentType, reference, orderReference });
   cart.clear();
   checkoutReference = "";
@@ -570,6 +580,12 @@ const renderPayPalArea = () => {
     }
 
     paypalStatus.textContent = "Le paiement PayPal ouvrira l'abonnement choisi. Les box seront envoyées chaque mois.";
+    trackEvent("paypal_render", {
+      paymentType: "subscription",
+      productId: cartId,
+      productName: item.name,
+      total,
+    });
     loadPayPalSdk("subscription")
       .then((paypal) => {
         paypalButtons.classList.remove("is-loading");
@@ -587,7 +603,10 @@ const renderPayPalArea = () => {
                 reference: data.subscriptionID,
                 orderReference,
               }),
-            onError: () => showToast("Le paiement PayPal n'a pas pu être lancé"),
+            onError: () => {
+              trackEvent("paypal_error", { paymentType: "subscription", productId: cartId });
+              showToast("Le paiement PayPal n'a pas pu être lancé");
+            },
           })
           .render(paypalButtons);
       })
@@ -614,6 +633,11 @@ const renderPayPalArea = () => {
   const orderReference = getCheckoutReference();
 
   paypalStatus.textContent = "Payez vos box à l'unité avec PayPal ou carte bancaire.";
+  trackEvent("paypal_render", {
+    paymentType: "one-time",
+    itemCount: oneTimeItems.length,
+    total,
+  });
   loadPayPalSdk("capture")
     .then((paypal) => {
       paypalButtons.classList.remove("is-loading");
@@ -648,7 +672,10 @@ const renderPayPalArea = () => {
                 orderReference,
               }),
             ),
-          onError: () => showToast("Le paiement PayPal n'a pas pu être lancé"),
+          onError: () => {
+            trackEvent("paypal_error", { paymentType: "one-time", total });
+            showToast("Le paiement PayPal n'a pas pu être lancé");
+          },
         })
         .render(paypalButtons);
     })
@@ -722,6 +749,14 @@ const commitCartItem = (item, message) => {
   drawer.setAttribute("aria-hidden", "false");
   celebrateCartAdd();
   showToast(message || `${item.name} ajouté au panier`);
+  trackEvent("add_to_cart", {
+    productId: item.id,
+    productName: item.name,
+    productType: item.type,
+    price: item.price,
+    quantity: getLineQuantity(item),
+    isGift: giftToggle?.checked || false,
+  });
 };
 
 const closeReplacementModal = () => {
@@ -743,6 +778,13 @@ const requestCartReplacement = (item) => {
   }
 
   pendingCartReplacement = { item };
+  trackEvent("replace_cart_prompt", {
+    currentType: getCartItemType(current),
+    currentName: getReplacementLabel(),
+    nextType: getCartItemType(item),
+    nextName: item.name,
+    nextId: item.id,
+  });
   if (replaceCurrent) replaceCurrent.textContent = getReplacementLabel();
   if (replaceNext) replaceNext.textContent = item.name;
   if (replaceCurrentType) replaceCurrentType.textContent = getCartItemType(current);
@@ -784,6 +826,14 @@ const addToCart = (id) => {
     drawer.setAttribute("aria-hidden", "false");
     celebrateCartAdd();
     showToast(`${product.name} ajouté en quantité ${cart.get(id).quantity}`);
+    trackEvent("add_to_cart", {
+      productId: id,
+      productName: product.name,
+      productType: "one-time",
+      price: product.price,
+      quantity: cart.get(id).quantity,
+      isGift: giftToggle?.checked || false,
+    });
     return;
   }
 
@@ -793,6 +843,14 @@ const addToCart = (id) => {
   drawer.setAttribute("aria-hidden", "false");
   celebrateCartAdd();
   showToast(`${product.name} ajouté au panier`);
+  trackEvent("add_to_cart", {
+    productId: id,
+    productName: product.name,
+    productType: "one-time",
+    price: product.price,
+    quantity: 1,
+    isGift: giftToggle?.checked || false,
+  });
 };
 
 const addPlanToCart = (type) => {
@@ -841,6 +899,11 @@ const syncPlanModal = () => {
 const openPlanModal = (type, options = {}) => {
   activePlanType = type;
   planModalGiftMode = Boolean(options.giftMode);
+  trackEvent("open_plan_modal", {
+    planType: type,
+    giftMode: planModalGiftMode,
+    defaultDuration: options.duration || 1,
+  });
   planOptions.classList.remove("is-box-choice");
   if (planEyebrow) planEyebrow.textContent = planModalGiftMode ? "Abonnement cadeau" : "Abonnement";
   const copy = subscriptionCopy[type];
@@ -870,6 +933,7 @@ const openPlanModal = (type, options = {}) => {
 const openGiftBoxModal = () => {
   activePlanType = "gift-box";
   activeBoxGiftId = "box-m";
+  trackEvent("open_gift_box_modal");
   planOptions.classList.add("is-box-choice");
   if (planEyebrow) planEyebrow.textContent = "Cadeau à l'unité";
   planTitle.textContent = "Choisir une box";
@@ -954,6 +1018,10 @@ document.addEventListener("click", (event) => {
 
   if (giftBoxChoiceButton) {
     activeBoxGiftId = giftBoxChoiceButton.dataset.giftBoxChoice;
+    trackEvent("select_gift_box", {
+      productId: activeBoxGiftId,
+      productName: products[activeBoxGiftId]?.name,
+    });
     syncPlanModal();
   }
 
@@ -968,6 +1036,12 @@ document.addEventListener("click", (event) => {
   if (planButton) {
     const [type, duration] = planButton.dataset.plan.split("-");
     selectedPlans[type] = Number(duration);
+    trackEvent("select_plan_duration", {
+      planType: type,
+      duration: selectedPlans[type],
+      giftMode: planModalGiftMode,
+      productId: subscriptionPlans[type]?.[selectedPlans[type]]?.id,
+    });
 
     const group = planButton.closest("[data-billing]");
     group?.querySelectorAll("[data-plan]").forEach((button) => {
@@ -992,8 +1066,14 @@ document.addEventListener("click", (event) => {
   }
 
   if (removeButton) {
+    const removedItem = cart.get(removeButton.dataset.remove);
     cart.delete(removeButton.dataset.remove);
     checkoutReference = "";
+    trackEvent("remove_from_cart", {
+      productId: removeButton.dataset.remove,
+      productName: removedItem?.name,
+      productType: removedItem?.type,
+    });
   }
 
   if (quantityDecreaseButton) {
@@ -1001,6 +1081,11 @@ document.addEventListener("click", (event) => {
     if (item && !isSubscriptionItem(item)) {
       item.quantity = normalizeQuantity(item.quantity) > 1 ? normalizeQuantity(item.quantity) - 1 : 1;
       checkoutReference = "";
+      trackEvent("decrease_quantity", {
+        productId: item.id,
+        productName: item.name,
+        quantity: item.quantity,
+      });
     }
   }
 
@@ -1009,6 +1094,11 @@ document.addEventListener("click", (event) => {
     if (item && !isSubscriptionItem(item)) {
       item.quantity = normalizeQuantity(normalizeQuantity(item.quantity) + 1);
       checkoutReference = "";
+      trackEvent("increase_quantity", {
+        productId: item.id,
+        productName: item.name,
+        quantity: item.quantity,
+      });
     }
   }
 
@@ -1017,17 +1107,28 @@ document.addEventListener("click", (event) => {
   }
 
   if (replaceCancelButton) {
+    trackEvent("replace_cart_cancel");
     closeReplacementModal();
   }
 
   if (replaceConfirmButton && pendingCartReplacement) {
     const { item } = pendingCartReplacement;
+    trackEvent("replace_cart_confirm", {
+      productId: item.id,
+      productName: item.name,
+      productType: item.type,
+    });
     commitCartItem(item, `${item.name} remplace l'offre précédente`);
     closeReplacementModal();
   }
 });
 
 document.querySelector("[data-cart-open]").addEventListener("click", () => {
+  trackEvent("open_cart", {
+    cartMode: getCartPaymentMode(),
+    quantity: getTotals().quantity,
+    total: getTotals().total,
+  });
   drawer.classList.add("is-open");
   drawer.setAttribute("aria-hidden", "false");
 });
@@ -1039,6 +1140,10 @@ document.querySelector("[data-cart-close]").addEventListener("click", () => {
 
 giftToggle?.addEventListener("change", () => {
   giftDetails?.classList.toggle("is-visible", giftToggle.checked);
+  trackEvent("set_gift_mode", {
+    enabled: giftToggle.checked,
+    cartMode: getCartPaymentMode(),
+  });
   renderCart();
 });
 
@@ -1055,6 +1160,12 @@ document.querySelector("[data-checkout]").addEventListener("click", () => {
     return;
   }
 
+  trackEvent("checkout_start", {
+    cartMode: getCartPaymentMode(),
+    quantity: getTotals().quantity,
+    total: getTotals().total,
+    isGift: giftToggle?.checked || false,
+  });
   renderCheckoutSummary();
   renderPayPalArea();
   modal.classList.add("is-open");

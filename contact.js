@@ -1,5 +1,8 @@
 const form = document.querySelector("[data-contact-form]");
 const statusTarget = document.querySelector("[data-contact-status]");
+const trackEvent = (eventName, payload = {}) => {
+  window.fdbTrack?.(eventName, payload);
+};
 
 const setStatus = (message, type = "info") => {
   statusTarget.textContent = message;
@@ -31,6 +34,10 @@ form?.addEventListener("submit", async (event) => {
   const submitButton = form.querySelector('button[type="submit"]');
   submitButton.disabled = true;
   setStatus("Envoi de votre demande...", "info");
+  trackEvent("contact_submit", {
+    topic: getPayload().topic,
+    hasReference: Boolean(getPayload().reference),
+  });
 
   try {
     const response = await fetch("/api/contact", {
@@ -49,8 +56,10 @@ form?.addEventListener("submit", async (event) => {
 
     form.reset();
     setStatus("Votre demande a bien été envoyée. Nous vous répondrons par email.", "success");
+    trackEvent("contact_success");
   } catch (error) {
     setStatus(error.message || "Une erreur est survenue pendant l'envoi.", "error");
+    trackEvent("contact_error");
   } finally {
     submitButton.disabled = false;
   }

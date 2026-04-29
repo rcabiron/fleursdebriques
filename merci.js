@@ -14,6 +14,14 @@ const orderReference = order?.orderReference || params.get("order") || "Non comm
 const paymentType = order?.paymentType || params.get("type") || "one-time";
 const isSubscription = paymentType === "subscription" || order?.mode === "subscription";
 
+window.fdbTrack?.("thank_you_view", {
+  paymentType,
+  mode: order?.mode || paymentType,
+  total: order?.total,
+  itemCount: order?.items?.length || 0,
+  isGift: order?.isGift || false,
+});
+
 const title = document.querySelector("[data-thank-title]");
 const intro = document.querySelector("[data-thank-intro]");
 const referenceTarget = document.querySelector("[data-thank-reference]");

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Statistiques - Fleurs de Briques</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Aller au contenu</a>
+    <header class="site-header">
+      <a class="brand" href="index.html#top" aria-label="Fleurs de Briques">
+        <span class="brand-mark" aria-hidden="true">
+          <span class="logo-flower"></span>
+          <span class="logo-bricks"></span>
+        </span>
+        <span class="brand-text">
+          <strong>Fleurs</strong>
+          <span>de Briques</span>
+        </span>
+      </a>
+      <nav aria-label="Navigation principale">
+        <a href="index.html#offres">Offres</a>
+        <a href="offrir.html">Cadeau</a>
+        <a href="index.html#box">La box</a>
+        <a href="index.html#faq">FAQ</a>
+      </nav>
+      <div class="header-actions">
+        <a class="header-cta" href="index.html#offres">Retour au site</a>
+      </div>
+    </header>
+
+    <main class="legal-page admin-page" id="main">
+      <section class="legal-hero">
+        <p class="eyebrow">Admin</p>
+        <h1>Statistiques du site</h1>
+        <p>Un tableau simple pour suivre les pages vues, les paniers, les checkouts et les confirmations.</p>
+      </section>
+
+      <section class="legal-card admin-access">
+        <form data-admin-form>
+          <label>
+            Code admin
+            <input type="password" name="token" data-admin-token autocomplete="current-password" required>
+          </label>
+          <label>
+            Période
+            <select name="range" data-admin-range>
+              <option value="7">7 jours</option>
+              <option value="30" selected>30 jours</option>
+              <option value="90">90 jours</option>
+            </select>
+          </label>
+          <button class="button button-primary" type="submit">Afficher les stats</button>
+        </form>
+        <p class="form-status" data-admin-status>Entrez le code admin pour afficher les statistiques.</p>
+      </section>
+
+      <section class="admin-dashboard" data-admin-dashboard hidden>
+        <div class="admin-actions">
+          <button class="button button-secondary" type="button" data-admin-refresh>Rafraîchir</button>
+          <button class="button button-secondary" type="button" data-admin-logout>Fermer l'accès</button>
+        </div>
+
+        <div class="admin-card-grid" data-admin-cards></div>
+
+        <section class="legal-card">
+          <h2>Conversion</h2>
+          <div class="admin-card-grid is-compact" data-admin-funnel></div>
+        </section>
+
+        <section class="legal-card">
+          <h2>Offres ajoutées au panier</h2>
+          <ul class="admin-list" data-admin-products></ul>
+        </section>
+
+        <section class="legal-card">
+          <h2>Pages les plus vues</h2>
+          <ul class="admin-list" data-admin-pages></ul>
+        </section>
+
+        <section class="legal-card">
+          <h2>Événements récents</h2>
+          <ul class="admin-list" data-admin-recent></ul>
+        </section>
+      </section>
+    </main>
+
+    <script src="admin.js"></script>
+  </body>
+</html>
