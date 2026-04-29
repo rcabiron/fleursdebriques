@@ -33,6 +33,10 @@ body {
   line-height: 1.55;
 }
 
+body.has-overlay-open {
+  overflow: hidden;
+}
+
 button,
 input,
 textarea,
@@ -2454,7 +2458,9 @@ details p {
 
 .cart-items {
   display: grid;
+  flex: 1 1 auto;
   gap: 0.75rem;
+  min-height: 0;
   padding-right: 0.2rem;
   overflow: auto;
 }
@@ -2625,6 +2631,7 @@ details p {
 }
 
 .cart-summary {
+  flex: 0 0 auto;
   margin-top: auto;
   padding: 1rem 0 0.85rem;
 }
@@ -2913,6 +2920,11 @@ details p {
   padding-top: 0.75rem;
   border-top: 1px solid var(--line);
   font-weight: 900;
+}
+
+.checkout-summary p strong {
+  overflow-wrap: anywhere;
+  text-align: right;
 }
 
 .checkout-summary > small {
@@ -3601,6 +3613,27 @@ details p {
     grid-template-columns: 1fr;
   }
 
+  .contact-card-shell {
+    min-height: 760px;
+  }
+
+  .contact-card-face {
+    transition-duration: 0.58s;
+  }
+
+  .contact-success {
+    align-content: start;
+    padding: 1.2rem;
+  }
+
+  .contact-success h2 {
+    font-size: clamp(2.15rem, 10vw, 3rem);
+  }
+
+  .contact-success p:not(.eyebrow) {
+    font-size: 1rem;
+  }
+
   .delivery-timeline {
     position: relative;
     padding: 0.85rem;
@@ -3914,7 +3947,7 @@ details p {
   .cart-panel {
     width: 100%;
     height: 100svh;
-    padding: 1rem;
+    padding: 1rem 1rem max(1rem, env(safe-area-inset-bottom));
   }
 
   .cart-items {
@@ -3936,6 +3969,13 @@ details p {
   .replace-card {
     max-height: calc(100svh - 1.1rem);
     padding: 1rem;
+  }
+
+  .plan-card .cart-head,
+  .replace-card .cart-head,
+  .modal-card .cart-head {
+    gap: 0.6rem;
+    margin-bottom: 0.85rem;
   }
 
   .replace-choices,
@@ -3969,6 +4009,12 @@ details p {
 
   .checkout-summary p {
     align-items: flex-start;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .checkout-summary p strong {
+    text-align: left;
   }
 
   .thank-you-summary li,

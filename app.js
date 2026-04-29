@@ -194,6 +194,7 @@ const planShippingNote = document.querySelector("[data-plan-shipping-note]");
 const planMonthlyShipping = document.querySelector("[data-plan-monthly-shipping]");
 const toast = document.querySelector("[data-toast]");
 const siteHeader = document.querySelector(".site-header");
+const overlays = [drawer, modal, planModal, replaceModal].filter(Boolean);
 
 let activePlanType = "classic";
 let paypalSdkIntent = "";
@@ -205,6 +206,17 @@ let checkoutReference = "";
 const trackEvent = (eventName, payload = {}) => {
   window.fdbTrack?.(eventName, payload);
 };
+
+const syncOverlayLock = () => {
+  document.body.classList.toggle("has-overlay-open", overlays.some((overlay) => overlay.classList.contains("is-open")));
+};
+
+overlays.forEach((overlay) => {
+  new MutationObserver(syncOverlayLock).observe(overlay, {
+    attributes: true,
+    attributeFilter: ["class"],
+  });
+});
 
 const getHeaderOffset = () => (siteHeader?.offsetHeight || 0) + 22;
 
