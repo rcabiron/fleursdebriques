@@ -3423,6 +3423,10 @@ details p {
   gap: 1rem;
 }
 
+.seo-guide-list-compact {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .guide-list article {
   display: grid;
   gap: 0.55rem;
@@ -3755,6 +3759,7 @@ details p {
   .compact-single-head,
   .occasion-grid,
   .guide-list,
+  .seo-guide-list-compact,
   .delivery-timeline ol,
   .review-grid {
     grid-template-columns: 1fr;
