@@ -59,7 +59,42 @@
             "price": "29.90",
             "priceCurrency": "EUR",
             "availability": "https://schema.org/InStock",
-            "url": "https://www.fleursdebriques.fr/#offres"
+            "url": "https://www.fleursdebriques.fr/#offres",
+            "shippingDetails": {
+              "@type": "OfferShippingDetails",
+              "shippingRate": {
+                "@type": "MonetaryAmount",
+                "value": "0",
+                "currency": "EUR"
+              },
+              "shippingDestination": {
+                "@type": "DefinedRegion",
+                "addressCountry": "FR"
+              },
+              "deliveryTime": {
+                "@type": "ShippingDeliveryTime",
+                "handlingTime": {
+                  "@type": "QuantitativeValue",
+                  "minValue": 1,
+                  "maxValue": 5,
+                  "unitCode": "DAY"
+                },
+                "transitTime": {
+                  "@type": "QuantitativeValue",
+                  "minValue": 2,
+                  "maxValue": 7,
+                  "unitCode": "DAY"
+                }
+              }
+            },
+            "hasMerchantReturnPolicy": {
+              "@type": "MerchantReturnPolicy",
+              "applicableCountry": "FR",
+              "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+              "merchantReturnDays": 14,
+              "returnMethod": "https://schema.org/ReturnByMail",
+              "returnFees": "https://schema.org/ReturnShippingFees"
+            }
           },
           {
             "@type": "Offer",
@@ -67,7 +102,42 @@
             "price": "46.90",
             "priceCurrency": "EUR",
             "availability": "https://schema.org/InStock",
-            "url": "https://www.fleursdebriques.fr/#offres"
+            "url": "https://www.fleursdebriques.fr/#offres",
+            "shippingDetails": {
+              "@type": "OfferShippingDetails",
+              "shippingRate": {
+                "@type": "MonetaryAmount",
+                "value": "0",
+                "currency": "EUR"
+              },
+              "shippingDestination": {
+                "@type": "DefinedRegion",
+                "addressCountry": "FR"
+              },
+              "deliveryTime": {
+                "@type": "ShippingDeliveryTime",
+                "handlingTime": {
+                  "@type": "QuantitativeValue",
+                  "minValue": 1,
+                  "maxValue": 5,
+                  "unitCode": "DAY"
+                },
+                "transitTime": {
+                  "@type": "QuantitativeValue",
+                  "minValue": 2,
+                  "maxValue": 7,
+                  "unitCode": "DAY"
+                }
+              }
+            },
+            "hasMerchantReturnPolicy": {
+              "@type": "MerchantReturnPolicy",
+              "applicableCountry": "FR",
+              "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+              "merchantReturnDays": 14,
+              "returnMethod": "https://schema.org/ReturnByMail",
+              "returnFees": "https://schema.org/ReturnShippingFees"
+            }
           },
           {
             "@type": "Offer",
@@ -75,7 +145,88 @@
             "price": "19.90",
             "priceCurrency": "EUR",
             "availability": "https://schema.org/InStock",
-            "url": "https://www.fleursdebriques.fr/#box-unitaires"
+            "url": "https://www.fleursdebriques.fr/#box-unitaires",
+            "shippingDetails": {
+              "@type": "OfferShippingDetails",
+              "shippingRate": {
+                "@type": "MonetaryAmount",
+                "value": "2.90",
+                "currency": "EUR"
+              },
+              "shippingDestination": {
+                "@type": "DefinedRegion",
+                "addressCountry": "FR"
+              },
+              "deliveryTime": {
+                "@type": "ShippingDeliveryTime",
+                "handlingTime": {
+                  "@type": "QuantitativeValue",
+                  "minValue": 1,
+                  "maxValue": 5,
+                  "unitCode": "DAY"
+                },
+                "transitTime": {
+                  "@type": "QuantitativeValue",
+                  "minValue": 2,
+                  "maxValue": 7,
+                  "unitCode": "DAY"
+                }
+              }
+            },
+            "hasMerchantReturnPolicy": {
+              "@type": "MerchantReturnPolicy",
+              "applicableCountry": "FR",
+              "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+              "merchantReturnDays": 14,
+              "returnMethod": "https://schema.org/ReturnByMail",
+              "returnFees": "https://schema.org/ReturnShippingFees"
+            }
+          }
+        ],
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.7",
+          "reviewCount": "3"
+        },
+        "review": [
+          {
+            "@type": "Review",
+            "author": {
+              "@type": "Person",
+              "name": "Camille"
+            },
+            "reviewRating": {
+              "@type": "Rating",
+              "ratingValue": "5",
+              "bestRating": "5"
+            },
+            "reviewBody": "Je pensais surtout aimer le montage, mais au final c'est la déco qui m'a surprise. Les deux premiers sets vont très bien ensemble."
+          },
+          {
+            "@type": "Review",
+            "author": {
+              "@type": "Person",
+              "name": "Nadia"
+            },
+            "reviewRating": {
+              "@type": "Rating",
+              "ratingValue": "5",
+              "bestRating": "5"
+            },
+            "reviewBody": "La Signature est plus chère, mais le rendu fait vraiment plus objet à exposer. Le dernier bouquet a fini sur mon bureau."
+          },
+          {
+            "@type": "Review",
+            "author": {
+              "@type": "Person",
+              "name": "Julien"
+            },
+            "reviewRating": {
+              "@type": "Rating",
+              "ratingValue": "4",
+              "bestRating": "5"
+            },
+            "reviewBody": "J'ai pris un Bouquet Découverte pour tester avant l'abonnement. Le montage était accessible, même si certaines petites pièces demandent un peu de patience."
           }
         ]
       }
