@@ -13,21 +13,21 @@ const products = {
     name: "Petit Bouquet",
     detail: "19,90€ + 2,90€ de port",
     cadence: "Achat ponctuel",
-    meta: "Sans abonnement, sans bonus surprise",
+    meta: "Petit format surprise",
     price: 22.8,
   },
   "box-m": {
     name: "Bouquet Découverte",
     detail: "39,90€ + 2,90€ de port",
     cadence: "Achat ponctuel",
-    meta: "Format proche du Classique, sans bonus",
+    meta: "Proche d'une box Classique",
     price: 42.8,
   },
   "box-xl": {
     name: "Grande Composition",
     detail: "59,90€ + 2,90€ de port",
     cadence: "Achat ponctuel",
-    meta: "Grand set à offrir ou à exposer",
+    meta: "Grand format déco",
     price: 62.8,
   },
 };
@@ -55,40 +55,40 @@ const subscriptionPlans = {
     1: {
       id: "sub-classic-1",
       name: "Jardin Classique",
-      detail: "Prélevé 34,90€ chaque mois, livraison incluse",
+      detail: "34,90€ par mois, livraison incluse",
       price: 34.9,
       label: "34,90€ <small>/ mois</small>",
-      note: "Prélevé 34,90€ chaque mois",
+      note: "Paiement mensuel: 34,90€",
       badge: "Flex",
       durationLabel: "Mensuel",
     },
     3: {
       id: "sub-classic-3",
       name: "Jardin Classique",
-      detail: "Prélevé 98,70€ tous les 3 mois, -6%",
+      detail: "98,70€ tous les 3 mois, -6%",
       price: 98.7,
       label: "32,90€ <small>/ mois</small>",
-      note: "Prélevé 98,70€ tous les 3 mois",
+      note: "Paiement tous les 3 mois: 98,70€",
       badge: "-6%",
       durationLabel: "3 mois",
     },
     6: {
       id: "sub-classic-6",
       name: "Jardin Classique",
-      detail: "Prélevé 191,40€ deux fois par an, -9%",
+      detail: "191,40€ deux fois par an, -9%",
       price: 191.4,
       label: "31,90€ <small>/ mois</small>",
-      note: "Prélevé 191,40€ deux fois par an",
+      note: "Paiement tous les 6 mois: 191,40€",
       badge: "-9%",
       durationLabel: "6 mois",
     },
     12: {
       id: "sub-classic-12",
       name: "Jardin Classique",
-      detail: "Prélevé 358,80€ une fois par an, -14%",
+      detail: "358,80€ une fois par an, -14%",
       price: 358.8,
       label: "29,90€ <small>/ mois</small>",
-      note: "Prélevé 358,80€ une fois par an",
+      note: "Paiement annuel: 358,80€",
       badge: "-14%",
       durationLabel: "1 an",
     },
@@ -97,40 +97,40 @@ const subscriptionPlans = {
     1: {
       id: "sub-signature-1",
       name: "Jardin Signature",
-      detail: "Prélevé 54,90€ chaque mois, livraison incluse",
+      detail: "54,90€ par mois, livraison incluse",
       price: 54.9,
       label: "54,90€ <small>/ mois</small>",
-      note: "Prélevé 54,90€ chaque mois",
+      note: "Paiement mensuel: 54,90€",
       badge: "Flex",
       durationLabel: "Mensuel",
     },
     3: {
       id: "sub-signature-3",
       name: "Jardin Signature",
-      detail: "Prélevé 155,70€ tous les 3 mois, -5%",
+      detail: "155,70€ tous les 3 mois, -5%",
       price: 155.7,
       label: "51,90€ <small>/ mois</small>",
-      note: "Prélevé 155,70€ tous les 3 mois",
+      note: "Paiement tous les 3 mois: 155,70€",
       badge: "-5%",
       durationLabel: "3 mois",
     },
     6: {
       id: "sub-signature-6",
       name: "Jardin Signature",
-      detail: "Prélevé 299,40€ deux fois par an, -9%",
+      detail: "299,40€ deux fois par an, -9%",
       price: 299.4,
       label: "49,90€ <small>/ mois</small>",
-      note: "Prélevé 299,40€ deux fois par an",
+      note: "Paiement tous les 6 mois: 299,40€",
       badge: "-9%",
       durationLabel: "6 mois",
     },
     12: {
       id: "sub-signature-12",
       name: "Jardin Signature",
-      detail: "Prélevé 562,80€ une fois par an, -15%",
+      detail: "562,80€ une fois par an, -15%",
       price: 562.8,
       label: "46,90€ <small>/ mois</small>",
-      note: "Prélevé 562,80€ une fois par an",
+      note: "Paiement annuel: 562,80€",
       badge: "-15%",
       durationLabel: "1 an",
     },
@@ -140,11 +140,11 @@ const subscriptionPlans = {
 const subscriptionCopy = {
   classic: {
     title: "Jardin Classique",
-    intro: "Un modèle surprise chaque mois, avec notice papier, livraison incluse et cadeau bonus dans la première box.",
+    intro: "Une fleur surprise chaque mois, avec notice papier, livraison incluse et cadeau dans la première box.",
   },
   signature: {
     title: "Jardin Signature",
-    intro: "Des modèles plus travaillés, plus imposants, parfois plusieurs sets, avec des bonus plus fréquents.",
+    intro: "Des compositions plus décoratives, parfois plusieurs sets, avec des bonus plus fréquents.",
   },
 };
 
@@ -152,9 +152,9 @@ const planDurations = [1, 3, 6, 12];
 
 const planHelp = {
   1: "Plus flexible, sans avance.",
-  3: "Bon équilibre: prélevé tous les 3 mois, box envoyée chaque mois.",
-  6: "Deux prélèvements par an, prix mensuel réduit.",
-  12: "Meilleur prix: un prélèvement annuel, une box chaque mois.",
+  3: "Bon équilibre: paiement tous les 3 mois.",
+  6: "Deux paiements par an, prix mensuel réduit.",
+  12: "Meilleur prix, paiement annuel.",
 };
 
 const selectedPlans = {
@@ -557,7 +557,7 @@ const renderPayPalArea = () => {
   const { total } = getTotals();
 
   if (mode === "empty") {
-    paypalStatus.textContent = "Ajoutez une offre au panier pour afficher le paiement.";
+    paypalStatus.textContent = "Ajoutez une offre au panier pour afficher le paiement sécurisé.";
     return;
   }
 
@@ -574,7 +574,7 @@ const renderPayPalArea = () => {
 
   if (!PAYPAL_CONFIG.clientId) {
     paypalStatus.textContent =
-      "Configuration à compléter: ajoutez le Client ID PayPal dans PAYPAL_CONFIG.clientId, puis les boutons apparaîtront ici.";
+      "Le paiement en ligne est momentanément indisponible. Réessayez dans quelques instants.";
     return;
   }
 
@@ -587,7 +587,7 @@ const renderPayPalArea = () => {
 
     if (!planId) {
       paypalButtons.classList.remove("is-loading");
-      paypalStatus.textContent = `Configuration à compléter: ajoutez l'ID du plan PayPal pour ${item.name} (${item.detail}).`;
+      paypalStatus.textContent = "Cette formule n'est pas encore disponible au paiement.";
       return;
     }
 
@@ -624,7 +624,8 @@ const renderPayPalArea = () => {
       })
       .catch((error) => {
         paypalButtons.classList.remove("is-loading");
-        paypalStatus.textContent = error.message;
+        console.error(error);
+        paypalStatus.textContent = "Le paiement en ligne est momentanément indisponible. Réessayez dans quelques instants.";
       });
     return;
   }
@@ -693,7 +694,8 @@ const renderPayPalArea = () => {
     })
     .catch((error) => {
       paypalButtons.classList.remove("is-loading");
-      paypalStatus.textContent = error.message;
+      console.error(error);
+      paypalStatus.textContent = "Le paiement en ligne est momentanément indisponible. Réessayez dans quelques instants.";
     });
 };
 
