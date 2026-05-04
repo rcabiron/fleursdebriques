@@ -16,3 +16,10 @@ node_modules/
 /Nos abonnés en parle.png
 /S'abonner.png
 /Surprise.png
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
