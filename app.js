@@ -398,22 +398,16 @@ document.addEventListener("keydown", (event) => {
 if (motionAllowed) {
   const hero = document.querySelector("[data-parallax-root]");
   const image = document.querySelector("[data-parallax-image]");
-  const notes = document.querySelectorAll("[data-float]");
 
   hero.addEventListener("pointermove", (event) => {
     const bounds = hero.getBoundingClientRect();
     const x = (event.clientX - bounds.left) / bounds.width - 0.5;
     const y = (event.clientY - bounds.top) / bounds.height - 0.5;
     image.style.transform = `perspective(1000px) rotateY(${x * 3}deg) rotateX(${y * -3}deg)`;
-    notes.forEach((note) => {
-      const amount = Number(note.dataset.float);
-      note.style.transform = `translate(${x * amount}px, ${y * amount}px)`;
-    });
   });
 
   hero.addEventListener("pointerleave", () => {
     image.style.transform = "";
-    notes.forEach((note) => (note.style.transform = ""));
   });
 
   let ticking = false;
