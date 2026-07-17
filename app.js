@@ -1,1245 +1,371 @@
-const products = {
-  "sub-classic": {
-    name: "Jardin Classique",
-    detail: "Dès 29,90€ / mois",
-    price: 358.8,
-  },
-  "sub-signature": {
-    name: "Jardin Signature",
-    detail: "Dès 46,90€ / mois",
-    price: 562.8,
-  },
-  "box-s": {
-    name: "Petit Bouquet",
-    detail: "19,90€ + 2,90€ de port",
-    cadence: "Achat ponctuel",
-    meta: "Petit format surprise",
-    price: 22.8,
-  },
-  "box-m": {
-    name: "Bouquet Découverte",
-    detail: "39,90€ + 2,90€ de port",
-    cadence: "Achat ponctuel",
-    meta: "Proche d'une box Classique",
-    price: 42.8,
-  },
-  "box-xl": {
-    name: "Grande Composition",
-    detail: "59,90€ + 2,90€ de port",
-    cadence: "Achat ponctuel",
-    meta: "Grand format déco",
-    price: 62.8,
-  },
+const header = document.querySelector("[data-header]");
+const menuButton = document.querySelector(".menu-button");
+const mobileMenu = document.querySelector(".mobile-menu");
+const revealItems = document.querySelectorAll(".reveal");
+const motionAllowed = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+document.querySelectorAll(".hero .reveal").forEach((item) => item.classList.add("visible"));
+
+const onScroll = () => {
+  header.classList.toggle("scrolled", window.scrollY > 24);
 };
 
-const THANK_YOU_STORAGE_KEY = "fleursDeBriquesLastOrder";
-const CART_STORAGE_KEY = "fleursDeBriquesCart";
+window.addEventListener("scroll", onScroll, { passive: true });
+onScroll();
 
-const PAYPAL_CONFIG = {
-  clientId: "AVH9AEvVSjuXt_ckB7Pjm0qNzeS_NSTgGSQLsku8b-Xd2IbJvdJKmwb1x-eBe-5EFeSCxLX5v2qt7kSL",
-  currency: "EUR",
-  subscriptionPlanIds: {
-    "sub-classic-1": "P-32X34523RT755773ANHYHALI",
-    "sub-classic-3": "P-6YS262634J8791848NHYHBWI",
-    "sub-classic-6": "P-6KC07465EM364180YNHYHCJY",
-    "sub-classic-12": "P-6DA62783D9634780DNHYHCWQ",
-    "sub-signature-1": "P-2LW74540ED5268102NHYHDGI",
-    "sub-signature-3": "P-7679825743430362TNHYHDUY",
-    "sub-signature-6": "P-66V94562YM574602CNHYHEDA",
-    "sub-signature-12": "P-0RJ4507019062905FNHYHETA",
-  },
-};
+menuButton.addEventListener("click", () => {
+  const open = menuButton.getAttribute("aria-expanded") === "true";
+  menuButton.setAttribute("aria-expanded", String(!open));
+  mobileMenu.classList.toggle("open", !open);
+});
 
-const subscriptionPlans = {
-  classic: {
-    1: {
-      id: "sub-classic-1",
-      name: "Jardin Classique",
-      detail: "34,90€ par mois, livraison incluse",
-      price: 34.9,
-      label: "34,90€ <small>/ mois</small>",
-      note: "Paiement mensuel: 34,90€",
-      badge: "Flex",
-      durationLabel: "Mensuel",
-    },
-    3: {
-      id: "sub-classic-3",
-      name: "Jardin Classique",
-      detail: "98,70€ tous les 3 mois, -6%",
-      price: 98.7,
-      label: "32,90€ <small>/ mois</small>",
-      note: "Paiement tous les 3 mois: 98,70€",
-      badge: "-6%",
-      durationLabel: "3 mois",
-    },
-    6: {
-      id: "sub-classic-6",
-      name: "Jardin Classique",
-      detail: "191,40€ deux fois par an, -9%",
-      price: 191.4,
-      label: "31,90€ <small>/ mois</small>",
-      note: "Paiement tous les 6 mois: 191,40€",
-      badge: "-9%",
-      durationLabel: "6 mois",
-    },
-    12: {
-      id: "sub-classic-12",
-      name: "Jardin Classique",
-      detail: "358,80€ une fois par an, -14%",
-      price: 358.8,
-      label: "29,90€ <small>/ mois</small>",
-      note: "Paiement annuel: 358,80€",
-      badge: "-14%",
-      durationLabel: "1 an",
-    },
-  },
-  signature: {
-    1: {
-      id: "sub-signature-1",
-      name: "Jardin Signature",
-      detail: "54,90€ par mois, livraison incluse",
-      price: 54.9,
-      label: "54,90€ <small>/ mois</small>",
-      note: "Paiement mensuel: 54,90€",
-      badge: "Flex",
-      durationLabel: "Mensuel",
-    },
-    3: {
-      id: "sub-signature-3",
-      name: "Jardin Signature",
-      detail: "155,70€ tous les 3 mois, -5%",
-      price: 155.7,
-      label: "51,90€ <small>/ mois</small>",
-      note: "Paiement tous les 3 mois: 155,70€",
-      badge: "-5%",
-      durationLabel: "3 mois",
-    },
-    6: {
-      id: "sub-signature-6",
-      name: "Jardin Signature",
-      detail: "299,40€ deux fois par an, -9%",
-      price: 299.4,
-      label: "49,90€ <small>/ mois</small>",
-      note: "Paiement tous les 6 mois: 299,40€",
-      badge: "-9%",
-      durationLabel: "6 mois",
-    },
-    12: {
-      id: "sub-signature-12",
-      name: "Jardin Signature",
-      detail: "562,80€ une fois par an, -15%",
-      price: 562.8,
-      label: "46,90€ <small>/ mois</small>",
-      note: "Paiement annuel: 562,80€",
-      badge: "-15%",
-      durationLabel: "1 an",
-    },
-  },
-};
-
-const subscriptionCopy = {
-  classic: {
-    title: "Jardin Classique",
-    intro: "Une fleur surprise chaque mois, avec notice papier, livraison incluse et cadeau dans la première box.",
-  },
-  signature: {
-    title: "Jardin Signature",
-    intro: "Des compositions plus décoratives, parfois plusieurs sets, avec des bonus plus fréquents.",
-  },
-};
-
-const planDurations = [1, 3, 6, 12];
-
-const planHelp = {
-  1: "Plus flexible, sans avance.",
-  3: "Bon équilibre: paiement tous les 3 mois.",
-  6: "Deux paiements par an, prix mensuel réduit.",
-  12: "Meilleur prix, paiement annuel.",
-};
-
-const selectedPlans = {
-  classic: 1,
-  signature: 1,
-};
-
-const cart = new Map();
-
-const drawer = document.querySelector("[data-cart-drawer]");
-const cartItems = document.querySelector("[data-cart-items]");
-const cartEmpty = document.querySelector("[data-cart-empty]");
-const cartCount = document.querySelector("[data-cart-count]");
-const cartTotal = document.querySelector("[data-cart-total]");
-const cartNote = document.querySelector("[data-cart-note]");
-const giftToggle = document.querySelector("[data-gift-toggle]");
-const giftDetails = document.querySelector("[data-gift-details]");
-const checkoutSummary = document.querySelector("[data-checkout-summary]");
-const paypalButtons = document.querySelector("[data-paypal-buttons]");
-const paypalStatus = document.querySelector("[data-paypal-status]");
-const modal = document.querySelector("[data-modal]");
-const planModal = document.querySelector("[data-plan-modal]");
-const replaceModal = document.querySelector("[data-replace-modal]");
-const replaceCurrent = document.querySelector("[data-replace-current]");
-const replaceNext = document.querySelector("[data-replace-next]");
-const replaceCurrentType = document.querySelector("[data-replace-current-type]");
-const replaceNextType = document.querySelector("[data-replace-next-type]");
-const replaceCurrentDetail = document.querySelector("[data-replace-current-detail]");
-const replaceNextDetail = document.querySelector("[data-replace-next-detail]");
-const planEyebrow = document.querySelector("[data-plan-eyebrow]");
-const planTitle = document.querySelector("[data-plan-title]");
-const planIntro = document.querySelector("[data-plan-intro]");
-const planOptions = document.querySelector("[data-plan-options]");
-const planPrice = document.querySelector("[data-plan-price-modal]");
-const planNote = document.querySelector("[data-plan-note-modal]");
-const planShippingNote = document.querySelector("[data-plan-shipping-note]");
-const planMonthlyShipping = document.querySelector("[data-plan-monthly-shipping]");
-const toast = document.querySelector("[data-toast]");
-const siteHeader = document.querySelector(".site-header");
-const overlays = [drawer, modal, planModal, replaceModal].filter(Boolean);
-
-let activePlanType = "classic";
-let paypalSdkIntent = "";
-let planModalGiftMode = false;
-let activeBoxGiftId = "box-m";
-let pendingCartReplacement = null;
-let checkoutReference = "";
-
-const trackEvent = (eventName, payload = {}) => {
-  window.fdbTrack?.(eventName, payload);
-};
-
-const syncOverlayLock = () => {
-  document.body.classList.toggle("has-overlay-open", overlays.some((overlay) => overlay.classList.contains("is-open")));
-};
-
-overlays.forEach((overlay) => {
-  new MutationObserver(syncOverlayLock).observe(overlay, {
-    attributes: true,
-    attributeFilter: ["class"],
+mobileMenu.querySelectorAll("a").forEach((link) => {
+  link.addEventListener("click", () => {
+    mobileMenu.classList.remove("open");
+    menuButton.setAttribute("aria-expanded", "false");
   });
 });
 
-const getHeaderOffset = () => (siteHeader?.offsetHeight || 0) + 22;
-
-const scrollToHash = (hash, { updateHistory = true, behavior = "smooth" } = {}) => {
-  const target = hash === "#top" ? document.body : document.querySelector(hash);
-  if (!target) return false;
-
-  const top = hash === "#top" ? 0 : target.getBoundingClientRect().top + window.scrollY - getHeaderOffset();
-  window.scrollTo({ top: Math.max(0, top), behavior });
-
-  if (updateHistory) {
-    history.pushState(null, "", hash);
-  }
-
-  return true;
-};
-
-const formatPrice = (value) =>
-  new Intl.NumberFormat("fr-FR", {
-    style: "currency",
-    currency: "EUR",
-  }).format(value);
-
-const createOrderReference = () => {
-  const now = new Date();
-  const date = [
-    now.getFullYear(),
-    String(now.getMonth() + 1).padStart(2, "0"),
-    String(now.getDate()).padStart(2, "0"),
-  ].join("");
-  const randomPart = crypto.randomUUID().slice(0, 8).toUpperCase();
-  return `FDB-${date}-${randomPart}`;
-};
-
-const getCheckoutReference = () => {
-  if (!checkoutReference) {
-    checkoutReference = createOrderReference();
-  }
-
-  return checkoutReference;
-};
-
-const showToast = (message) => {
-  toast.textContent = message;
-  toast.classList.add("is-visible");
-  window.clearTimeout(showToast.timeout);
-  showToast.timeout = window.setTimeout(() => {
-    toast.classList.remove("is-visible");
-  }, 2400);
-};
-
-const getCartItemType = (item) => (item.type === "subscription" || item.id?.startsWith("sub-") ? "Abonnement" : "Sans abonnement");
-
-const isSubscriptionItem = (item) => item.type === "subscription" || item.id?.startsWith("sub-");
-
-const normalizeQuantity = (quantity) => {
-  const parsed = Number.parseInt(quantity, 10);
-  if (!Number.isFinite(parsed)) return 1;
-  return Math.min(Math.max(parsed, 1), 99);
-};
-
-const getLineQuantity = (item) => (isSubscriptionItem(item) ? 1 : normalizeQuantity(item.quantity));
-
-const getLineTotal = (item) => item.price * getLineQuantity(item);
-
-const hasSubscriptionInCart = () => [...cart.values()].some((item) => isSubscriptionItem(item));
-
-const getReplacementLabel = () => {
-  const items = [...cart.values()];
-  if (items.length === 0) return "";
-  if (items.length === 1) return items[0].name;
-  const oneTimeCount = items.filter((item) => !isSubscriptionItem(item)).length;
-  if (oneTimeCount === items.length) return `${oneTimeCount} box à l'unité`;
-  return `${items.length} offres`;
-};
-
-const getReplacementDetail = (item) => {
-  if (!item) return "";
-  if (isSubscriptionItem(item)) return item.detail || item.meta || item.cadence || "";
-
-  const quantity = getLineQuantity(item);
-  const quantityLabel = quantity > 1 ? `${quantity} exemplaires · ` : "";
-  return `${quantityLabel}${item.detail || item.meta || item.cadence || ""}`;
-};
-
-const saveCartState = () => {
-  try {
-    if (cart.size === 0) {
-      localStorage.removeItem(CART_STORAGE_KEY);
-      return;
-    }
-
-    localStorage.setItem(
-      CART_STORAGE_KEY,
-      JSON.stringify({
-        items: [...cart.values()],
-        isGift: giftToggle?.checked || false,
-        updatedAt: new Date().toISOString(),
-      }),
-    );
-  } catch {
-    // Le panier reste fonctionnel même si le stockage local est indisponible.
-  }
-};
-
-const restoreCartState = () => {
-  try {
-    const saved = JSON.parse(localStorage.getItem(CART_STORAGE_KEY) || "null");
-    if (!saved || !Array.isArray(saved.items)) return;
-
-    cart.clear();
-    saved.items.forEach((item) => {
-      if (!item?.id || typeof item.price !== "number") return;
-      const type = item.type || (item.id.startsWith("sub-") ? "subscription" : "one-time");
-      cart.set(item.id, {
-        ...item,
-        type,
-        quantity: type === "subscription" ? 1 : normalizeQuantity(item.quantity),
-      });
-    });
-
-    if (giftToggle) {
-      giftToggle.checked = Boolean(saved.isGift);
-      giftDetails?.classList.toggle("is-visible", giftToggle.checked);
-    }
-  } catch {
-    localStorage.removeItem(CART_STORAGE_KEY);
-  }
-};
-
-const enableGiftMode = () => {
-  if (!giftToggle) return;
-  giftToggle.checked = true;
-  giftDetails?.classList.add("is-visible");
-  renderCart();
-};
-
-const celebrateCartAdd = () => {
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-  document.querySelector(".cart-burst")?.remove();
-
-  const burst = document.createElement("div");
-  burst.className = "cart-burst";
-  burst.setAttribute("aria-hidden", "true");
-
-  const pieces = [
-    ["flower", "#ee5aa8", "-72px", "-92px", "-28deg", "0ms", "15px"],
-    ["flower", "#ffed4a", "-34px", "-118px", "22deg", "25ms", "14px"],
-    ["flower", "#6fb6d9", "42px", "-106px", "34deg", "50ms", "13px"],
-    ["flower", "#ee5a3f", "74px", "-70px", "-38deg", "75ms", "14px"],
-    ["flower", "#8bd46a", "-94px", "-42px", "46deg", "100ms", "12px"],
-    ["flower", "#123b66", "28px", "-46px", "58deg", "125ms", "13px"],
-  ];
-
-  pieces.forEach(([type, color, x, y, rotation, delay, size]) => {
-    const piece = document.createElement("span");
-    piece.className = `burst-piece is-${type}`;
-    piece.style.setProperty("--color", color);
-    piece.style.setProperty("--x", x);
-    piece.style.setProperty("--y", y);
-    piece.style.setProperty("--rot", rotation);
-    piece.style.setProperty("--delay", delay);
-    piece.style.setProperty("--size", size);
-    burst.append(piece);
-  });
-
-  document.body.append(burst);
-  window.setTimeout(() => burst.remove(), 1200);
-};
-
-const getTotals = () => {
-  let total = 0;
-  let quantity = 0;
-
-  cart.forEach((item) => {
-    const lineQuantity = getLineQuantity(item);
-    quantity += lineQuantity;
-    total += item.price * lineQuantity;
-  });
-
-  return { quantity, total };
-};
-
-const renderCart = () => {
-  cartItems.innerHTML = "";
-
-  cart.forEach((item, id) => {
-    const quantity = getLineQuantity(item);
-    const lineTotal = getLineTotal(item);
-    const canChangeQuantity = !isSubscriptionItem(item);
-    const line = document.createElement("article");
-    line.className = "cart-line";
-    line.innerHTML = `
-      <div class="cart-line-main">
-        <div class="cart-line-top">
-          <h3>${item.name}</h3>
-          <strong>${formatPrice(lineTotal)}</strong>
-        </div>
-        <p>${item.detail}</p>
-        ${canChangeQuantity && quantity > 1 ? `<small class="cart-meta">${quantity} × ${formatPrice(item.price)} l'unité</small>` : ""}
-        ${item.cadence ? `<small class="cart-meta">${item.cadence}</small>` : ""}
-      </div>
-      <div class="cart-line-actions">
-        ${
-          canChangeQuantity
-            ? `<div class="quantity-control" aria-label="Quantité ${item.name}">
-                <button type="button" data-qty-decrease="${id}" aria-label="Réduire la quantité de ${item.name}">−</button>
-                <span>${quantity}</span>
-                <button type="button" data-qty-increase="${id}" aria-label="Augmenter la quantité de ${item.name}">+</button>
-              </div>`
-            : ""
+if ("IntersectionObserver" in window) {
+  const revealObserver = new IntersectionObserver(
+    (entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          observer.unobserve(entry.target);
         }
-        <button class="remove-item" type="button" data-remove="${id}" aria-label="Supprimer ${item.name} du panier">Supprimer</button>
-      </div>
-    `;
-    cartItems.append(line);
+      });
+    },
+    { threshold: 0.14, rootMargin: "0px 0px -30px" },
+  );
+  revealItems.forEach((item) => revealObserver.observe(item));
+} else {
+  revealItems.forEach((item) => item.classList.add("visible"));
+}
+
+document.querySelectorAll("[data-scroll-to]").forEach((button) => {
+  button.addEventListener("click", () => {
+    document.getElementById(button.dataset.scrollTo)?.scrollIntoView({ behavior: "smooth" });
   });
+});
 
-  const { quantity, total } = getTotals();
-  const hasSubscription = hasSubscriptionInCart();
-  const isGift = giftToggle?.checked;
-  cartCount.textContent = quantity;
-  cartTotal.textContent = formatPrice(total);
-  if (isGift) {
-    cartNote.textContent = hasSubscription
-      ? "Cadeau: indiquez l'adresse du destinataire lors du paiement."
-      : "Cadeau: indiquez l'adresse du destinataire lors du paiement. Vous pouvez offrir plusieurs box à l'unité.";
-  } else {
-    cartNote.textContent = hasSubscription
-      ? "Les box restent envoyées chaque mois selon le rythme indiqué. Les achats ponctuels se commandent séparément."
-      : "Vous pouvez ajouter plusieurs box à l'unité. Les frais de port sont inclus dans le total affiché.";
-  }
-  cartEmpty.classList.toggle("is-visible", quantity === 0);
-  saveCartState();
-};
+document.querySelectorAll(".faq-item button").forEach((button) => {
+  button.addEventListener("click", () => {
+    const item = button.closest(".faq-item");
+    const open = item.classList.contains("is-open");
 
-const getCartPaymentMode = () => {
-  const items = [...cart.entries()];
-  const subscriptions = items.filter(([id]) => id.startsWith("sub-"));
-  const oneTimeItems = items.filter(([id]) => !id.startsWith("sub-"));
-
-  if (subscriptions.length && oneTimeItems.length) return "mixed";
-  if (subscriptions.length > 1) return "subscription-multiple";
-  if (subscriptions.length === 1) return "subscription";
-  if (oneTimeItems.length) return "one-time";
-  return "empty";
-};
-
-const loadPayPalSdk = (intent) =>
-  new Promise((resolve, reject) => {
-    if (!PAYPAL_CONFIG.clientId) {
-      reject(new Error("Client ID PayPal manquant"));
-      return;
-    }
-
-    if (window.paypal && paypalSdkIntent === intent) {
-      resolve(window.paypal);
-      return;
-    }
-
-    document.querySelector("[data-paypal-sdk]")?.remove();
-    delete window.paypal;
-    paypalSdkIntent = intent;
-
-    const params = new URLSearchParams({
-      "client-id": PAYPAL_CONFIG.clientId,
-      currency: PAYPAL_CONFIG.currency,
-      components: "buttons",
+    document.querySelectorAll(".faq-item").forEach((other) => {
+      other.classList.remove("is-open");
+      other.querySelector("button").setAttribute("aria-expanded", "false");
     });
 
-    if (intent === "subscription") {
-      params.set("vault", "true");
-      params.set("intent", "subscription");
+    if (!open) {
+      item.classList.add("is-open");
+      button.setAttribute("aria-expanded", "true");
     }
+  });
+});
 
+const premiumGallery = document.querySelector("[data-premium-gallery]");
+if (premiumGallery) {
+  const premiumImages = premiumGallery.querySelectorAll("[data-premium-image]");
+  const premiumButtons = premiumGallery.querySelectorAll("[data-premium-view]");
+  let premiumView = "large";
+  let premiumTimer;
+
+  const showPremiumView = (view) => {
+    premiumView = view;
+    premiumImages.forEach((image) => {
+      const active = image.dataset.premiumImage === view;
+      image.classList.toggle("is-active", active);
+      image.setAttribute("aria-hidden", String(!active));
+    });
+    premiumButtons.forEach((button) => {
+      button.setAttribute("aria-pressed", String(button.dataset.premiumView === view));
+    });
+  };
+
+  const startPremiumGallery = () => {
+    if (!motionAllowed) return;
+    window.clearInterval(premiumTimer);
+    premiumTimer = window.setInterval(() => {
+      showPremiumView(premiumView === "large" ? "duo" : "large");
+    }, 5200);
+  };
+
+  premiumButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      showPremiumView(button.dataset.premiumView);
+      startPremiumGallery();
+    });
+  });
+
+  premiumGallery.addEventListener("pointerenter", () => window.clearInterval(premiumTimer));
+  premiumGallery.addEventListener("pointerleave", startPremiumGallery);
+  startPremiumGallery();
+}
+
+const dialog = document.querySelector(".plan-dialog");
+const dialogTitle = dialog.querySelector("h2");
+const dialogPrice = dialog.querySelector(".dialog-price");
+const dialogPremiumOffer = dialog.querySelector(".dialog-premium-offer");
+const dialogEligibleCount = dialog.querySelector("[data-dialog-eligible]");
+const closeButtons = dialog.querySelectorAll(".dialog-close, .dialog-backdrop");
+const checkoutFlow = dialog.querySelector("[data-checkout-flow]");
+const checkoutSuccess = dialog.querySelector("[data-checkout-success]");
+const subscriptionReference = dialog.querySelector("[data-subscription-reference]");
+const paypalContainer = dialog.querySelector("[data-paypal-button-container]");
+const paypalStatus = dialog.querySelector("[data-paypal-status]");
+const checkoutTotal = dialog.querySelector("[data-checkout-total]");
+const deliveryOptions = dialog.querySelectorAll('input[name="delivery-zone"]');
+const checkoutConsent = dialog.querySelector("[data-checkout-consent]");
+const successClose = dialog.querySelector("[data-success-close]");
+let lastFocusedElement;
+let activePlan = null;
+let paypalRenderVersion = 0;
+let confirmationUrl = "";
+
+const PAYPAL_PLANS = {
+  ESSENTIEL: { price: 49.9, planId: "P-9WK16435TS7356210NJM6FSY" },
+  PREMIUM: { price: 69.9, planId: "P-44N73432SR248160RNJM6GDY" },
+};
+const PAYPAL_SDK_URL = "https://www.paypal.com/sdk/js?client-id=AVH9AEvVSjuXt_ckB7Pjm0qNzeS_NSTgGSQLsku8b-Xd2IbJvdJKmwb1x-eBe-5EFeSCxLX5v2qt7kSL&currency=EUR&vault=true&intent=subscription&components=buttons";
+let paypalSdkPromise;
+
+const loadPayPalSdk = () => {
+  if (window.paypal?.Buttons) return Promise.resolve(window.paypal);
+  if (paypalSdkPromise) return paypalSdkPromise;
+
+  paypalSdkPromise = new Promise((resolve, reject) => {
     const script = document.createElement("script");
-    script.src = `https://www.paypal.com/sdk/js?${params.toString()}`;
-    script.dataset.paypalSdk = intent;
-    script.onload = () => resolve(window.paypal);
-    script.onerror = () => reject(new Error("Impossible de charger PayPal"));
+    script.src = PAYPAL_SDK_URL;
+    script.dataset.sdkIntegrationSource = "button-factory";
+    script.addEventListener("load", () => resolve(window.paypal));
+    script.addEventListener("error", () => reject(new Error("PayPal SDK unavailable")));
     document.head.append(script);
   });
 
-const saveOrderSnapshot = ({ paymentType, reference, orderReference }) => {
-  const { total } = getTotals();
-  const mode = getCartPaymentMode();
-  const items = [...cart.values()].map((item) => ({
-    name: item.name,
-    detail: item.detail,
-    cadence: item.cadence,
-    meta: item.meta,
-    quantity: getLineQuantity(item),
-    price: item.price,
-  }));
-
-  localStorage.setItem(
-    THANK_YOU_STORAGE_KEY,
-    JSON.stringify({
-      paymentType,
-      mode,
-      reference,
-      orderReference,
-      total,
-      items,
-      isGift: giftToggle?.checked || false,
-      createdAt: new Date().toISOString(),
-    }),
-  );
+  return paypalSdkPromise;
 };
 
-const completePaidOrder = ({ paymentType, reference, orderReference }) => {
-  trackEvent("paypal_approved", {
-    paymentType,
-    cartMode: getCartPaymentMode(),
-    total: getTotals().total,
-    isGift: giftToggle?.checked || false,
-  });
-  saveOrderSnapshot({ paymentType, reference, orderReference });
-  cart.clear();
-  checkoutReference = "";
-  localStorage.removeItem(CART_STORAGE_KEY);
-  renderCart();
-  modal.classList.remove("is-open");
-  modal.setAttribute("aria-hidden", "true");
-  drawer.classList.remove("is-open");
-  drawer.setAttribute("aria-hidden", "true");
-  window.location.href = `merci.html?type=${encodeURIComponent(paymentType)}&ref=${encodeURIComponent(reference)}&order=${encodeURIComponent(orderReference)}`;
+const formatPrice = (value) =>
+  new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" }).format(value);
+
+const selectedShipping = () => {
+  const option = dialog.querySelector('input[name="delivery-zone"]:checked');
+  return Number(option?.dataset.shipping || 0);
 };
 
-const renderPayPalArea = () => {
-  if (!paypalButtons || !paypalStatus) return;
+const showToast = (message) => {
+  const toast = document.querySelector(".toast");
+  toast.textContent = message;
+  toast.classList.add("show");
+  window.setTimeout(() => toast.classList.remove("show"), 4000);
+};
 
-  paypalButtons.innerHTML = "";
-  paypalButtons.classList.remove("is-loading");
+const renderPayPalButtons = async () => {
+  if (!activePlan) return;
 
-  const mode = getCartPaymentMode();
-  const { total } = getTotals();
-
-  if (mode === "empty") {
-    paypalStatus.textContent = "Ajoutez une offre au panier pour afficher le paiement sécurisé.";
+  const renderVersion = ++paypalRenderVersion;
+  const shipping = selectedShipping();
+  checkoutTotal.textContent = formatPrice(activePlan.price + shipping);
+  paypalContainer.replaceChildren();
+  paypalStatus.classList.remove("is-error");
+  if (!checkoutConsent.checked) {
+    paypalStatus.textContent = "Acceptez les conditions pour afficher les moyens de paiement.";
     return;
   }
 
-  if (mode === "mixed") {
-    paypalStatus.textContent =
-      "PayPal ne peut pas valider un abonnement et une box à l'unité dans le même paiement. Gardez une seule formule dans le panier.";
+  paypalStatus.textContent = "Chargement des moyens de paiement…";
+
+  try {
+    await loadPayPalSdk();
+  } catch (error) {
+    console.error("PayPal SDK error", error);
+    paypalStatus.textContent = "Le paiement PayPal n’a pas pu être chargé. Vérifiez votre connexion puis actualisez la page.";
+    paypalStatus.classList.add("is-error");
     return;
   }
 
-  if (mode === "subscription-multiple") {
-    paypalStatus.textContent = "Gardez un seul abonnement dans le panier pour finaliser avec PayPal.";
+  if (!window.paypal?.Buttons) {
+    paypalStatus.textContent = "Le paiement PayPal n’a pas pu être chargé. Vérifiez votre connexion puis actualisez la page.";
+    paypalStatus.classList.add("is-error");
     return;
   }
 
-  if (!PAYPAL_CONFIG.clientId) {
-    paypalStatus.textContent =
-      "Le paiement en ligne est momentanément indisponible. Réessayez dans quelques instants.";
-    return;
-  }
-
-  paypalButtons.classList.add("is-loading");
-
-  if (mode === "subscription") {
-    const [cartId, item] = [...cart.entries()][0];
-    const planId = PAYPAL_CONFIG.subscriptionPlanIds[cartId];
-    const orderReference = getCheckoutReference();
-
-    if (!planId) {
-      paypalButtons.classList.remove("is-loading");
-      paypalStatus.textContent = "Cette formule n'est pas encore disponible au paiement.";
-      return;
-    }
-
-    paypalStatus.textContent = "Le paiement PayPal ouvrira l'abonnement choisi. Les box seront envoyées chaque mois.";
-    trackEvent("paypal_render", {
-      paymentType: "subscription",
-      productId: cartId,
-      productName: item.name,
-      total,
-    });
-    loadPayPalSdk("subscription")
-      .then((paypal) => {
-        paypalButtons.classList.remove("is-loading");
-        paypal
-          .Buttons({
-            style: { layout: "vertical", shape: "pill", label: "subscribe" },
-            createSubscription: (data, actions) =>
-              actions.subscription.create({
-                plan_id: planId,
-                custom_id: orderReference,
-              }),
-            onApprove: (data) =>
-              completePaidOrder({
-                paymentType: "subscription",
-                reference: data.subscriptionID,
-                orderReference,
-              }),
-            onError: () => {
-              trackEvent("paypal_error", { paymentType: "subscription", productId: cartId });
-              showToast("Le paiement PayPal n'a pas pu être lancé");
-            },
-          })
-          .render(paypalButtons);
-      })
-      .catch((error) => {
-        paypalButtons.classList.remove("is-loading");
-        console.error(error);
-        paypalStatus.textContent = "Le paiement en ligne est momentanément indisponible. Réessayez dans quelques instants.";
-      });
-    return;
-  }
-
-  const oneTimeItems = [...cart.values()].map((item) => ({
-    name: item.name,
-    quantity: String(getLineQuantity(item)),
-    unit_amount: {
-      currency_code: PAYPAL_CONFIG.currency,
-      value: item.price.toFixed(2),
+  const buttons = window.paypal.Buttons({
+    style: {
+      layout: "vertical",
+      shape: "pill",
+      color: "gold",
+      label: "subscribe",
+      height: 46,
     },
-  }));
-  const itemTotal = oneTimeItems.reduce(
-    (sum, item) => sum + Number(item.unit_amount.value) * Number(item.quantity),
-    0,
-  );
-  const oneTimeSummary = oneTimeItems.map((item) => `${item.quantity} × ${item.name}`).join(", ");
-  const orderReference = getCheckoutReference();
+    createSubscription(data, actions) {
+      const currentShipping = selectedShipping();
+      const payload = {
+        plan_id: activePlan.planId,
+        custom_id: `FDB-${activePlan.code}-${Date.now().toString(36).toUpperCase()}`,
+        application_context: {
+          brand_name: "Fleurs de Briques",
+          locale: "fr-FR",
+          shipping_preference: "GET_FROM_FILE",
+          user_action: "SUBSCRIBE_NOW",
+        },
+      };
 
-  paypalStatus.textContent = "Payez vos box à l'unité avec PayPal ou carte bancaire.";
-  trackEvent("paypal_render", {
-    paymentType: "one-time",
-    itemCount: oneTimeItems.length,
-    total,
+      if (currentShipping > 0) {
+        payload.shipping_amount = {
+          currency_code: "EUR",
+          value: currentShipping.toFixed(2),
+        };
+      }
+
+      return actions.subscription.create(payload);
+    },
+    onApprove(data) {
+      const deliveryOption = dialog.querySelector('input[name="delivery-zone"]:checked');
+      const shipping = selectedShipping();
+      const confirmation = {
+        subscriptionId: data.subscriptionID,
+        planCode: activePlan.code,
+        planName: activePlan.name,
+        planId: activePlan.planId,
+        basePrice: activePlan.price,
+        shipping,
+        total: activePlan.price + shipping,
+        deliveryZone: deliveryOption?.value || "france",
+        createdAt: new Date().toISOString(),
+      };
+
+      try {
+        const serializedConfirmation = JSON.stringify(confirmation);
+        window.sessionStorage.setItem("fdbLastSubscription", serializedConfirmation);
+        window.localStorage.setItem("fdbLastSubscription", serializedConfirmation);
+      } catch (error) {
+        console.warn("Confirmation locale indisponible", error);
+      }
+
+      const destination = new URL("merci.html", window.location.href);
+      destination.searchParams.set("subscription", data.subscriptionID);
+      confirmationUrl = destination.href;
+      checkoutFlow.hidden = true;
+      checkoutSuccess.hidden = false;
+      subscriptionReference.textContent = data.subscriptionID;
+      dialog.querySelector("[data-success-close]").focus();
+
+      window.setTimeout(() => {
+        if (confirmationUrl) window.location.assign(confirmationUrl);
+      }, 1200);
+    },
+    onCancel() {
+      showToast("Paiement interrompu. Aucun abonnement n’a été créé.");
+    },
+    onError(error) {
+      console.error("PayPal subscription error", error);
+      paypalStatus.textContent = "Une erreur est survenue avec PayPal. Réessayez dans quelques instants.";
+      paypalStatus.classList.add("is-error");
+    },
   });
-  loadPayPalSdk("capture")
-    .then((paypal) => {
-      paypalButtons.classList.remove("is-loading");
-      paypal
-        .Buttons({
-          style: { layout: "vertical", shape: "pill", label: "pay" },
-          createOrder: (data, actions) =>
-            actions.order.create({
-              purchase_units: [
-                {
-                  description: oneTimeSummary || "Fleurs de Briques - Box à l'unité",
-                  custom_id: orderReference,
-                  items: oneTimeItems,
-                  amount: {
-                    currency_code: PAYPAL_CONFIG.currency,
-                    value: total.toFixed(2),
-                    breakdown: {
-                      item_total: {
-                        currency_code: PAYPAL_CONFIG.currency,
-                        value: itemTotal.toFixed(2),
-                      },
-                    },
-                  },
-                },
-              ],
-            }),
-          onApprove: (data, actions) =>
-            actions.order.capture().then((details) =>
-              completePaidOrder({
-                paymentType: "one-time",
-                reference: details.id || data.orderID,
-                orderReference,
-              }),
-            ),
-          onError: () => {
-            trackEvent("paypal_error", { paymentType: "one-time", total });
-            showToast("Le paiement PayPal n'a pas pu être lancé");
-          },
-        })
-        .render(paypalButtons);
-    })
-    .catch((error) => {
-      paypalButtons.classList.remove("is-loading");
-      console.error(error);
-      paypalStatus.textContent = "Le paiement en ligne est momentanément indisponible. Réessayez dans quelques instants.";
-    });
-};
 
-const renderCheckoutSummary = () => {
-  const { quantity, total } = getTotals();
-
-  if (quantity === 0) {
-    checkoutSummary.innerHTML = "";
+  if (!buttons.isEligible()) {
+    paypalStatus.textContent = "PayPal n’est pas disponible sur cet appareil. Essayez avec un autre navigateur.";
+    paypalStatus.classList.add("is-error");
     return;
   }
 
-  const lines = [...cart.values()]
-    .map(
-      (item) => {
-        const quantity = getLineQuantity(item);
-        const lineTotal = getLineTotal(item);
-        return `
-        <li>
-          <span>${quantity > 1 ? `${quantity} × ` : ""}${item.name}</span>
-          <strong>${formatPrice(lineTotal)}</strong>
-          <small>${item.detail}</small>
-          ${quantity > 1 ? `<small>${formatPrice(item.price)} l'unité</small>` : ""}
-          ${item.cadence ? `<small>${item.cadence}</small>` : ""}
-          ${item.meta ? `<small>${item.meta}</small>` : ""}
-        </li>
-      `;
-      },
-    )
-    .join("");
-  const paymentMode = getCartPaymentMode();
-  const isGift = giftToggle?.checked;
-  const orderReference = getCheckoutReference();
-  const checkoutNote =
-    isGift
-      ? "Cadeau: l'adresse du destinataire sera confirmée dans PayPal."
-      : paymentMode === "subscription"
-      ? "Le montant correspond au rythme de prélèvement choisi. Les box restent envoyées chaque mois."
-      : "L'adresse et les informations de paiement seront confirmées dans PayPal.";
-
-  checkoutSummary.innerHTML = `
-    <strong>Récapitulatif</strong>
-    <ul>${lines}</ul>
-    <p>
-      <span>Référence commande</span>
-      <strong>${orderReference}</strong>
-    </p>
-    <p>
-      <span>Total à régler maintenant</span>
-      <strong>${formatPrice(total)}</strong>
-    </p>
-    <small>${checkoutNote}</small>
-  `;
-};
-
-const commitCartItem = (item, message) => {
-  cart.clear();
-  cart.set(item.id, {
-    ...item,
-    quantity: isSubscriptionItem(item) ? 1 : normalizeQuantity(item.quantity),
-  });
-  checkoutReference = "";
-
-  renderCart();
-  drawer.classList.add("is-open");
-  drawer.setAttribute("aria-hidden", "false");
-  celebrateCartAdd();
-  showToast(message || `${item.name} ajouté au panier`);
-  trackEvent("add_to_cart", {
-    productId: item.id,
-    productName: item.name,
-    productType: item.type,
-    price: item.price,
-    quantity: getLineQuantity(item),
-    isGift: giftToggle?.checked || false,
+  buttons.render(paypalContainer).then(() => {
+    if (renderVersion === paypalRenderVersion) paypalStatus.textContent = "PayPal ou carte bancaire · paiement chiffré";
+  }).catch((error) => {
+    console.error("PayPal button render error", error);
+    if (renderVersion !== paypalRenderVersion) return;
+    paypalStatus.textContent = "Le paiement PayPal n’a pas pu être affiché. Actualisez la page pour réessayer.";
+    paypalStatus.classList.add("is-error");
   });
 };
 
-const closeReplacementModal = () => {
-  pendingCartReplacement = null;
-  replaceModal?.classList.remove("is-open");
-  replaceModal?.setAttribute("aria-hidden", "true");
+const closeDialog = () => {
+  dialog.hidden = true;
+  document.body.classList.remove("dialog-open");
+  lastFocusedElement?.focus();
 };
 
-const requestCartReplacement = (item) => {
-  const current = [...cart.values()][0];
-  if (!current || cart.has(item.id)) {
-    commitCartItem(item, cart.has(item.id) ? `${item.name} est déjà dans votre panier` : undefined);
+document.querySelectorAll(".choose-plan").forEach((button) => {
+  button.addEventListener("click", () => {
+    const card = button.closest(".plan-card");
+    const plan = PAYPAL_PLANS[card.dataset.planCode];
+    lastFocusedElement = button;
+    activePlan = { ...plan, code: card.dataset.planCode, name: card.dataset.plan };
+    confirmationUrl = "";
+    dialogTitle.textContent = card.dataset.plan;
+    dialogPrice.innerHTML = `${card.dataset.price} <span>/ mois</span>`;
+    dialogPremiumOffer.hidden = !card.dataset.eligibleCount;
+    dialogEligibleCount.textContent = card.dataset.eligibleCount;
+    checkoutFlow.hidden = false;
+    checkoutSuccess.hidden = true;
+    subscriptionReference.textContent = "";
+    deliveryOptions[0].checked = true;
+    checkoutConsent.checked = false;
+    dialog.hidden = false;
+    document.body.classList.add("dialog-open");
+    dialog.querySelector('input[name="delivery-zone"]:checked').focus();
+    renderPayPalButtons();
+  });
+});
+
+deliveryOptions.forEach((option) => option.addEventListener("change", renderPayPalButtons));
+checkoutConsent.addEventListener("change", renderPayPalButtons);
+successClose.addEventListener("click", () => {
+  if (confirmationUrl) {
+    window.location.assign(confirmationUrl);
     return;
   }
-
-  if (!replaceModal) {
-    commitCartItem(item, `${item.name} remplace l'offre précédente`);
-    return;
-  }
-
-  pendingCartReplacement = { item };
-  trackEvent("replace_cart_prompt", {
-    currentType: getCartItemType(current),
-    currentName: getReplacementLabel(),
-    nextType: getCartItemType(item),
-    nextName: item.name,
-    nextId: item.id,
-  });
-  if (replaceCurrent) replaceCurrent.textContent = getReplacementLabel();
-  if (replaceNext) replaceNext.textContent = item.name;
-  if (replaceCurrentType) replaceCurrentType.textContent = getCartItemType(current);
-  if (replaceNextType) replaceNextType.textContent = getCartItemType(item);
-  if (replaceCurrentDetail) replaceCurrentDetail.textContent = getReplacementDetail(current);
-  if (replaceNextDetail) replaceNextDetail.textContent = getReplacementDetail(item);
-  drawer.classList.remove("is-open");
-  drawer.setAttribute("aria-hidden", "true");
-  replaceModal?.classList.add("is-open");
-  replaceModal?.setAttribute("aria-hidden", "false");
-};
-
-const addToCart = (id) => {
-  const product = products[id];
-  if (!product) return;
-
-  const item = {
-    id,
-    ...product,
-    type: "one-time",
-    quantity: 1,
-  };
-
-  if (hasSubscriptionInCart()) {
-    requestCartReplacement(item);
-    return;
-  }
-
-  const existing = cart.get(id);
-  checkoutReference = "";
-
-  if (existing) {
-    cart.set(id, {
-      ...existing,
-      quantity: normalizeQuantity(normalizeQuantity(existing.quantity) + 1),
-    });
-    renderCart();
-    drawer.classList.add("is-open");
-    drawer.setAttribute("aria-hidden", "false");
-    celebrateCartAdd();
-    showToast(`${product.name} ajouté en quantité ${cart.get(id).quantity}`);
-    trackEvent("add_to_cart", {
-      productId: id,
-      productName: product.name,
-      productType: "one-time",
-      price: product.price,
-      quantity: cart.get(id).quantity,
-      isGift: giftToggle?.checked || false,
-    });
-    return;
-  }
-
-  cart.set(id, item);
-  renderCart();
-  drawer.classList.add("is-open");
-  drawer.setAttribute("aria-hidden", "false");
-  celebrateCartAdd();
-  showToast(`${product.name} ajouté au panier`);
-  trackEvent("add_to_cart", {
-    productId: id,
-    productName: product.name,
-    productType: "one-time",
-    price: product.price,
-    quantity: 1,
-    isGift: giftToggle?.checked || false,
-  });
-};
-
-const addPlanToCart = (type) => {
-  const duration = selectedPlans[type];
-  const plan = subscriptionPlans[type]?.[duration];
-  if (!plan) return;
-
-  requestCartReplacement({
-    id: plan.id,
-    name: plan.name,
-    detail: plan.note,
-    cadence: "1 box envoyée chaque mois",
-    meta: planHelp[duration],
-    price: plan.price,
-    type: "subscription",
-    quantity: 1,
-  });
-};
-
-const syncPlanModal = () => {
-  if (activePlanType === "gift-box") {
-    const product = products[activeBoxGiftId];
-    if (!product) return;
-    planOptions.querySelectorAll("[data-gift-box-choice]").forEach((button) => {
-      button.classList.toggle("is-selected", button.dataset.giftBoxChoice === activeBoxGiftId);
-    });
-    planPrice.innerHTML = formatPrice(product.price);
-    planNote.textContent = `${product.detail}. ${product.cadence}.`;
-    planShippingNote.classList.add("is-hidden");
-    planMonthlyShipping.classList.add("is-hidden");
-    return;
-  }
-
-  const plan = subscriptionPlans[activePlanType]?.[selectedPlans[activePlanType]];
-  if (!plan) return;
-  const needsShippingClarification = selectedPlans[activePlanType] !== 1;
-  planPrice.innerHTML = plan.label;
-  planNote.textContent = plan.note;
-  planShippingNote.classList.toggle("is-hidden", !needsShippingClarification);
-  planMonthlyShipping.classList.toggle("is-hidden", !needsShippingClarification);
-  planOptions.querySelectorAll("[data-plan]").forEach((button) => {
-    button.classList.toggle("is-selected", button.dataset.plan === `${activePlanType}-${selectedPlans[activePlanType]}`);
-  });
-};
-
-const openPlanModal = (type, options = {}) => {
-  activePlanType = type;
-  planModalGiftMode = Boolean(options.giftMode);
-  trackEvent("open_plan_modal", {
-    planType: type,
-    giftMode: planModalGiftMode,
-    defaultDuration: options.duration || 1,
-  });
-  planOptions.classList.remove("is-box-choice");
-  if (planEyebrow) planEyebrow.textContent = planModalGiftMode ? "Abonnement cadeau" : "Abonnement";
-  const copy = subscriptionCopy[type];
-  if (!copy) return;
-  selectedPlans[type] = options.duration || 1;
-
-  planTitle.textContent = copy.title;
-  planIntro.textContent = copy.intro;
-  planOptions.innerHTML = planDurations
-    .map((duration) => {
-      const plan = subscriptionPlans[type][duration];
-      return `
-        <button type="button" data-plan="${type}-${duration}">
-          ${plan.durationLabel}
-          <span>${planModalGiftMode && duration === 3 ? `Recommandé · ${plan.badge}` : plan.badge}</span>
-          <small>${plan.label.replace("<small>", "").replace("</small>", "")}</small>
-        </button>
-      `;
-    })
-    .join("");
-
-  syncPlanModal();
-  planModal.classList.add("is-open");
-  planModal.setAttribute("aria-hidden", "false");
-};
-
-const openGiftBoxModal = () => {
-  activePlanType = "gift-box";
-  activeBoxGiftId = "box-m";
-  trackEvent("open_gift_box_modal");
-  planOptions.classList.add("is-box-choice");
-  if (planEyebrow) planEyebrow.textContent = "Cadeau à l'unité";
-  planTitle.textContent = "Choisir une box";
-  planIntro.textContent = "Sélectionnez la taille de box à offrir. L'adresse du destinataire sera confirmée dans PayPal.";
-  planOptions.innerHTML = ["box-s", "box-m", "box-xl"]
-    .map((id) => {
-      const product = products[id];
-      return `
-        <button type="button" data-gift-box-choice="${id}">
-          ${product.name}
-          <span>${product.detail}</span>
-          <small>${product.meta}</small>
-        </button>
-      `;
-    })
-    .join("");
-
-  syncPlanModal();
-  planModal.classList.add("is-open");
-  planModal.setAttribute("aria-hidden", "false");
-};
-
-const closePlanModal = () => {
-  planModal.classList.remove("is-open");
-  planModal.setAttribute("aria-hidden", "true");
-  planModalGiftMode = false;
-  activePlanType = "classic";
-  planOptions.classList.remove("is-box-choice");
-};
-
-const setTimelineStep = (step) => {
-  document.querySelectorAll("[data-timeline-step]").forEach((item) => {
-    item.classList.toggle("is-active", Number(item.dataset.timelineStep) === step);
-  });
-  document.querySelectorAll("[data-timeline-item]").forEach((item) => {
-    item.classList.toggle("is-active", Number(item.dataset.timelineItem) === step);
-  });
-};
-
-document.addEventListener("click", (event) => {
-  const anchorLink = event.target.closest('a[href^="#"]');
-  const addButton = event.target.closest("[data-add]");
-  const openPlanButton = event.target.closest("[data-open-plan]");
-  const giftPlanButton = event.target.closest("[data-gift-plan]");
-  const giftBoxButton = event.target.closest("[data-gift-box]");
-  const giftBoxPanelButton = event.target.closest("[data-gift-box-panel]");
-  const giftBoxChoiceButton = event.target.closest("[data-gift-box-choice]");
-  const planButton = event.target.closest("[data-plan]");
-  const timelineButton = event.target.closest("[data-timeline-step]");
-  const timelineItem = event.target.closest("[data-timeline-item]");
-  const removeButton = event.target.closest("[data-remove]");
-  const quantityDecreaseButton = event.target.closest("[data-qty-decrease]");
-  const quantityIncreaseButton = event.target.closest("[data-qty-increase]");
-  const replaceCancelButton = event.target.closest("[data-replace-cancel]");
-  const replaceConfirmButton = event.target.closest("[data-replace-confirm]");
-
-  if (anchorLink) {
-    const hash = anchorLink.getAttribute("href");
-    if (scrollToHash(hash)) {
-      event.preventDefault();
-    }
-  }
-
-  if (openPlanButton) {
-    openPlanModal(openPlanButton.dataset.openPlan);
-  }
-
-  if (giftPlanButton) {
-    enableGiftMode();
-    openPlanModal(giftPlanButton.dataset.giftPlan, { giftMode: true, duration: 3 });
-  }
-
-  if (giftBoxPanelButton) {
-    enableGiftMode();
-    openGiftBoxModal();
-  }
-
-  if (giftBoxButton) {
-    enableGiftMode();
-    addToCart(giftBoxButton.dataset.giftBox);
-  }
-
-  if (giftBoxChoiceButton) {
-    activeBoxGiftId = giftBoxChoiceButton.dataset.giftBoxChoice;
-    trackEvent("select_gift_box", {
-      productId: activeBoxGiftId,
-      productName: products[activeBoxGiftId]?.name,
-    });
-    syncPlanModal();
-  }
-
-  if (timelineButton) {
-    setTimelineStep(Number(timelineButton.dataset.timelineStep));
-  }
-
-  if (timelineItem) {
-    setTimelineStep(Number(timelineItem.dataset.timelineItem));
-  }
-
-  if (planButton) {
-    const [type, duration] = planButton.dataset.plan.split("-");
-    selectedPlans[type] = Number(duration);
-    trackEvent("select_plan_duration", {
-      planType: type,
-      duration: selectedPlans[type],
-      giftMode: planModalGiftMode,
-      productId: subscriptionPlans[type]?.[selectedPlans[type]]?.id,
-    });
-
-    const group = planButton.closest("[data-billing]");
-    group?.querySelectorAll("[data-plan]").forEach((button) => {
-      button.classList.toggle("is-selected", button === planButton);
-    });
-
-    if (type === activePlanType) syncPlanModal();
-  }
-
-  if (event.target.closest("[data-confirm-plan]")) {
-    if (activePlanType === "gift-box") {
-      enableGiftMode();
-      addToCart(activeBoxGiftId);
-    } else {
-      addPlanToCart(activePlanType);
-    }
-    closePlanModal();
-  }
-
-  if (addButton) {
-    addToCart(addButton.dataset.add);
-  }
-
-  if (removeButton) {
-    const removedItem = cart.get(removeButton.dataset.remove);
-    cart.delete(removeButton.dataset.remove);
-    checkoutReference = "";
-    trackEvent("remove_from_cart", {
-      productId: removeButton.dataset.remove,
-      productName: removedItem?.name,
-      productType: removedItem?.type,
-    });
-  }
-
-  if (quantityDecreaseButton) {
-    const item = cart.get(quantityDecreaseButton.dataset.qtyDecrease);
-    if (item && !isSubscriptionItem(item)) {
-      item.quantity = normalizeQuantity(item.quantity) > 1 ? normalizeQuantity(item.quantity) - 1 : 1;
-      checkoutReference = "";
-      trackEvent("decrease_quantity", {
-        productId: item.id,
-        productName: item.name,
-        quantity: item.quantity,
-      });
-    }
-  }
-
-  if (quantityIncreaseButton) {
-    const item = cart.get(quantityIncreaseButton.dataset.qtyIncrease);
-    if (item && !isSubscriptionItem(item)) {
-      item.quantity = normalizeQuantity(normalizeQuantity(item.quantity) + 1);
-      checkoutReference = "";
-      trackEvent("increase_quantity", {
-        productId: item.id,
-        productName: item.name,
-        quantity: item.quantity,
-      });
-    }
-  }
-
-  if (removeButton || quantityDecreaseButton || quantityIncreaseButton) {
-    renderCart();
-  }
-
-  if (replaceCancelButton) {
-    trackEvent("replace_cart_cancel");
-    closeReplacementModal();
-  }
-
-  if (replaceConfirmButton && pendingCartReplacement) {
-    const { item } = pendingCartReplacement;
-    trackEvent("replace_cart_confirm", {
-      productId: item.id,
-      productName: item.name,
-      productType: item.type,
-    });
-    commitCartItem(item, `${item.name} remplace l'offre précédente`);
-    closeReplacementModal();
-  }
+  closeDialog();
 });
 
-document.querySelector("[data-cart-open]").addEventListener("click", () => {
-  trackEvent("open_cart", {
-    cartMode: getCartPaymentMode(),
-    quantity: getTotals().quantity,
-    total: getTotals().total,
-  });
-  drawer.classList.add("is-open");
-  drawer.setAttribute("aria-hidden", "false");
-});
-
-document.querySelector("[data-cart-close]").addEventListener("click", () => {
-  drawer.classList.remove("is-open");
-  drawer.setAttribute("aria-hidden", "true");
-});
-
-giftToggle?.addEventListener("change", () => {
-  giftDetails?.classList.toggle("is-visible", giftToggle.checked);
-  trackEvent("set_gift_mode", {
-    enabled: giftToggle.checked,
-    cartMode: getCartPaymentMode(),
-  });
-  renderCart();
-});
-
-drawer.addEventListener("click", (event) => {
-  if (event.target === drawer) {
-    drawer.classList.remove("is-open");
-    drawer.setAttribute("aria-hidden", "true");
-  }
-});
-
-document.querySelector("[data-checkout]").addEventListener("click", () => {
-  if (getTotals().quantity === 0) {
-    showToast("Ajoutez d'abord une offre au panier");
-    return;
-  }
-
-  trackEvent("checkout_start", {
-    cartMode: getCartPaymentMode(),
-    quantity: getTotals().quantity,
-    total: getTotals().total,
-    isGift: giftToggle?.checked || false,
-  });
-  renderCheckoutSummary();
-  renderPayPalArea();
-  modal.classList.add("is-open");
-  modal.setAttribute("aria-hidden", "false");
-});
-
-document.querySelector("[data-modal-close]").addEventListener("click", () => {
-  modal.classList.remove("is-open");
-  modal.setAttribute("aria-hidden", "true");
-});
-
-document.querySelector("[data-plan-close]").addEventListener("click", closePlanModal);
-
-planModal.addEventListener("click", (event) => {
-  if (event.target === planModal) {
-    closePlanModal();
-  }
-});
-
-replaceModal?.addEventListener("click", (event) => {
-  if (event.target === replaceModal) {
-    closeReplacementModal();
-  }
-});
-
-modal.addEventListener("click", (event) => {
-  if (event.target === modal) {
-    modal.classList.remove("is-open");
-    modal.setAttribute("aria-hidden", "true");
-    closePlanModal();
-  }
-});
-
+closeButtons.forEach((button) => button.addEventListener("click", closeDialog));
 document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape") {
-    drawer.classList.remove("is-open");
-    drawer.setAttribute("aria-hidden", "true");
-    modal.classList.remove("is-open");
-    modal.setAttribute("aria-hidden", "true");
-    closePlanModal();
-    closeReplacementModal();
-  }
+  if (event.key === "Escape" && !dialog.hidden) closeDialog();
 });
 
-restoreCartState();
-renderCart();
-setTimelineStep(0);
+if (motionAllowed) {
+  const hero = document.querySelector("[data-parallax-root]");
+  const image = document.querySelector("[data-parallax-image]");
+  const notes = document.querySelectorAll("[data-float]");
 
-window.addEventListener("load", () => {
-  if (window.location.hash) {
-    window.setTimeout(() => {
-      scrollToHash(window.location.hash, { updateHistory: false, behavior: "auto" });
-    }, 80);
-  }
-});
+  hero.addEventListener("pointermove", (event) => {
+    const bounds = hero.getBoundingClientRect();
+    const x = (event.clientX - bounds.left) / bounds.width - 0.5;
+    const y = (event.clientY - bounds.top) / bounds.height - 0.5;
+    image.style.transform = `perspective(1000px) rotateY(${x * 3}deg) rotateX(${y * -3}deg)`;
+    notes.forEach((note) => {
+      const amount = Number(note.dataset.float);
+      note.style.transform = `translate(${x * amount}px, ${y * amount}px)`;
+    });
+  });
 
-window.addEventListener("hashchange", () => {
-  if (window.location.hash) {
-    window.setTimeout(() => {
-      scrollToHash(window.location.hash, { updateHistory: false, behavior: "auto" });
-    }, 80);
-  }
-});
+  hero.addEventListener("pointerleave", () => {
+    image.style.transform = "";
+    notes.forEach((note) => (note.style.transform = ""));
+  });
+
+  let ticking = false;
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (ticking) return;
+      window.requestAnimationFrame(() => {
+        const statement = document.querySelector(".statement");
+        const rect = statement.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          const progress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
+          document.querySelector(".orbit-one").style.transform = `translateY(${progress * 80}px) rotate(${-12 + progress * 18}deg)`;
+          document.querySelector(".orbit-two").style.transform = `translateY(${-progress * 90}px) rotate(${9 - progress * 18}deg)`;
+        }
+        ticking = false;
+      });
+      ticking = true;
+    },
+    { passive: true },
+  );
+}

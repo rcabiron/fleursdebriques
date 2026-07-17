@@ -1,96 +1,55 @@
 const json = (body, status = 200) =>
-  new Response(JSON.stringify(body), {
-    status,
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-    },
-  });
+  new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json; charset=utf-8" } });
 
 const sanitize = (value, maxLength = 1200) => String(value || "").trim().slice(0, maxLength);
-
 const isEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-
 const escapeHtml = (value) =>
-  sanitize(value, 4000)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;");
+  sanitize(value, 4000).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
+
+const sendEmail = (env, payload) =>
+  fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json", "User-Agent": "fleurs-de-briques-contact/2.0" },
+    body: JSON.stringify(payload),
+  });
 
 export async function onRequestPost({ request, env }) {
   if (!env.RESEND_API_KEY || !env.CONTACT_TO || !env.CONTACT_FROM) {
-    return json({ message: "Le formulaire n'est pas encore configuré côté serveur." }, 500);
+    return json({ message: "Le formulaire n’est pas encore configuré côté serveur." }, 500);
   }
 
   let body;
-  try {
-    body = await request.json();
-  } catch {
-    return json({ message: "La demande est invalide." }, 400);
-  }
-
-  if (sanitize(body.website)) {
-    return json({ ok: true });
-  }
+  try { body = await request.json(); } catch { return json({ message: "La demande est invalide." }, 400); }
+  if (sanitize(body.website)) return json({ ok: true });
 
   const name = sanitize(body.name, 120);
   const email = sanitize(body.email, 180);
   const topic = sanitize(body.topic, 120);
   const reference = sanitize(body.reference, 160);
   const message = sanitize(body.message, 3500);
+  if (!name || !email || !topic || !message || !isEmail(email)) return json({ message: "Merci de compléter les champs obligatoires." }, 400);
 
-  if (!name || !email || !topic || !message || !isEmail(email)) {
-    return json({ message: "Merci de compléter les champs obligatoires." }, 400);
-  }
+  const isCancellation = topic.toLowerCase().includes("résiliation");
+  const merchantSubject = `Fleurs de Briques - ${topic}`;
+  const merchantText = [`Nom: ${name}`, `Email: ${email}`, reference ? `Référence: ${reference}` : null, "", "Message:", message].filter(Boolean).join("\n");
+  const merchantHtml = `<h1>Nouvelle demande Fleurs de Briques</h1><p><strong>Motif :</strong> ${escapeHtml(topic)}</p><p><strong>Nom :</strong> ${escapeHtml(name)}</p><p><strong>Email :</strong> ${escapeHtml(email)}</p>${reference ? `<p><strong>Référence :</strong> ${escapeHtml(reference)}</p>` : ""}<hr><p>${escapeHtml(message).replaceAll("\n", "<br>")}</p>`;
 
-  const subject = `Fleurs de Briques - ${topic}`;
-  const text = [
-    `Nom: ${name}`,
-    `Email: ${email}`,
-    reference ? `Référence: ${reference}` : null,
-    "",
-    "Message:",
-    message,
-  ]
-    .filter(Boolean)
-    .join("\n");
+  const merchantResponse = await sendEmail(env, { from: env.CONTACT_FROM, to: [env.CONTACT_TO.toLowerCase()], reply_to: email, subject: merchantSubject, text: merchantText, html: merchantHtml });
+  if (!merchantResponse.ok) return json({ message: "La demande n’a pas pu être transmise. Vous pouvez utiliser la gestion des abonnements PayPal." }, 502);
 
-  const html = `
-    <h1>Nouvelle demande Fleurs de Briques</h1>
-    <p><strong>Motif:</strong> ${escapeHtml(topic)}</p>
-    <p><strong>Nom:</strong> ${escapeHtml(name)}</p>
-    <p><strong>Email:</strong> ${escapeHtml(email)}</p>
-    ${reference ? `<p><strong>Référence:</strong> ${escapeHtml(reference)}</p>` : ""}
-    <hr>
-    <p>${escapeHtml(message).replaceAll("\n", "<br>")}</p>
-  `;
-
-  const response = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${env.RESEND_API_KEY}`,
-      "Content-Type": "application/json",
-      "User-Agent": "fleurs-de-briques-contact/1.0",
-    },
-    body: JSON.stringify({
+  if (isCancellation) {
+    const confirmationText = `Bonjour ${name},\n\nNous confirmons la réception de votre demande de résiliation pour la référence ${reference || "communiquée"}. Nous vérifierons l’abonnement et vous confirmerons par email sa date de fin effective.\n\nFleurs de Briques`;
+    await sendEmail(env, {
       from: env.CONTACT_FROM,
-      to: [env.CONTACT_TO.toLowerCase()],
-      reply_to: email,
-      subject,
-      text,
-      html,
-    }),
-  });
-
-  if (!response.ok) {
-    const resendError = await response.json().catch(() => null);
-    const detail = resendError?.message || resendError?.error || `Erreur Resend ${response.status}`;
-    return json({ message: `L'email n'a pas pu être envoyé: ${detail}` }, 502);
+      to: [email.toLowerCase()],
+      reply_to: env.CONTACT_TO.toLowerCase(),
+      subject: "Réception de votre demande de résiliation - Fleurs de Briques",
+      text: confirmationText,
+      html: `<p>Bonjour ${escapeHtml(name)},</p><p>Nous confirmons la réception de votre demande de résiliation pour la référence <strong>${escapeHtml(reference || "communiquée")}</strong>.</p><p>Nous vérifierons l’abonnement et vous confirmerons par email sa date de fin effective.</p><p>Fleurs de Briques</p>`,
+    });
   }
 
   return json({ ok: true });
 }
 
-export function onRequestGet() {
-  return json({ message: "Méthode non autorisée." }, 405);
-}
+export function onRequestGet() { return json({ message: "Méthode non autorisée." }, 405); }

@@ -1,128 +1,76 @@
 <!doctype html>
 <html lang="fr">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Commande confirmée - Fleurs de Briques</title>
-    <meta name="description" content="Confirmation de commande Fleurs de Briques et récapitulatif des prochaines étapes.">
-    <link rel="canonical" href="https://www.fleursdebriques.fr/merci">
-    <link rel="icon" type="image/png" href="assets/favicon.png">
-    <meta name="robots" content="noindex">
-    <meta name="theme-color" content="#fff7df">
-    <meta property="og:site_name" content="Fleurs de Briques">
-    <meta property="og:locale" content="fr_FR">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.fleursdebriques.fr/merci">
-    <meta property="og:title" content="Commande confirmée - Fleurs de Briques">
-    <meta property="og:description" content="Confirmation de commande Fleurs de Briques et récapitulatif des prochaines étapes.">
-    <meta property="og:image" content="https://www.fleursdebriques.fr/assets/social-share.png">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Commande confirmée - Fleurs de Briques">
-    <meta name="twitter:description" content="Confirmation de commande Fleurs de Briques et récapitulatif des prochaines étapes.">
-    <meta name="twitter:image" content="https://www.fleursdebriques.fr/assets/social-share.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,650;9..144,800&family=Inter:wght@400;500;600;700;800;900&display=swap"
-      rel="stylesheet"
-    >
-    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Confirmation de votre abonnement Fleurs de Briques." />
+    <meta name="theme-color" content="#f7f4ee" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Votre abonnement est confirmé — Fleurs de Briques</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
   </head>
-  <body class="thank-you-page">
-    <header class="site-header">
-      <a class="brand" href="index.html#top" aria-label="Fleurs de Briques">
-        <img class="brand-logo" src="assets/logo-fdb.webp" width="553" height="180" alt="Fleurs de Briques">
-        <img class="brand-icon" src="assets/logo-icon.webp" width="413" height="482" alt="" aria-hidden="true">
+  <body class="thanks-page">
+    <div class="noise" aria-hidden="true"></div>
+    <header class="site-header scrolled">
+      <a class="brand" href="index.html#top" aria-label="Fleurs de Briques, accueil">
+        <img class="brand-logo-image" src="assets/original-logo.webp" width="553" height="180" alt="Fleurs de Briques" />
       </a>
-      <nav class="main-nav" aria-label="Navigation principale">
-        <a href="index.html#offres">Offres</a>
-        <a href="offrir.html">Cadeau</a>
-        <a href="index.html#box">La box</a>
-        <a href="index.html#faq">FAQ</a>
-      </nav>
-      <div class="header-actions">
-        <a class="header-cta" href="index.html#offres">Choisir une box</a>
-      </div>
+      <a class="button button-small button-dark" href="index.html#top">Retour au site <span aria-hidden="true">↗</span></a>
     </header>
 
-    <main class="thank-you-main">
-      <section class="thank-you-hero">
-        <div>
-          <p class="eyebrow">Commande validée</p>
-          <h1 data-thank-title>Votre commande est confirmée.</h1>
-          <p data-thank-intro>Merci. PayPal a bien validé votre paiement Fleurs de Briques.</p>
+    <main class="thanks-main">
+      <section class="thanks-hero" aria-labelledby="thanks-title">
+        <div class="thanks-copy">
+          <span class="thanks-check" aria-hidden="true">✓</span>
+          <p class="eyebrow">C’est officiel</p>
+          <h1 id="thanks-title">Votre collection<br /><em>commence ici.</em></h1>
+          <p class="thanks-intro">Votre abonnement Fleurs de Briques est confirmé. Il ne reste plus qu’à attendre votre première création — et à lui choisir une belle place.</p>
+          <div class="thanks-actions">
+            <a class="button button-dark button-large" href="index.html#concept">Revoir le concept <span aria-hidden="true">→</span></a>
+            <a class="text-link" href="https://www.paypal.com/myaccount/autopay/" target="_blank" rel="noopener">Gérer dans PayPal <span aria-hidden="true">↗</span></a>
+          </div>
         </div>
-        <aside class="thank-you-reference">
-          <div>
-            <span>Référence commande</span>
-            <strong data-thank-order-reference>FDB</strong>
-          </div>
-          <div>
-            <span>Référence PayPal</span>
-            <strong data-thank-reference>Confirmation PayPal</strong>
-          </div>
-        </aside>
+        <div class="thanks-visual" aria-hidden="true">
+          <img src="assets/original-collection-room.jpg" alt="" />
+          <div class="thanks-visual-label"><span>✿</span><strong>Bienvenue<br />dans l’aventure</strong></div>
+        </div>
       </section>
 
-      <section class="thank-you-grid">
-        <article class="thank-you-card">
-          <p class="eyebrow">Récapitulatif</p>
-          <h2>Ce que vous avez choisi</h2>
-          <p class="gift-confirmation" data-gift-confirmation hidden>
-            Cette commande a été indiquée comme cadeau. L'adresse du destinataire sera celle confirmée dans PayPal.
-          </p>
-          <div class="thank-you-summary" data-thank-summary></div>
-        </article>
-
-        <article class="thank-you-card">
-          <p class="eyebrow">Maintenant</p>
-          <h2>Ce qui va se passer</h2>
-          <ol class="next-steps" data-next-steps></ol>
-        </article>
+      <section class="thanks-summary" aria-labelledby="summary-title">
+        <div class="thanks-section-heading">
+          <p class="eyebrow">Votre récapitulatif</p>
+          <h2 id="summary-title">Tout est en ordre.</h2>
+        </div>
+        <div class="thanks-summary-grid">
+          <article><span>Abonnement</span><strong data-confirmation-plan>Votre formule mensuelle</strong><small>Sans engagement</small></article>
+          <article><span>Montant mensuel</span><strong data-confirmation-total>Confirmé dans PayPal</strong><small data-confirmation-shipping>Livraison selon votre adresse</small></article>
+          <article><span>Prochaine échéance</span><strong>À la date anniversaire</strong><small>Le même jour de chaque mois</small></article>
+          <article><span>Référence PayPal</span><strong class="confirmation-reference" data-confirmation-reference>Disponible dans votre email PayPal</strong><small>À conserver pour toute demande</small></article>
+        </div>
       </section>
 
-      <section class="thank-you-note">
-        <strong>À garder en tête</strong>
-        <p>
-          Cette page récapitule votre confirmation dans ce navigateur. L'email PayPal reste la preuve de paiement officielle.
-        </p>
-        <a class="button button-primary" href="index.html#offres">Retourner aux offres</a>
+      <section class="thanks-next" aria-labelledby="next-title">
+        <div class="thanks-section-heading">
+          <p class="eyebrow">Et maintenant ?</p>
+          <h2 id="next-title">Votre première box se prépare.</h2>
+        </div>
+        <ol class="thanks-timeline">
+          <li><span>01</span><div><strong>Gardez votre confirmation</strong><p>PayPal vous envoie le reçu et les détails de gestion de votre abonnement.</p></div></li>
+          <li><span>02</span><div><strong>Nous préparons la surprise</strong><p>Votre création, ses sachets numérotés et sa notice illustrée sont réunis avec soin.</p></div></li>
+          <li><span>03</span><div><strong>Expédition autour du 10</strong><p>La box est envoyée aux alentours du 10 afin de vous parvenir, dans la mesure du possible, avant le 15.</p></div></li>
+        </ol>
       </section>
+
+      <aside class="thanks-help">
+        <div><span aria-hidden="true">?</span><p><strong>Une question sur votre abonnement ?</strong><br />Retrouvez les modalités de livraison, de résiliation et toutes les informations utiles.</p></div>
+        <nav aria-label="Aide après souscription"><a href="livraison-retours.html">Livraison et retours</a><a href="resiliation.html">Résilier mon abonnement</a><a href="conditions-generales.html">Consulter les CGV</a></nav>
+      </aside>
     </main>
 
-    <footer class="site-footer">
-      <div class="footer-brand">
-        <strong>Fleurs de Briques</strong>
-        <span>Box florale à construire</span>
-      </div>
-      <div class="footer-main">
-        <nav aria-label="Explorer le site">
-          <strong>Explorer</strong>
-          <div>
-            <a href="index.html#offres">Offres</a>
-            <a href="offrir.html">Cadeau</a>
-            <a href="index.html#box">La box</a>
-            <a href="index.html#faq">FAQ</a>
-          </div>
-        </nav>
-        <nav aria-label="Aide et guide">
-          <strong>Besoin d'aide ?</strong>
-          <div>
-            <a href="contact.html">Contact</a>
-            <a href="cadeau-creatif-adulte.html">Guide cadeau</a>
-          </div>
-        </nav>
-      </div>
-      <nav class="footer-legal" aria-label="Informations légales">
-        <a href="mentions-legales.html">Mentions légales</a>
-        <a href="conditions-generales.html">CGV</a>
-        <a href="confidentialite.html">Confidentialité</a>
-        <a href="retractation-livraison.html">Rétractation & livraison</a>
-      </nav>
-    </footer>
-
-    <script src="analytics.js"></script>
+    <footer class="legal-footer thanks-footer"><span>© 2026 Fleurs de Briques</span><nav><a href="confidentialite.html">Confidentialité</a><a href="mentions-legales.html">Mentions légales</a></nav></footer>
     <script src="merci.js"></script>
-    <script src="design.js"></script>
   </body>
 </html>

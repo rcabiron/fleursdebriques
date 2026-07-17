@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Résiliez simplement votre abonnement Fleurs de Briques." /><meta name="theme-color" content="#171713" />
+    <title>Résilier votre abonnement — Fleurs de Briques</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" /><link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="legal-page"><div class="noise" aria-hidden="true"></div>
+    <header class="site-header"><a class="brand" href="index.html#top" aria-label="Fleurs de Briques, accueil"><img class="brand-logo-image" src="assets/original-logo.webp" width="553" height="180" alt="Fleurs de Briques" /></a><nav class="desktop-nav" aria-label="Navigation principale"><a href="index.html#concept">Le concept</a><a href="index.html#abonnements">Les abonnements</a><a href="conditions-generales.html">CGV</a></nav><a class="button button-small button-dark desktop-cta" href="index.html#top">Retour au site <span aria-hidden="true">↗</span></a></header>
+    <main class="legal-main">
+      <section class="legal-hero"><p class="eyebrow">Sans engagement, vraiment</p><h1>Résilier votre abonnement</h1><p>Choisissez la démarche qui vous convient. La résiliation est gratuite et arrête les prochains prélèvements une fois enregistrée.</p><div class="legal-meta"><span>Aucun courrier postal</span><span>Aucuns frais</span><span>Confirmation par email</span></div></section>
+      <div class="legal-layout"><aside class="legal-nav"><strong>Deux possibilités</strong><a href="#paypal">Depuis PayPal</a><a href="#formulaire">Depuis ce site</a><a href="#effet">Effet de la résiliation</a></aside>
+        <div class="legal-content">
+          <section class="resiliation-direct" id="paypal"><h2>Le plus rapide : depuis PayPal</h2><p>Ouvrez vos paiements automatiques PayPal, sélectionnez Fleurs de Briques puis annulez le paiement automatique. PayPal confirme immédiatement la modification.</p><a class="button" href="https://www.paypal.com/myaccount/autopay/" target="_blank" rel="noopener">Ouvrir mes abonnements PayPal <span aria-hidden="true">↗</span></a></section>
+          <section class="legal-card form-card" id="formulaire"><h2>Notifier votre résiliation ici</h2><p>Si vous ne pouvez pas accéder à PayPal, transmettez-nous votre demande. La référence commence généralement par <strong>I-</strong> et figure dans l’email de confirmation PayPal.</p>
+            <form class="legal-form" data-cancellation-form>
+              <label><span>Nom et prénom</span><input type="text" name="name" autocomplete="name" required /></label>
+              <label><span>Adresse email utilisée pour l’abonnement</span><input type="email" name="email" autocomplete="email" required /></label>
+              <label><span>Référence PayPal de l’abonnement</span><input type="text" name="reference" placeholder="I-XXXXXXXXXXXX" autocomplete="off" required /></label>
+              <label><span>Précision facultative</span><textarea name="details" placeholder="Vous pouvez ajouter une information utile, sans avoir à justifier votre décision."></textarea></label>
+              <label class="form-check"><input type="checkbox" name="confirmation" required /><span>Je confirme demander la résiliation de cet abonnement et l’arrêt de ses prochains prélèvements.</span></label>
+              <label class="sr-only" aria-hidden="true">Site web<input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+              <button class="button button-dark" type="submit">Notifier ma résiliation <span aria-hidden="true">→</span></button>
+              <p class="form-status" data-cancellation-status role="status" aria-live="polite"></p>
+            </form>
+          </section>
+          <section class="legal-card" id="effet"><h2>Ce qui se passe ensuite</h2><p>La résiliation empêche les échéances futures une fois enregistrée. Une mensualité déjà prélevée n’est pas annulée rétroactivement et la box correspondante reste due et expédiée.</p><p>Résilier n’est pas exercer le droit de rétractation. Si votre première box vient d’être reçue et que vous souhaitez annuler le contrat dans le délai légal, consultez la page <a href="livraison-retours.html#retractation">Rétractation et retours</a>.</p><p>L’abonnement ne peut pas être mis en pause et aucune échéance ne peut être sautée.</p></section>
+        </div>
+      </div>
+      <footer class="legal-footer"><span>© 2026 Fleurs de Briques</span><nav><a href="mentions-legales.html">Mentions légales</a><a href="conditions-generales.html">CGV</a><a href="confidentialite.html">Confidentialité</a><a href="livraison-retours.html">Livraison et retours</a></nav></footer>
+    </main>
+    <script src="resiliation.js"></script>
+  </body>
+</html>
