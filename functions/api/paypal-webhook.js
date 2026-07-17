@@ -4,6 +4,22 @@ const PAYPAL_API_BASE = {
 };
 
 const PLAN_CATALOG = {
+  "P-48D74613M42572619NJM72NY": {
+    code: "ESSENTIEL",
+    name: "L’Essentiel",
+    price: 39.9,
+    regularPrice: 49.9,
+    introductoryCycles: 3,
+    contents: "une création florale de 500 à 1 000 pièces",
+  },
+  "P-7X5243942W016041TNJM73MY": {
+    code: "PREMIUM",
+    name: "Le Premium",
+    price: 59.9,
+    regularPrice: 69.9,
+    introductoryCycles: 3,
+    contents: "une grande création ou deux sets différents, pour un minimum de 1 000 pièces",
+  },
   "P-9WK16435TS7356210NJM6FSY": {
     code: "ESSENTIEL",
     name: "L’Essentiel",
@@ -60,6 +76,10 @@ const formatMoney = (value, currency = "EUR") => {
   if (!Number.isFinite(amount)) return "Non communiqué";
   return new Intl.NumberFormat("fr-FR", { style: "currency", currency }).format(amount);
 };
+
+const formatPlanPricing = (plan) => plan.introductoryCycles
+  ? `${formatMoney(plan.price)} par mois pendant ${plan.introductoryCycles} mois, puis ${formatMoney(plan.regularPrice)} par mois`
+  : `${formatMoney(plan.price)} par mois`;
 
 const formatDate = (value) => {
   if (!value) return "Non communiquée";
@@ -235,7 +255,8 @@ const sendMerchantEmail = async ({ env, summary }) => {
     text: [
       `Fleurs de Briques — ${title}`,
       `Formule: ${summary.plan.name}`,
-      `Montant mensuel: ${formatMoney(summary.total)}`,
+      `Tarification: ${formatPlanPricing(summary.plan)}`,
+      `Première échéance avec livraison: ${formatMoney(summary.total)}`,
       `Dernier paiement lié: ${summary.paymentAmount}`,
       `Livraison: ${deliveryCost}`,
       `Référence PayPal: ${summary.subscriptionId}`,
@@ -251,7 +272,7 @@ const sendMerchantEmail = async ({ env, summary }) => {
       <div style="font-family:Arial,sans-serif;background:#f3efe7;color:#171713;padding:24px;">
         <div style="max-width:700px;margin:0 auto;background:#fff;border-radius:20px;overflow:hidden;border:1px solid #e7e0d5;">
           <div style="padding:24px;background:#171713;color:#fff;"><p style="margin:0 0 8px;color:#f5c654;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;">Fleurs de Briques · PayPal</p><h1 style="margin:0;font-size:27px;">${escapeHtml(title)}</h1></div>
-          <div style="padding:24px;"><p style="margin:0 0 18px;font-size:18px;"><strong>${escapeHtml(summary.plan.name)}</strong> · ${escapeHtml(formatMoney(summary.total))} par mois</p>
+          <div style="padding:24px;"><p style="margin:0 0 18px;font-size:18px;"><strong>${escapeHtml(summary.plan.name)}</strong> · ${escapeHtml(formatPlanPricing(summary.plan))}</p>
             <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;border:1px solid #ece7dd;">
               ${infoRow("Référence PayPal", summary.subscriptionId)}
               ${infoRow("Référence FDB", summary.customId)}
@@ -289,7 +310,8 @@ const customerEmailContent = ({ env, summary }) => {
         <p>Bonjour${escapeHtml(firstName)},</p>
         <p>Votre abonnement <strong>${escapeHtml(summary.plan.name)}</strong> est maintenant actif. Chaque mois, vous recevrez ${escapeHtml(summary.plan.contents)}.</p>
         <div style="margin:24px 0;padding:20px;border-radius:16px;background:#f3efe7;">
-          <p style="margin:0 0 8px;"><strong>Montant mensuel :</strong> ${escapeHtml(formatMoney(summary.total))}</p>
+          <p style="margin:0 0 8px;"><strong>Tarif :</strong> ${escapeHtml(formatPlanPricing(summary.plan))}</p>
+          <p style="margin:0 0 8px;"><strong>Première échéance :</strong> ${escapeHtml(formatMoney(summary.total))}</p>
           <p style="margin:0 0 8px;"><strong>Livraison :</strong> ${escapeHtml(delivery)}</p>
           <p style="margin:0 0 8px;"><strong>Prochaine échéance :</strong> ${escapeHtml(nextBilling)}</p>
           <p style="margin:0;"><strong>Référence PayPal :</strong> ${escapeHtml(summary.subscriptionId)}</p>
@@ -300,7 +322,8 @@ const customerEmailContent = ({ env, summary }) => {
         `Bonjour${firstName},`,
         `Votre abonnement ${summary.plan.name} est maintenant actif.`,
         `Contenu: ${summary.plan.contents}.`,
-        `Montant mensuel: ${formatMoney(summary.total)} (${delivery}).`,
+        `Tarif: ${formatPlanPricing(summary.plan)}.`,
+        `Première échéance: ${formatMoney(summary.total)} (${delivery}).`,
         `Prochaine échéance: ${nextBilling}.`,
         `Référence PayPal: ${summary.subscriptionId}.`,
         "Les box sont expédiées aux alentours du 10 afin d’arriver, dans la mesure du possible, avant le 15.",

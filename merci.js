@@ -1,6 +1,6 @@
 const PLAN_DETAILS = {
-  ESSENTIEL: { name: "L’Essentiel", price: 49.9 },
-  PREMIUM: { name: "Le Premium", price: 69.9 },
+  ESSENTIEL: { name: "L’Essentiel", price: 39.9 },
+  PREMIUM: { name: "Le Premium", price: 59.9 },
 };
 
 const formatPrice = (value) =>

@@ -105,11 +105,70 @@ if (premiumGallery) {
   startPremiumGallery();
 }
 
+const creationsCarousel = document.querySelector("[data-creations-carousel]");
+if (creationsCarousel) {
+  const creationSlides = [...creationsCarousel.querySelectorAll(".creation-slide")];
+  const previousCreation = document.querySelector("[data-carousel-prev]");
+  const nextCreation = document.querySelector("[data-carousel-next]");
+  const carouselStatus = document.querySelector(".carousel-status");
+  let activeCreation = 0;
+  let carouselScrollTimer;
+
+  const formatSlideNumber = (number) => String(number).padStart(2, "0");
+
+  const updateCreationState = (index) => {
+    activeCreation = Math.max(0, Math.min(index, creationSlides.length - 1));
+    creationSlides.forEach((slide, slideIndex) => {
+      slide.classList.toggle("is-active", slideIndex === activeCreation);
+    });
+    carouselStatus.innerHTML = `<strong>${formatSlideNumber(activeCreation + 1)}</strong><span>/ ${formatSlideNumber(creationSlides.length)}</span>`;
+  };
+
+  const goToCreation = (index) => {
+    const wrappedIndex = (index + creationSlides.length) % creationSlides.length;
+    const trackPadding = Number.parseFloat(getComputedStyle(creationsCarousel).paddingLeft) || 0;
+    creationsCarousel.scrollTo({
+      left: creationSlides[wrappedIndex].offsetLeft - trackPadding,
+      behavior: motionAllowed ? "smooth" : "auto",
+    });
+    updateCreationState(wrappedIndex);
+  };
+
+  previousCreation.addEventListener("click", () => goToCreation(activeCreation - 1));
+  nextCreation.addEventListener("click", () => goToCreation(activeCreation + 1));
+
+  creationsCarousel.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      goToCreation(activeCreation - 1);
+    }
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      goToCreation(activeCreation + 1);
+    }
+  });
+
+  creationsCarousel.addEventListener("scroll", () => {
+    window.clearTimeout(carouselScrollTimer);
+    carouselScrollTimer = window.setTimeout(() => {
+      const trackPadding = Number.parseFloat(getComputedStyle(creationsCarousel).paddingLeft) || 0;
+      const trackPosition = creationsCarousel.scrollLeft + trackPadding;
+      const closestSlide = creationSlides.reduce((closest, slide, index) => {
+        const distance = Math.abs(slide.offsetLeft - trackPosition);
+        return distance < closest.distance ? { index, distance } : closest;
+      }, { index: 0, distance: Number.POSITIVE_INFINITY });
+      updateCreationState(closestSlide.index);
+    }, 80);
+  }, { passive: true });
+
+  updateCreationState(0);
+}
+
 const dialog = document.querySelector(".plan-dialog");
 const dialogTitle = dialog.querySelector("h2");
 const dialogPrice = dialog.querySelector(".dialog-price");
 const dialogPremiumOffer = dialog.querySelector(".dialog-premium-offer");
-const dialogEligibleCount = dialog.querySelector("[data-dialog-eligible]");
+const dialogPromoSchedule = dialog.querySelector("[data-dialog-promo-schedule]");
 const closeButtons = dialog.querySelectorAll(".dialog-close, .dialog-backdrop");
 const checkoutFlow = dialog.querySelector("[data-checkout-flow]");
 const checkoutSuccess = dialog.querySelector("[data-checkout-success]");
@@ -126,8 +185,8 @@ let paypalRenderVersion = 0;
 let confirmationUrl = "";
 
 const PAYPAL_PLANS = {
-  ESSENTIEL: { price: 49.9, planId: "P-9WK16435TS7356210NJM6FSY" },
-  PREMIUM: { price: 69.9, planId: "P-44N73432SR248160RNJM6GDY" },
+  ESSENTIEL: { price: 39.9, regularPrice: 49.9, planId: "P-48D74613M42572619NJM72NY", standardPlanId: "P-9WK16435TS7356210NJM6FSY" },
+  PREMIUM: { price: 59.9, regularPrice: 69.9, planId: "P-7X5243942W016041TNJM73MY", standardPlanId: "P-44N73432SR248160RNJM6GDY" },
 };
 const PAYPAL_SDK_URL = "https://www.paypal.com/sdk/js?client-id=AVH9AEvVSjuXt_ckB7Pjm0qNzeS_NSTgGSQLsku8b-Xd2IbJvdJKmwb1x-eBe-5EFeSCxLX5v2qt7kSL&currency=EUR&vault=true&intent=subscription&components=buttons";
 let paypalSdkPromise;
@@ -170,9 +229,15 @@ const renderPayPalButtons = async () => {
   const shipping = selectedShipping();
   checkoutTotal.textContent = formatPrice(activePlan.price + shipping);
   paypalContainer.replaceChildren();
-  paypalStatus.classList.remove("is-error");
+  paypalStatus.classList.remove("is-error", "is-pending");
   if (!checkoutConsent.checked) {
     paypalStatus.textContent = "Acceptez les conditions pour afficher les moyens de paiement.";
+    return;
+  }
+
+  if (!activePlan.planId) {
+    paypalStatus.textContent = "Votre abonnement est prêt. Le paiement sera activé dès que le nouveau plan PayPal sera relié.";
+    paypalStatus.classList.add("is-pending");
     return;
   }
 
@@ -232,6 +297,8 @@ const renderPayPalButtons = async () => {
         planName: activePlan.name,
         planId: activePlan.planId,
         basePrice: activePlan.price,
+        regularPrice: activePlan.regularPrice,
+        promotionalMonths: 3,
         shipping,
         total: activePlan.price + shipping,
         deliveryZone: deliveryOption?.value || "france",
@@ -298,9 +365,9 @@ document.querySelectorAll(".choose-plan").forEach((button) => {
     activePlan = { ...plan, code: card.dataset.planCode, name: card.dataset.plan };
     confirmationUrl = "";
     dialogTitle.textContent = card.dataset.plan;
-    dialogPrice.innerHTML = `${card.dataset.price} <span>/ mois</span>`;
-    dialogPremiumOffer.hidden = !card.dataset.eligibleCount;
-    dialogEligibleCount.textContent = card.dataset.eligibleCount;
+    dialogPrice.innerHTML = `${card.dataset.promoPrice} <span>/ mois</span><small>Pendant 3 mois · puis ${card.dataset.price}/mois</small>`;
+    dialogPromoSchedule.textContent = `${card.dataset.promoPrice} × 3, puis ${card.dataset.price}`;
+    dialogPremiumOffer.hidden = false;
     checkoutFlow.hidden = false;
     checkoutSuccess.hidden = true;
     subscriptionReference.textContent = "";
