@@ -406,14 +406,21 @@ blockquote { margin: 20px 0 42px; font: 500 clamp(26px, 3vw, 38px)/1.3 "Manrope"
   .plans-heading { margin-bottom: 64px; gap: 28px; }
   .plan-grid { grid-template-columns: 1fr; gap: 16px; }
   .collector-banner { padding-bottom: 18px; }
+  .collector-banner strong { font-size: 19px; line-height: 1.3; }
+  .collector-banner span { font-size: 14px; line-height: 1.55; }
   .plan-card { padding: 22px 18px; border-radius: 26px; }
-  .plan-description { min-height: 0; }
+  .plan-description { min-height: 0; font-size: 15px; line-height: 1.55; }
+  .promo-renewal { margin-top: 5px; font-size: 13px; line-height: 1.5; }
   .plan-illustration { margin-left: -18px; margin-right: -18px; }
-  .plan-facts { gap: 9px 0; }
+  .plan-facts { padding: 16px 0; gap: 12px 0; font-size: 13px; line-height: 1.4; }
   .plan-facts span { width: 50%; padding: 0 8px; border-right: 0; }
   .plan-facts span:nth-child(odd) { padding-left: 0; }
+  .plan-facts strong { font-size: 14px; }
+  .plan-includes { gap: 12px; }
+  .plan-includes li { padding-left: 20px; font-size: 15px; line-height: 1.5; }
+  .plan-reassurance { margin-top: 12px; font-size: 12px; line-height: 1.5; }
   .plan-gallery-tabs { width: calc(100% - 24px); }
-  .plan-gallery-tabs button { flex: 1; padding-left: 8px; padding-right: 8px; }
+  .plan-gallery-tabs button { flex: 1; padding-left: 8px; padding-right: 8px; font-size: 12px; }
   .price strong { font-size: 42px; }
   .plans-notes { grid-template-columns: 1fr; gap: 18px; }
   .quote-card { padding: 30px 25px; }
