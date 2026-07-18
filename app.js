@@ -188,6 +188,8 @@ const PAYPAL_PLANS = {
   ESSENTIEL: { price: 39.9, regularPrice: 49.9, planId: "P-48D74613M42572619NJM72NY", standardPlanId: "P-9WK16435TS7356210NJM6FSY" },
   PREMIUM: { price: 59.9, regularPrice: 69.9, planId: "P-7X5243942W016041TNJM73MY", standardPlanId: "P-44N73432SR248160RNJM6GDY" },
 };
+const PAYPAL_RETURN_URL = "https://www.fleursdebriques.fr/merci.html?paypal_return=1";
+const PAYPAL_CANCEL_URL = "https://www.fleursdebriques.fr/?paypal_cancel=1#abonnements";
 const PAYPAL_SDK_URL = "https://www.paypal.com/sdk/js?client-id=AVH9AEvVSjuXt_ckB7Pjm0qNzeS_NSTgGSQLsku8b-Xd2IbJvdJKmwb1x-eBe-5EFeSCxLX5v2qt7kSL&currency=EUR&vault=true&intent=subscription&components=buttons";
 let paypalSdkPromise;
 
@@ -221,6 +223,13 @@ const showToast = (message) => {
   toast.classList.add("show");
   window.setTimeout(() => toast.classList.remove("show"), 4000);
 };
+
+const paypalReturnState = new URL(window.location.href);
+if (paypalReturnState.searchParams.get("paypal_cancel") === "1") {
+  showToast("Paiement interrompu. Aucun abonnement n’a été créé.");
+  paypalReturnState.searchParams.delete("paypal_cancel");
+  window.history.replaceState({}, "", `${paypalReturnState.pathname}${paypalReturnState.search}${paypalReturnState.hash}`);
+}
 
 const renderPayPalButtons = async () => {
   if (!activePlan) return;
@@ -268,6 +277,9 @@ const renderPayPalButtons = async () => {
     },
     createSubscription(data, actions) {
       const currentShipping = selectedShipping();
+      const returnUrl = new URL(PAYPAL_RETURN_URL);
+      returnUrl.searchParams.set("plan", activePlan.code);
+      returnUrl.searchParams.set("shipping", currentShipping.toFixed(2));
       const payload = {
         plan_id: activePlan.planId,
         custom_id: `FDB-${activePlan.code}-${Date.now().toString(36).toUpperCase()}`,
@@ -276,6 +288,8 @@ const renderPayPalButtons = async () => {
           locale: "fr-FR",
           shipping_preference: "GET_FROM_FILE",
           user_action: "SUBSCRIBE_NOW",
+          return_url: returnUrl.href,
+          cancel_url: PAYPAL_CANCEL_URL,
         },
       };
 
@@ -315,6 +329,8 @@ const renderPayPalButtons = async () => {
 
       const destination = new URL("merci.html", window.location.href);
       destination.searchParams.set("subscription", data.subscriptionID);
+      destination.searchParams.set("plan", activePlan.code);
+      destination.searchParams.set("shipping", shipping.toFixed(2));
       confirmationUrl = destination.href;
       checkoutFlow.hidden = true;
       checkoutSuccess.hidden = false;

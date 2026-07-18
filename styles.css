@@ -483,6 +483,15 @@ blockquote { margin: 20px 0 42px; font: 500 clamp(26px, 3vw, 38px)/1.3 "Manrope"
 .legal-card ul { margin: 0; padding-left: 20px; }
 .legal-card li + li { margin-top: 7px; }
 .legal-card a { color: #5043bb; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+.legal-identity { margin: 20px 0 24px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.legal-identity > div { min-height: 92px; padding: 17px 18px; border: 1px solid rgba(23,23,19,.07); border-radius: 17px; display: flex; flex-direction: column; justify-content: space-between; background: #faf8f3; }
+.legal-identity span { color: var(--muted); font-size: 9px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.legal-identity strong { margin-top: 12px; font: 700 14px/1.45 "Manrope", sans-serif; overflow-wrap: anywhere; }
+.legal-identity strong a { color: #5043bb; font-size: inherit; }
+.legal-warranty { margin: 20px 0 24px; padding: 25px 26px; border: 1px solid rgba(80,67,187,.18); border-radius: 20px; background: #f6f4ff; }
+.legal-warranty h3 { margin-top: 0; color: #302873; }
+.legal-warranty h3:not(:first-child) { margin-top: 24px; }
+.legal-warranty p { color: #514e66; }
 .legal-alert { padding: 20px 22px; border: 1px solid rgba(240,124,98,.34); border-radius: 20px; color: #7e3528; background: #fff0eb; font-size: 13px; line-height: 1.55; }
 .legal-alert strong { display: block; margin-bottom: 4px; font: 700 14px "Manrope", sans-serif; }
 .legal-actions { margin-top: 28px; display: flex; gap: 12px; flex-wrap: wrap; }
@@ -509,38 +518,45 @@ blockquote { margin: 20px 0 42px; font: 500 clamp(26px, 3vw, 38px)/1.3 "Manrope"
 .thanks-page { min-height: 100vh; background: #f3efe7; }
 .thanks-page .site-header { background: rgba(247,244,238,.9); border-color: rgba(255,255,255,.75); }
 .thanks-main { width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 128px 0 82px; }
-.thanks-hero { min-height: 620px; border-radius: 42px; display: grid; grid-template-columns: 1.02fr .98fr; overflow: hidden; background: #fff; box-shadow: 0 30px 90px rgba(57,45,32,.1); }
+.thanks-hero { min-height: 560px; border-radius: 42px; display: grid; grid-template-columns: 1.02fr .98fr; overflow: hidden; background: #fff; box-shadow: 0 30px 90px rgba(57,45,32,.1); }
 .thanks-copy { padding: clamp(48px, 7vw, 88px); display: flex; flex-direction: column; justify-content: center; }
 .thanks-check { width: 58px; height: 58px; margin-bottom: 32px; border-radius: 50%; display: grid; place-items: center; color: #fff; background: #20a464; font: 700 28px "Manrope", sans-serif; box-shadow: 0 13px 32px rgba(32,164,100,.24); }
 .thanks-copy .eyebrow { margin-bottom: 18px; }
 .thanks-copy h1 { margin: 0 0 26px; font: 700 clamp(48px, 6vw, 78px)/.98 "Manrope", sans-serif; letter-spacing: -.065em; }
 .thanks-copy h1 em { color: var(--coral); }
-.thanks-intro { max-width: 570px; margin-bottom: 32px; color: var(--muted); font-size: 17px; line-height: 1.65; }
+.thanks-intro { max-width: 570px; margin-bottom: 18px; color: var(--muted); font-size: 17px; line-height: 1.65; }
+.thanks-plan-confirmation { margin: 0 0 28px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.thanks-plan-confirmation strong { font: 700 16px "Manrope", sans-serif; }
+.thanks-plan-confirmation span { padding: 7px 10px; border-radius: 999px; color: #5145b7; background: #eeeaff; font-size: 10px; font-weight: 700; }
 .thanks-actions { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
+.thanks-reference { margin: 18px 0 0; color: var(--muted); font-size: 10px; line-height: 1.5; }
+.thanks-reference strong { color: var(--ink); font-weight: 600; overflow-wrap: anywhere; }
 .thanks-visual { position: relative; min-height: 500px; overflow: hidden; }
 .thanks-visual::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 50%, rgba(23,23,19,.38)); }
 .thanks-visual img { width: 100%; height: 100%; object-fit: cover; }
 .thanks-visual-label { position: absolute; left: 28px; right: 28px; bottom: 28px; z-index: 1; padding: 18px 20px; border: 1px solid rgba(255,255,255,.5); border-radius: 22px; display: flex; gap: 14px; align-items: center; color: #fff; background: rgba(255,255,255,.14); backdrop-filter: blur(18px); }
 .thanks-visual-label span { width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; flex: 0 0 auto; color: var(--coral); background: #fff; font-size: 24px; }
 .thanks-visual-label strong { font: 700 15px/1.35 "Manrope", sans-serif; }
-.thanks-summary, .thanks-next { padding: 100px 0 0; }
+.thanks-next { padding: 88px 0 0; }
 .thanks-section-heading { max-width: 760px; margin-bottom: 40px; }
 .thanks-section-heading h2 { margin: 0; font: 700 clamp(40px, 5vw, 66px)/1 "Manrope", sans-serif; letter-spacing: -.06em; }
-.thanks-summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-.thanks-summary-grid article { min-height: 190px; padding: 26px; border: 1px solid rgba(23,23,19,.07); border-radius: 25px; display: flex; flex-direction: column; background: #fff; box-shadow: 0 14px 45px rgba(57,45,32,.045); }
-.thanks-summary-grid article > span { color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; }
-.thanks-summary-grid strong { margin-top: auto; font: 700 21px/1.25 "Manrope", sans-serif; letter-spacing: -.035em; overflow-wrap: anywhere; }
-.thanks-summary-grid small { margin-top: 8px; color: var(--muted); font-size: 11px; line-height: 1.45; }
-.thanks-summary-grid .confirmation-reference { font-size: 16px; letter-spacing: -.015em; }
-.thanks-timeline { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; counter-reset: none; }
-.thanks-timeline li { min-height: 250px; padding: 28px; border-radius: 28px; display: flex; flex-direction: column; background: #e5e0f8; }
-.thanks-timeline li:nth-child(2) { background: #f6d4c9; }
-.thanks-timeline li:nth-child(3) { background: #eadf9e; }
-.thanks-timeline li > span { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; color: #fff; background: var(--ink); font: 700 11px "Manrope", sans-serif; }
-.thanks-timeline li > div { margin-top: auto; }
-.thanks-timeline strong { font: 700 20px "Manrope", sans-serif; letter-spacing: -.035em; }
-.thanks-timeline p { margin: 10px 0 0; color: #5c5952; font-size: 13px; line-height: 1.6; }
-.thanks-help { margin-top: 60px; padding: 30px; border-radius: 28px; display: flex; align-items: center; justify-content: space-between; gap: 40px; color: #fff; background: var(--ink); }
+.thanks-section-heading > p:last-child:not(.eyebrow) { max-width: 620px; margin: 22px 0 0; color: var(--muted); font-size: 16px; line-height: 1.6; }
+.thanks-timeline { position: relative; margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.thanks-timeline::before { content: ""; position: absolute; top: 25px; left: 28px; right: 28px; height: 2px; background: #d4cec4; }
+.thanks-timeline li { position: relative; z-index: 1; min-height: 320px; padding: 78px 24px 24px; display: flex; flex-direction: column; }
+.thanks-timeline li::before { content: ""; position: absolute; z-index: -1; inset: 56px 0 0; border: 1px solid rgba(23,23,19,.07); border-radius: 26px; background: #fff; box-shadow: 0 14px 45px rgba(57,45,32,.045); }
+.thanks-timeline-marker { position: absolute; top: 4px; left: 24px; width: 44px; height: 44px; border: 6px solid #f3efe7; border-radius: 50%; display: grid; place-items: center; color: #fff; background: var(--purple); font: 700 10px "Manrope", sans-serif; box-sizing: content-box; }
+.thanks-timeline-regular .thanks-timeline-marker { background: var(--ink); }
+.thanks-timeline-date { margin: 0 0 24px; min-height: 42px; font: 700 16px/1.3 "Manrope", sans-serif; letter-spacing: -.025em; }
+.thanks-timeline li > small { color: var(--muted); font-size: 9px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.thanks-timeline li > strong { margin-top: 7px; font: 700 22px/1.2 "Manrope", sans-serif; letter-spacing: -.04em; }
+.thanks-timeline-delivery { margin-top: auto; padding-top: 18px; border-top: 1px solid var(--line); }
+.thanks-timeline-delivery span { display: block; margin-bottom: 6px; color: var(--muted); font-size: 9px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.thanks-timeline-delivery strong { font: 700 13px/1.4 "Manrope", sans-serif; }
+.thanks-timeline-gift, .thanks-timeline-continuity { margin-top: 17px; padding: 10px 12px; border-radius: 12px; color: #5145b7; background: #eeeaff; font: 700 11px/1.35 "Manrope", sans-serif; }
+.thanks-timeline-continuity { color: #5f5a50; background: #ece8df; }
+.thanks-timeline-legend { margin: 24px 0 0; color: var(--muted); font-size: 11px; text-align: center; }
+.thanks-help { margin-top: 48px; padding: 24px 28px; border-radius: 24px; display: flex; align-items: center; justify-content: space-between; gap: 40px; color: #fff; background: var(--ink); }
 .thanks-help > div { display: flex; gap: 16px; align-items: center; }
 .thanks-help > div > span { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; flex: 0 0 auto; color: var(--ink); background: var(--yellow); font: 800 20px "Manrope", sans-serif; }
 .thanks-help p { margin: 0; color: #aaa8a1; font-size: 13px; line-height: 1.55; }
@@ -560,6 +576,9 @@ blockquote { margin: 20px 0 42px; font: 500 clamp(26px, 3vw, 38px)/1.3 "Manrope"
   .legal-layout { grid-template-columns: 1fr; }
   .legal-nav { position: static; display: none; }
   .legal-card, .form-card { padding: 26px 22px; border-radius: 22px; }
+  .legal-identity { grid-template-columns: 1fr; }
+  .legal-identity > div { min-height: 82px; }
+  .legal-warranty { padding: 21px 18px; }
   .legal-footer { flex-direction: column; }
   .thanks-main { width: min(100% - 24px, 1180px); padding-top: 100px; }
   .thanks-hero { min-height: 0; grid-template-columns: 1fr; border-radius: 28px; }
@@ -570,11 +589,16 @@ blockquote { margin: 20px 0 42px; font: 500 clamp(26px, 3vw, 38px)/1.3 "Manrope"
   .thanks-actions { align-items: stretch; flex-direction: column; }
   .thanks-actions .button { width: 100%; }
   .thanks-actions .text-link { justify-content: center; }
-  .thanks-visual { min-height: 390px; }
-  .thanks-summary, .thanks-next { padding-top: 75px; }
-  .thanks-summary-grid, .thanks-timeline { grid-template-columns: 1fr; }
-  .thanks-summary-grid article { min-height: 160px; }
-  .thanks-timeline li { min-height: 220px; }
+  .thanks-visual { min-height: 330px; }
+  .thanks-next { padding-top: 65px; }
+  .thanks-timeline { grid-template-columns: 1fr; }
+  .thanks-timeline { gap: 18px; }
+  .thanks-timeline::before { top: 26px; bottom: 26px; left: 25px; right: auto; width: 2px; height: auto; }
+  .thanks-timeline li { min-height: 250px; padding: 28px 22px 28px 82px; }
+  .thanks-timeline li::before { inset: 0 0 0 58px; border-radius: 22px; }
+  .thanks-timeline-marker { top: 0; left: 0; }
+  .thanks-timeline-date { min-height: 0; margin-bottom: 20px; }
+  .thanks-timeline-legend { padding-left: 58px; text-align: left; line-height: 1.6; }
   .thanks-help { align-items: flex-start; flex-direction: column; }
   .thanks-help nav { justify-content: flex-start; }
   .thanks-footer { width: min(100% - 24px, 1180px); }
