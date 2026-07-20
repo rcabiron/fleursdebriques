@@ -86,3 +86,40 @@ if (plan) {
 }
 
 if (reference) document.querySelector("[data-confirmation-reference]").textContent = reference;
+
+if (reference && plan) {
+  const subscribeEventKey = `fdbMetaSubscribe:${reference}`;
+  let alreadyTracked = false;
+  try {
+    alreadyTracked = window.localStorage.getItem(subscribeEventKey) === "1";
+  } catch (error) {
+    alreadyTracked = false;
+  }
+
+  if (!alreadyTracked) {
+    const basePrice = Number(stored?.basePrice ?? plan.price);
+    const shipping = Number(stored?.shipping ?? queryShipping);
+    const tracked = window.fdbAnalytics?.track("Subscribe", {
+      currency: "EUR",
+      value: basePrice + shipping,
+      content_name: stored?.planName || plan.name,
+      content_ids: [stored?.planCode || queryPlanCode],
+      content_type: "product",
+      predicted_ltv: (Number(stored?.regularPrice ?? plan.regularPrice) + shipping) * 6,
+    });
+
+    const rememberSubscribeEvent = () => {
+      try {
+        window.localStorage.setItem(subscribeEventKey, "1");
+      } catch (error) {
+        console.warn("Le suivi de confirmation n’a pas pu être mémorisé.", error);
+      }
+    };
+
+    if (tracked) {
+      rememberSubscribeEvent();
+    } else if (window.fdbAnalytics?.getConsent() === null) {
+      window.addEventListener("fdb:analytics-consent-granted", rememberSubscribeEvent, { once: true });
+    }
+  }
+}

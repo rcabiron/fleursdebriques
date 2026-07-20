@@ -3,6 +3,7 @@ const menuButton = document.querySelector(".menu-button");
 const mobileMenu = document.querySelector(".mobile-menu");
 const revealItems = document.querySelectorAll(".reveal");
 const motionAllowed = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const trackMetaEvent = (name, parameters = {}) => window.fdbAnalytics?.track(name, parameters);
 
 document.querySelectorAll(".hero .reveal").forEach((item) => item.classList.add("visible"));
 
@@ -48,6 +49,21 @@ document.querySelectorAll("[data-scroll-to]").forEach((button) => {
     document.getElementById(button.dataset.scrollTo)?.scrollIntoView({ behavior: "smooth" });
   });
 });
+
+const subscriptionsSection = document.querySelector("#abonnements");
+if (subscriptionsSection && "IntersectionObserver" in window) {
+  const subscriptionsObserver = new IntersectionObserver((entries, observer) => {
+    if (!entries.some((entry) => entry.isIntersecting)) return;
+    trackMetaEvent("ViewContent", {
+      content_name: "Abonnements Fleurs de Briques",
+      content_category: "Abonnements",
+      content_ids: ["ESSENTIEL", "PREMIUM"],
+      content_type: "product_group",
+    });
+    observer.disconnect();
+  }, { threshold: 0.35 });
+  subscriptionsObserver.observe(subscriptionsSection);
+}
 
 document.querySelectorAll(".faq-item button").forEach((button) => {
   button.addEventListener("click", () => {
@@ -277,6 +293,13 @@ const renderPayPalButtons = async () => {
     },
     createSubscription(data, actions) {
       const currentShipping = selectedShipping();
+      trackMetaEvent("AddPaymentInfo", {
+        currency: "EUR",
+        value: activePlan.price + currentShipping,
+        content_name: activePlan.name,
+        content_ids: [activePlan.code],
+        content_type: "product",
+      });
       const returnUrl = new URL(PAYPAL_RETURN_URL);
       returnUrl.searchParams.set("plan", activePlan.code);
       returnUrl.searchParams.set("shipping", currentShipping.toFixed(2));
@@ -379,6 +402,14 @@ document.querySelectorAll(".choose-plan").forEach((button) => {
     const plan = PAYPAL_PLANS[card.dataset.planCode];
     lastFocusedElement = button;
     activePlan = { ...plan, code: card.dataset.planCode, name: card.dataset.plan };
+    trackMetaEvent("InitiateCheckout", {
+      currency: "EUR",
+      value: plan.price,
+      content_name: card.dataset.plan,
+      content_ids: [card.dataset.planCode],
+      content_type: "product",
+      num_items: 1,
+    });
     confirmationUrl = "";
     dialogTitle.textContent = card.dataset.plan;
     dialogPrice.innerHTML = `${card.dataset.promoPrice} <span>/ mois</span><small>Pendant 3 mois · puis ${card.dataset.price}/mois</small>`;

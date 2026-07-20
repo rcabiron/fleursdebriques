@@ -485,6 +485,7 @@ blockquote { margin: 20px 0 42px; font: 500 clamp(26px, 3vw, 38px)/1.3 "Manrope"
 .legal-card h2 { margin: 0 0 16px; font: 700 25px "Manrope", sans-serif; letter-spacing: -.04em; }
 .legal-card h3 { margin: 24px 0 9px; font: 700 16px "Manrope", sans-serif; }
 .legal-card p, .legal-card li { color: #5e5c55; font-size: 14px; line-height: 1.72; }
+.legal-card code { padding: 2px 6px; border-radius: 7px; color: var(--ink); background: #efebe3; font-size: .92em; }
 .legal-card p { margin: 0 0 12px; }
 .legal-card p:last-child { margin-bottom: 0; }
 .legal-card ul { margin: 0; padding-left: 20px; }
@@ -573,6 +574,19 @@ blockquote { margin: 20px 0 42px; font: 500 clamp(26px, 3vw, 38px)/1.3 "Manrope"
 .thanks-help a:hover { color: #fff; }
 .thanks-footer { width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 26px 0; }
 
+/* Consentement à la mesure publicitaire */
+.cookie-banner { position: fixed; z-index: 1200; left: 50%; bottom: 18px; width: min(920px, calc(100% - 36px)); padding: 20px; border: 1px solid rgba(255,255,255,.14); border-radius: 24px; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 26px; color: #fff; background: rgba(23,23,19,.97); box-shadow: 0 24px 80px rgba(0,0,0,.28); backdrop-filter: blur(20px); transform: translateX(-50%); }
+.cookie-banner:focus { outline: 0; }
+.cookie-copy strong { display: block; margin-bottom: 7px; font: 700 16px "Manrope", sans-serif; }
+.cookie-copy p { max-width: 610px; margin: 0; color: #c9c6bd; font-size: 12px; line-height: 1.55; }
+.cookie-copy a { display: inline-block; margin-top: 7px; color: #fff; font-size: 11px; text-decoration: underline; text-underline-offset: 3px; }
+.cookie-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.cookie-actions button { min-width: 145px; min-height: 46px; padding: 11px 15px; border: 1px solid rgba(255,255,255,.55); border-radius: 999px; color: #fff; background: transparent; cursor: pointer; font: 700 11px "Manrope", sans-serif; transition: background .2s, color .2s, border-color .2s; }
+.cookie-actions button:hover, .cookie-actions button:focus-visible { border-color: #fff; color: var(--ink); background: #fff; outline: 0; }
+.cookie-settings-link { margin: 0; padding: 0; border: 0; color: inherit; background: transparent; cursor: pointer; font: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.site-footer .cookie-settings-link { color: #aaa79f; }
+.cookie-settings-link:hover, .cookie-settings-link:focus-visible { color: currentColor; outline: 2px solid currentColor; outline-offset: 4px; }
+
 @media (max-width: 760px) {
   .legal-page .site-header { padding-left: 14px; }
   .legal-page .brand-logo-image { width: 140px; }
@@ -609,6 +623,10 @@ blockquote { margin: 20px 0 42px; font: 500 clamp(26px, 3vw, 38px)/1.3 "Manrope"
   .thanks-help { align-items: flex-start; flex-direction: column; }
   .thanks-help nav { justify-content: flex-start; }
   .thanks-footer { width: min(100% - 24px, 1180px); }
+  .cookie-banner { bottom: 10px; width: calc(100% - 20px); padding: 18px; border-radius: 20px; grid-template-columns: 1fr; gap: 16px; }
+  .cookie-copy p { font-size: 12px; }
+  .cookie-actions { width: 100%; }
+  .cookie-actions button { min-width: 0; min-height: 48px; padding-inline: 10px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
