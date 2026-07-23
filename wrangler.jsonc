@@ -1,0 +1,20 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "fleursdebriques",
+  "compatibility_date": "2026-07-20",
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": "."
+  },
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "FUNNEL_METRICS",
+      "id": "bb7dc0c278b9476a97b42ff71c7fea67"
+    }
+  ]
+}

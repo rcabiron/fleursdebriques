@@ -4,6 +4,18 @@
   const META_PIXEL_ID = "209354772094276";
   const CONSENT_KEY = "fdbCookieConsentV1";
   const CONSENT_DURATION = 1000 * 60 * 60 * 24 * 183;
+  const FUNNEL_ENDPOINT = "/api/funnel";
+  const FUNNEL_EVENTS = new Set([
+    "page_view",
+    "offers_viewed",
+    "checkout_opened",
+    "payment_methods_viewed",
+    "paypal_started",
+    "paypal_cancelled",
+    "paypal_error",
+    "subscription_approved",
+    "subscription_confirmed",
+  ]);
   const pendingEvents = [];
   let pixelInitialized = false;
 
@@ -72,6 +84,46 @@
     return true;
   };
 
+  const compactLabel = (value, maxLength = 80) =>
+    String(value || "")
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9_-]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+      .slice(0, maxLength);
+
+  const trackInternal = (name, parameters = {}) => {
+    if (!FUNNEL_EVENTS.has(name)) return false;
+
+    const pagePath = String(parameters.path || window.location.pathname || "/")
+      .split("?")[0]
+      .slice(0, 120);
+    const plan = compactLabel(parameters.plan, 24);
+
+    const query = new URLSearchParams(window.location.search);
+    const payload = {
+      event: name,
+      path: pagePath,
+      plan,
+      value: Number.isFinite(Number(parameters.value)) ? Number(parameters.value) : 0,
+      source: compactLabel(parameters.source || query.get("utm_source"), 48),
+      medium: compactLabel(parameters.medium || query.get("utm_medium"), 48),
+      campaign: compactLabel(parameters.campaign || query.get("utm_campaign"), 80),
+    };
+
+    fetch(FUNNEL_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+      keepalive: true,
+      credentials: "same-origin",
+    }).catch(() => {
+      // Une mesure indisponible ne doit jamais perturber l’expérience d’achat.
+    });
+
+    return true;
+  };
+
   const removeBanner = () => document.querySelector("[data-cookie-banner]")?.remove();
 
   const showBanner = () => {
@@ -83,13 +135,14 @@
     banner.tabIndex = -1;
     banner.innerHTML = `
       <div class="cookie-copy">
-        <strong id="cookie-title">Votre vie privée, simplement.</strong>
-        <p>Avec votre accord, Meta nous aide à mesurer les visites et les abonnements issus de nos publicités. Aucun cookie publicitaire n’est déposé avant votre choix.</p>
+        <span class="cookie-kicker">Votre choix</span>
+        <strong id="cookie-title">Nous aider à améliorer Fleurs de Briques&nbsp;?</strong>
+        <p>En autorisant la mesure, vous nous aidez à comprendre quelles publicités donnent envie de découvrir nos créations. Meta reçoit alors des données de navigation. Vous pouvez continuer sans l’autoriser&nbsp;: le site et les prix restent identiques.</p>
         <a href="confidentialite.html#cookies">En savoir plus</a>
       </div>
       <div class="cookie-actions">
-        <button type="button" data-cookie-choice="refused">Tout refuser</button>
-        <button type="button" data-cookie-choice="accepted">Accepter la mesure</button>
+        <button type="button" data-cookie-choice="refused">Continuer sans mesure</button>
+        <button type="button" class="cookie-accept" data-cookie-choice="accepted">Autoriser la mesure</button>
       </div>
     `;
 
@@ -134,8 +187,10 @@
     getConsent: readConsent,
     showSettings: showBanner,
     track,
+    trackInternal,
   };
 
+  trackInternal("page_view");
   if (readConsent() === "accepted") installMetaPixel();
 
   const initializeConsentInterface = () => {

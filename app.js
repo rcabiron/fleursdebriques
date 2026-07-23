@@ -4,6 +4,7 @@ const mobileMenu = document.querySelector(".mobile-menu");
 const revealItems = document.querySelectorAll(".reveal");
 const motionAllowed = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const trackMetaEvent = (name, parameters = {}) => window.fdbAnalytics?.track(name, parameters);
+const trackFunnelEvent = (name, parameters = {}) => window.fdbAnalytics?.trackInternal(name, parameters);
 
 document.querySelectorAll(".hero .reveal").forEach((item) => item.classList.add("visible"));
 
@@ -60,6 +61,7 @@ if (subscriptionsSection && "IntersectionObserver" in window) {
       content_ids: ["ESSENTIEL", "PREMIUM"],
       content_type: "product_group",
     });
+    trackFunnelEvent("offers_viewed");
     observer.disconnect();
   }, { threshold: 0.35 });
   subscriptionsObserver.observe(subscriptionsSection);
@@ -293,12 +295,24 @@ const renderPayPalButtons = async () => {
     },
     createSubscription(data, actions) {
       const currentShipping = selectedShipping();
+      trackMetaEvent("InitiateCheckout", {
+        currency: "EUR",
+        value: activePlan.price + currentShipping,
+        content_name: activePlan.name,
+        content_ids: [activePlan.code],
+        content_type: "product",
+        num_items: 1,
+      });
       trackMetaEvent("AddPaymentInfo", {
         currency: "EUR",
         value: activePlan.price + currentShipping,
         content_name: activePlan.name,
         content_ids: [activePlan.code],
         content_type: "product",
+      });
+      trackFunnelEvent("paypal_started", {
+        plan: activePlan.code,
+        value: activePlan.price + currentShipping,
       });
       const returnUrl = new URL(PAYPAL_RETURN_URL);
       returnUrl.searchParams.set("plan", activePlan.code);
@@ -328,6 +342,10 @@ const renderPayPalButtons = async () => {
     onApprove(data) {
       const deliveryOption = dialog.querySelector('input[name="delivery-zone"]:checked');
       const shipping = selectedShipping();
+      trackFunnelEvent("subscription_approved", {
+        plan: activePlan.code,
+        value: activePlan.price + shipping,
+      });
       const confirmation = {
         subscriptionId: data.subscriptionID,
         planCode: activePlan.code,
@@ -365,10 +383,12 @@ const renderPayPalButtons = async () => {
       }, 1200);
     },
     onCancel() {
+      trackFunnelEvent("paypal_cancelled", { plan: activePlan?.code });
       showToast("Paiement interrompu. Aucun abonnement n’a été créé.");
     },
     onError(error) {
       console.error("PayPal subscription error", error);
+      trackFunnelEvent("paypal_error", { plan: activePlan?.code });
       paypalStatus.textContent = "Une erreur est survenue avec PayPal. Réessayez dans quelques instants.";
       paypalStatus.classList.add("is-error");
     },
@@ -381,7 +401,13 @@ const renderPayPalButtons = async () => {
   }
 
   buttons.render(paypalContainer).then(() => {
-    if (renderVersion === paypalRenderVersion) paypalStatus.textContent = "PayPal ou carte bancaire · paiement chiffré";
+    if (renderVersion === paypalRenderVersion) {
+      paypalStatus.textContent = "PayPal ou carte bancaire · paiement chiffré";
+      trackFunnelEvent("payment_methods_viewed", {
+        plan: activePlan.code,
+        value: activePlan.price + selectedShipping(),
+      });
+    }
   }).catch((error) => {
     console.error("PayPal button render error", error);
     if (renderVersion !== paypalRenderVersion) return;
@@ -402,13 +428,9 @@ document.querySelectorAll(".choose-plan").forEach((button) => {
     const plan = PAYPAL_PLANS[card.dataset.planCode];
     lastFocusedElement = button;
     activePlan = { ...plan, code: card.dataset.planCode, name: card.dataset.plan };
-    trackMetaEvent("InitiateCheckout", {
-      currency: "EUR",
+    trackFunnelEvent("checkout_opened", {
+      plan: card.dataset.planCode,
       value: plan.price,
-      content_name: card.dataset.plan,
-      content_ids: [card.dataset.planCode],
-      content_type: "product",
-      num_items: 1,
     });
     confirmationUrl = "";
     dialogTitle.textContent = card.dataset.plan;

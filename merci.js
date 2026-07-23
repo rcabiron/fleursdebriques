@@ -88,6 +88,14 @@ if (plan) {
 if (reference) document.querySelector("[data-confirmation-reference]").textContent = reference;
 
 if (reference && plan) {
+  const confirmedPlanCode = stored?.planCode || queryPlanCode;
+  const confirmedBasePrice = Number(stored?.basePrice ?? plan.price);
+  const confirmedShipping = Number(stored?.shipping ?? queryShipping);
+  window.fdbAnalytics?.trackInternal("subscription_confirmed", {
+    plan: confirmedPlanCode,
+    value: confirmedBasePrice + confirmedShipping,
+  });
+
   const subscribeEventKey = `fdbMetaSubscribe:${reference}`;
   let alreadyTracked = false;
   try {
@@ -97,15 +105,13 @@ if (reference && plan) {
   }
 
   if (!alreadyTracked) {
-    const basePrice = Number(stored?.basePrice ?? plan.price);
-    const shipping = Number(stored?.shipping ?? queryShipping);
     const tracked = window.fdbAnalytics?.track("Subscribe", {
       currency: "EUR",
-      value: basePrice + shipping,
+      value: confirmedBasePrice + confirmedShipping,
       content_name: stored?.planName || plan.name,
-      content_ids: [stored?.planCode || queryPlanCode],
+      content_ids: [confirmedPlanCode],
       content_type: "product",
-      predicted_ltv: (Number(stored?.regularPrice ?? plan.regularPrice) + shipping) * 6,
+      predicted_ltv: (Number(stored?.regularPrice ?? plan.regularPrice) + confirmedShipping) * 6,
     });
 
     const rememberSubscribeEvent = () => {
