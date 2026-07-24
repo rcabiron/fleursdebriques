@@ -186,7 +186,6 @@ const dialog = document.querySelector(".plan-dialog");
 const dialogTitle = dialog.querySelector("h2");
 const dialogPrice = dialog.querySelector(".dialog-price");
 const dialogPremiumOffer = dialog.querySelector(".dialog-premium-offer");
-const dialogPromoSchedule = dialog.querySelector("[data-dialog-promo-schedule]");
 const closeButtons = dialog.querySelectorAll(".dialog-close, .dialog-backdrop");
 const checkoutFlow = dialog.querySelector("[data-checkout-flow]");
 const checkoutSuccess = dialog.querySelector("[data-checkout-success]");
@@ -434,8 +433,7 @@ document.querySelectorAll(".choose-plan").forEach((button) => {
     });
     confirmationUrl = "";
     dialogTitle.textContent = card.dataset.plan;
-    dialogPrice.innerHTML = `${card.dataset.promoPrice} <span>/ mois</span><small>Pendant 3 mois · puis ${card.dataset.price}/mois</small>`;
-    dialogPromoSchedule.textContent = `${card.dataset.promoPrice} × 3, puis ${card.dataset.price}`;
+    dialogPrice.innerHTML = `${card.dataset.promoPrice} <span>/mois</span><small>3 premiers mois, puis ${card.dataset.price}/mois</small>`;
     dialogPremiumOffer.hidden = false;
     checkoutFlow.hidden = false;
     checkoutSuccess.hidden = true;

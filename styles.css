@@ -150,23 +150,24 @@ h1 em, h2 em { font-family: Georgia, serif; font-weight: 400; color: var(--coral
 .plans .eyebrow { color: #9c9a93; }
 .plans h2 span { color: #77766f; }
 .plans-intro { width: min(370px, 100%); margin: 0 0 10px; line-height: 1.6; color: #aaa8a1; }
-.collector-banner { max-width: 1120px; margin: -34px auto 28px; padding: 0 0 22px; border-bottom: 1px solid rgba(255,255,255,.15); display: grid; gap: 5px; }
-.collector-banner strong { color: #f5c654; font: 700 clamp(17px, 1.7vw, 22px) "Manrope", sans-serif; letter-spacing: -.03em; }
-.collector-banner span { color: #aaa8a1; font-size: 12px; line-height: 1.5; }
+.collector-banner { max-width: 1120px; margin: -34px auto 28px; padding: 18px 22px; border-radius: 20px; display: flex; align-items: baseline; gap: 14px; color: var(--ink); background: #f5c654; }
+.collector-banner span { font-size: 11px; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; }
+.collector-banner strong { font: 700 clamp(18px, 1.7vw, 23px) "Manrope", sans-serif; letter-spacing: -.03em; }
+.collector-banner small { margin-left: auto; color: #5f501c; font-size: 13px; font-weight: 700; white-space: nowrap; }
 .plan-grid { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: stretch; }
 .plan-card { position: relative; overflow: hidden; padding: 30px; border-radius: 30px; display: flex; flex-direction: column; }
 .plan-card.essential { color: var(--ink); background: #f2eee5; }
 .plan-card.premium { color: #fff; background: linear-gradient(145deg, #7267db 0%, #5144bf 100%); box-shadow: 0 30px 90px rgba(84,67,205,.25); }
 .plan-topline { display: block; }
 .plan-label { font: 700 clamp(29px, 3vw, 42px) "Manrope", sans-serif; letter-spacing: -.05em; }
-.plan-description { max-width: 430px; min-height: 44px; margin: 8px 0 13px; color: #716e67; font-size: 14px; line-height: 1.45; }
+.plan-description { max-width: 430px; min-height: 46px; margin: 8px 0 14px; color: #716e67; font-size: 16px; line-height: 1.45; }
 .premium .plan-description { color: #d3cff8; }
 .price { display: flex; align-items: baseline; gap: 8px; }
 .price strong { font: 700 clamp(40px, 3.6vw, 52px) "Manrope", sans-serif; letter-spacing: -.06em; }
 .price span { color: #7d7a72; }
 .premium .price span { color: #c5c0f0; }
 .promo-price { flex-wrap: wrap; }
-.promo-renewal { margin: 2px 0 0; color: #716e67; font-size: 11px; line-height: 1.4; }
+.promo-renewal { margin: 3px 0 0; color: #716e67; font-size: 13px; line-height: 1.45; }
 .promo-renewal strong { color: var(--ink); }
 .premium .promo-renewal { color: #d3cff8; }
 .premium .promo-renewal strong { color: #fff; }
@@ -205,16 +206,16 @@ h1 em, h2 em { font-family: Georgia, serif; font-weight: 400; color: var(--coral
 .f-four { left: 10%; top: 42px; background: #f2b7c9; --stem-angle: -23deg; transform: scale(.64); }
 .f-four i { background: #e98daa; }
 .f-five { right: 10%; top: 36px; background: #ff977b; --stem-angle: 24deg; transform: scale(.62); }
-.plan-includes { list-style: none; margin: 0 0 20px; padding: 0; display: grid; gap: 10px; }
-.plan-includes li { position: relative; padding-left: 18px; color: #4e4d47; font-size: 13px; line-height: 1.4; }
-.plan-includes li::before { content: "—"; position: absolute; left: 0; color: var(--coral); font-weight: 800; }
+.plan-includes { flex: 1; list-style: none; margin: 0 0 22px; padding: 0; display: grid; gap: 0; }
+.plan-includes li { position: relative; padding: 12px 0 12px 34px; border-bottom: 1px solid rgba(23,23,19,.1); color: #4e4d47; font-size: 14px; line-height: 1.4; }
+.plan-includes li:first-child { border-top: 1px solid rgba(23,23,19,.1); }
+.plan-includes li::before { content: "✓"; position: absolute; left: 0; top: 10px; width: 23px; height: 23px; border-radius: 50%; display: grid; place-items: center; color: #5548be; background: #e8e4ff; font-size: 11px; font-weight: 800; }
+.plan-includes strong { font-family: "Manrope", sans-serif; }
 .premium .plan-includes li { color: #eceaff; }
-.premium .plan-includes li::before { color: #dcd8ff; }
-.plan-reassurance { margin: 9px 0 0; text-align: center; color: #716e67; font-size: 9px; font-weight: 700; letter-spacing: .01em; }
+.premium .plan-includes li { border-color: rgba(255,255,255,.18); }
+.premium .plan-includes li::before { color: #5548be; background: #fff; }
+.plan-reassurance { margin: 11px 0 0; text-align: center; color: #716e67; font-size: 12px; font-weight: 700; letter-spacing: .01em; }
 .premium .plan-reassurance { color: #f0eeff; }
-.plans-notes { max-width: 1120px; margin: 24px auto 0; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.14); display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
-.plans-notes p { margin: 0; color: #929088; font-size: 11px; line-height: 1.55; }
-.plans-notes strong { display: block; margin-bottom: 4px; color: #e3e1da; font: 700 12px "Manrope", sans-serif; }
 
 .quote-section { max-width: 1360px; margin: 0 auto; display: grid; grid-template-columns: .9fr 1.1fr; gap: 8vw; align-items: center; }
 .quote-card { padding: 48px; border-radius: 38px; background: #e1dcf4; transform: rotate(-2deg); }
@@ -296,53 +297,50 @@ blockquote { margin: 20px 0 42px; font: 500 clamp(26px, 3vw, 38px)/1.3 "Manrope"
 .plan-dialog[hidden] { display: none; }
 .plan-dialog { position: fixed; inset: 0; display: grid; place-items: center; z-index: 500; padding: 20px; }
 .dialog-backdrop { position: absolute; inset: 0; border: 0; background: rgba(20,19,17,.55); backdrop-filter: blur(12px); cursor: default; animation: fadeIn .3s both; }
-.dialog-panel { width: min(700px, 100%); max-height: calc(100svh - 16px); position: relative; padding: 24px 30px 22px; border-radius: 28px; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; background: var(--paper); box-shadow: 0 30px 100px rgba(0,0,0,.25); animation: panelIn .4s cubic-bezier(.2,.8,.2,1) both; }
+.dialog-panel { width: min(680px, 100%); max-height: calc(100svh - 16px); position: relative; padding: 28px 32px 24px; border-radius: 28px; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; background: var(--paper); box-shadow: 0 30px 100px rgba(0,0,0,.25); animation: panelIn .4s cubic-bezier(.2,.8,.2,1) both; }
 @keyframes fadeIn { from { opacity: 0; } }
 @keyframes panelIn { from { opacity: 0; transform: translateY(25px) scale(.97); } }
 .dialog-close { position: absolute; top: 14px; right: 14px; width: 34px; height: 34px; border: 0; border-radius: 50%; color: var(--ink); background: #e8e3d9; font-size: 21px; cursor: pointer; }
-.dialog-title-row { padding-right: 38px; display: flex; align-items: flex-end; justify-content: space-between; gap: 22px; }
-.dialog-kicker { color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
-.dialog-panel h2 { margin: 5px 0 0; font: 700 38px "Manrope", sans-serif; letter-spacing: -.06em; }
-.dialog-price { flex: 0 0 auto; margin: 0 0 4px; color: var(--coral); font: 700 26px "Manrope", sans-serif; letter-spacing: -.04em; }
-.dialog-price span { color: var(--muted); font: 400 14px "DM Sans", sans-serif; letter-spacing: 0; }
-.dialog-price small { display: block; margin-top: 2px; color: var(--muted); font: 600 9px "DM Sans", sans-serif; letter-spacing: 0; text-align: right; }
-.dialog-highlights { margin-top: 14px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; }
-.dialog-highlights > div { min-height: 58px; padding: 9px 10px; border: 1px solid rgba(23,23,19,.08); border-radius: 13px; display: grid; grid-template-columns: 29px 1fr; gap: 8px; align-items: center; background: rgba(255,255,255,.55); }
-.dialog-highlights > div > span { width: 29px; height: 29px; border-radius: 50%; display: grid; place-items: center; color: #5548be; background: #e8e4ff; font-size: 13px; font-weight: 800; }
-.dialog-highlights p { margin: 0; }
-.dialog-highlights strong, .dialog-highlights small { display: block; }
-.dialog-highlights strong { font: 700 11px "Manrope", sans-serif; }
-.dialog-highlights small { margin-top: 2px; color: var(--muted); font-size: 9px; line-height: 1.25; }
-.dialog-premium-offer { margin: 11px 0 0; padding: 11px 13px; border-radius: 13px; color: #fff; background: linear-gradient(135deg, #7166da, #5043bb); }
+.dialog-title-row { padding-right: 42px; display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
+.dialog-kicker { color: var(--muted); font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.dialog-panel h2 { margin: 6px 0 0; font: 700 40px "Manrope", sans-serif; letter-spacing: -.06em; }
+.dialog-price { flex: 0 0 auto; margin: 0; color: var(--coral); font: 700 32px "Manrope", sans-serif; letter-spacing: -.05em; text-align: right; }
+.dialog-price span { color: var(--muted); font: 500 15px "DM Sans", sans-serif; letter-spacing: 0; }
+.dialog-price small { display: block; margin-top: 4px; color: var(--muted); font: 600 12px "DM Sans", sans-serif; letter-spacing: 0; text-align: right; }
+.dialog-premium-offer { margin: 18px 0 0; padding: 16px 18px; border-radius: 16px; color: #fff; background: linear-gradient(135deg, #7166da, #5043bb); }
 .dialog-premium-offer[hidden] { display: none; }
 .dialog-premium-offer strong, .dialog-premium-offer span { display: block; }
-.dialog-premium-offer strong { font: 700 12px "Manrope", sans-serif; }
-.dialog-premium-offer span { margin-top: 3px; color: #ddd9ff; font-size: 10px; line-height: 1.35; }
-.checkout-flow { margin-top: 12px; }
+.dialog-premium-offer strong { font: 700 18px "Manrope", sans-serif; letter-spacing: -.02em; }
+.dialog-premium-offer span { margin-top: 5px; color: #e8e5ff; font-size: 13px; line-height: 1.4; }
+.dialog-highlights { margin: 14px 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }
+.dialog-highlights li { min-height: 48px; padding: 10px 12px; border: 1px solid rgba(23,23,19,.08); border-radius: 13px; display: flex; align-items: center; gap: 9px; background: rgba(255,255,255,.58); }
+.dialog-highlights span { width: 24px; height: 24px; flex: 0 0 auto; border-radius: 50%; display: grid; place-items: center; color: #5548be; background: #e8e4ff; font-size: 12px; font-weight: 800; }
+.dialog-highlights strong { font: 700 13px/1.25 "Manrope", sans-serif; }
+.checkout-flow { margin-top: 18px; }
 .delivery-choice { margin: 0; padding: 0; border: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.delivery-choice legend { grid-column: 1 / -1; margin-bottom: 6px; font-size: 12px; font-weight: 700; }
+.delivery-choice legend { grid-column: 1 / -1; margin-bottom: 8px; font-size: 15px; font-weight: 700; }
 .delivery-choice label { position: relative; cursor: pointer; }
 .delivery-choice input { position: absolute; width: 1px; height: 1px; opacity: 0; }
-.delivery-choice label > span { min-height: 56px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 13px; display: flex; flex-direction: column; justify-content: center; background: #fff; transition: border-color .2s, box-shadow .2s, transform .2s; }
+.delivery-choice label > span { min-height: 62px; padding: 11px 14px; border: 1px solid var(--line); border-radius: 14px; display: flex; flex-direction: column; justify-content: center; background: #fff; transition: border-color .2s, box-shadow .2s, transform .2s; }
 .delivery-choice label:hover > span { transform: translateY(-1px); }
 .delivery-choice input:focus-visible + span { outline: 3px solid rgba(86,73,196,.25); outline-offset: 2px; }
 .delivery-choice input:checked + span { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
-.delivery-choice strong { font: 700 13px "Manrope", sans-serif; }
-.delivery-choice small { margin-top: 3px; color: var(--muted); font-size: 11px; }
-.delivery-hint { margin: 6px 2px 0; color: var(--muted); font-size: 9px; line-height: 1.35; }
-.checkout-total { margin: 11px 0 0; padding: 11px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 20px; }
-.checkout-total span { max-width: 55%; color: var(--muted); font-size: 12px; line-height: 1.35; }
-.checkout-total strong { font: 700 20px "Manrope", sans-serif; letter-spacing: -.04em; }
-.paypal-checkout { min-height: 104px; }
-.paypal-label { margin: 0 0 8px; display: flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 700; }
+.delivery-choice strong { font: 700 15px "Manrope", sans-serif; }
+.delivery-choice small { margin-top: 3px; color: var(--muted); font-size: 13px; }
+.checkout-total { margin: 14px 0 0; padding: 15px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.checkout-total span { color: var(--ink); font-size: 15px; font-weight: 700; line-height: 1.35; }
+.checkout-total strong { font: 700 25px "Manrope", sans-serif; letter-spacing: -.04em; }
+.paypal-checkout { min-height: 0; }
+.paypal-label { margin: 0 0 9px; display: flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 700; }
 .paypal-label span { color: #20a464; font-size: 10px; }
 .paypal-button-container { position: relative; z-index: 1; min-height: 45px; }
-.paypal-status { margin: 6px 0 0; color: var(--muted); font-size: 9px; text-align: center; }
+.paypal-button-container:empty { min-height: 0; }
+.paypal-status { margin: 7px 0 0; color: var(--muted); font-size: 12px; text-align: center; }
 .paypal-status:empty { display: none; }
 .paypal-status.is-error { padding: 10px; border-radius: 10px; color: #a33324; background: #ffe8e2; text-align: left; }
 .paypal-status.is-pending { padding: 11px 12px; border-radius: 11px; color: #665e25; background: #fff2ba; line-height: 1.4; text-align: left; }
-.checkout-consent { margin: 10px 0 12px; padding: 10px 11px; border-radius: 11px; display: flex; align-items: flex-start; gap: 9px; color: var(--muted); background: rgba(23,23,19,.045); font-size: 9px; line-height: 1.4; cursor: pointer; }
-.checkout-consent input { width: 16px; height: 16px; margin: 0; flex: 0 0 auto; accent-color: var(--ink); }
+.checkout-consent { margin: 12px 0 14px; padding: 12px 13px; border-radius: 12px; display: flex; align-items: flex-start; gap: 10px; color: var(--muted); background: rgba(23,23,19,.045); font-size: 12px; line-height: 1.45; cursor: pointer; }
+.checkout-consent input { width: 18px; height: 18px; margin: 0; flex: 0 0 auto; accent-color: var(--ink); }
 .checkout-consent a { color: var(--ink); font-weight: 700; text-decoration: underline; text-underline-offset: 2px; }
 .checkout-success { padding: 32px 0 4px; text-align: center; }
 .checkout-success[hidden] { display: none; }
@@ -405,24 +403,18 @@ blockquote { margin: 20px 0 42px; font: 500 clamp(26px, 3vw, 38px)/1.3 "Manrope"
   .statement-orbit { width: 72px; height: 72px; border-radius: 22px; font-size: 33px; opacity: .65; }
   .plans-heading { margin-bottom: 64px; gap: 28px; }
   .plan-grid { grid-template-columns: 1fr; gap: 16px; }
-  .collector-banner { padding-bottom: 18px; }
-  .collector-banner strong { font-size: 19px; line-height: 1.3; }
-  .collector-banner span { font-size: 14px; line-height: 1.55; }
+  .collector-banner { padding: 17px 18px; align-items: flex-start; flex-direction: column; gap: 4px; }
+  .collector-banner span { font-size: 10px; }
+  .collector-banner strong { font-size: 20px; line-height: 1.3; }
+  .collector-banner small { margin-left: 0; font-size: 13px; }
   .plan-card { padding: 22px 18px; border-radius: 26px; }
-  .plan-description { min-height: 0; font-size: 15px; line-height: 1.55; }
+  .plan-description { min-height: 0; font-size: 16px; line-height: 1.5; }
   .promo-renewal { margin-top: 5px; font-size: 13px; line-height: 1.5; }
   .plan-illustration { margin-left: -18px; margin-right: -18px; }
-  .plan-facts { padding: 16px 0; gap: 12px 0; font-size: 13px; line-height: 1.4; }
-  .plan-facts span { width: 50%; padding: 0 8px; border-right: 0; }
-  .plan-facts span:nth-child(odd) { padding-left: 0; }
-  .plan-facts strong { font-size: 14px; }
-  .plan-includes { gap: 12px; }
-  .plan-includes li { padding-left: 20px; font-size: 15px; line-height: 1.5; }
+  .plan-includes { gap: 0; }
+  .plan-includes li { padding: 13px 0 13px 36px; font-size: 15px; line-height: 1.45; }
   .plan-reassurance { margin-top: 12px; font-size: 12px; line-height: 1.5; }
-  .plan-gallery-tabs { width: calc(100% - 24px); }
-  .plan-gallery-tabs button { flex: 1; padding-left: 8px; padding-right: 8px; font-size: 12px; }
   .price strong { font-size: 42px; }
-  .plans-notes { grid-template-columns: 1fr; gap: 18px; }
   .quote-card { padding: 30px 25px; }
   blockquote { font-size: 25px; }
   .creations-showcase { padding: 84px 0 76px; }
@@ -446,19 +438,22 @@ blockquote { margin: 20px 0 42px; font: 500 clamp(26px, 3vw, 38px)/1.3 "Manrope"
   .footer-main { grid-template-columns: 1fr; gap: 26px; }
   .footer-links { grid-template-columns: 1fr 1fr; }
   .footer-bottom { gap: 12px; flex-direction: column; }
-  .dialog-panel { max-height: calc(100svh - 16px); padding: 23px 18px 20px; border-radius: 22px; }
-  .dialog-title-row { padding-right: 35px; gap: 12px; }
-  .dialog-panel h2 { font-size: 32px; }
-  .dialog-price { font-size: 22px; }
-  .dialog-price span { font-size: 11px; }
-  .dialog-price small { max-width: 145px; }
-  .dialog-highlights { grid-template-columns: repeat(2, 1fr); }
-  .dialog-highlights > div { min-height: 56px; padding: 8px; grid-template-columns: 27px 1fr; gap: 7px; }
-  .dialog-highlights > div > span { width: 27px; height: 27px; }
+  .dialog-panel { max-height: calc(100svh - 16px); padding: 24px 18px 20px; border-radius: 22px; }
+  .dialog-title-row { padding-right: 35px; align-items: flex-start; flex-direction: column; gap: 10px; }
+  .dialog-panel h2 { font-size: 34px; }
+  .dialog-price { font-size: 28px; text-align: left; }
+  .dialog-price span { font-size: 14px; }
+  .dialog-price small { max-width: none; font-size: 12px; text-align: left; }
+  .dialog-premium-offer { margin-top: 15px; padding: 15px; }
+  .dialog-premium-offer strong { font-size: 17px; }
+  .dialog-premium-offer span { font-size: 13px; }
+  .dialog-highlights { grid-template-columns: 1fr; gap: 7px; }
+  .dialog-highlights li { min-height: 44px; padding: 9px 11px; }
+  .dialog-highlights strong { font-size: 14px; }
   .delivery-choice { grid-template-columns: 1fr 1fr; gap: 7px; }
-  .delivery-choice label > span { min-height: 56px; padding: 9px; }
-  .delivery-choice strong { font-size: 11px; }
-  .delivery-choice small { font-size: 9px; }
+  .delivery-choice label > span { min-height: 62px; padding: 10px; }
+  .delivery-choice strong { font-size: 13px; }
+  .delivery-choice small { font-size: 12px; }
   .checkout-total { align-items: flex-end; }
 }
 
